@@ -278,7 +278,7 @@ export default Canister({
         return Err({ UnauthorizedAccess: "Unauthorized access." });
       }
 
-      // Remove the property owner profile 
+      // Remove the property owner profile
       propertyOwnerStorage.remove(ownerId);
 
       return Ok(null);
@@ -342,21 +342,159 @@ export default Canister({
         return Err({ InvalidPayload: "Missing required fields" });
       }
 
+      // Check for valid email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!emailRegex.test(payload.email)) {
+        return Err({
+          InvalidEmail: "Invalid email format, ensure it is in correct format!",
+        });
+      }
+
+      // Validation for unique email check
+      const investors = investorStorage.values();
+
+      const existingInvestor = investors.find(
+        (investor) => investor.email === payload.email
+      );
+
+      if (existingInvestor) {
+        return Err({
+          EmailAlreadyExists:
+            "Email already exists, please use a different email.",
+        });
+      }
+
       const investorId = uuidv4();
       const investor = {
         id: investorId,
+        ...payload,
         principal: ic.caller(),
-        name: payload.name,
-        email: payload.email,
-        phoneNumber: payload.phoneNumber,
         investments: [],
         totalInvested: 0n,
         joinedAt: new Date().toISOString(),
       };
+
+      // Insert the investor into the storage
       investorStorage.insert(investorId, investor);
+
+      // Successfully return the created investor
       return Ok(investor);
     }
   ),
+
+  // Update Investor Profile
+  updateInvestorProfile: update(
+    [text, InvestorPayload],
+    Result(Investor, Message),
+    (investorId, payload) => {
+      // Check if the investor exists
+      const investorOpt = investorStorage.get(investorId);
+      if ("None" in investorOpt) {
+        return Err({ NotFound: "Investor not found." });
+      }
+
+      // Check if required fields are provided
+      if (!payload.name || !payload.email || !payload.phoneNumber) {
+        return Err({ InvalidPayload: "Missing required fields" });
+      }
+
+      // Check for valid email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(payload.email)) {
+        return Err({
+          InvalidEmail: "Invalid email format, ensure it is in correct format!",
+        });
+      }
+
+      // Validation for unique email check
+      const investors = investorStorage.values();
+      const existingInvestor = investors.find(
+        (investor) => investor.email === payload.email
+      );
+
+      if (existingInvestor && existingInvestor.id !== investorId) {
+        return Err({
+          EmailAlreadyExists:
+            "Email already exists, please use a different email.",
+        });
+      }
+
+      // Check if the caller is the owner of the Investor profile
+      if (ic.caller().toText() !== investorOpt.Some.principal.toText()) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Update the investor profile
+      const updatedInvestor = {
+        ...investorOpt.Some,
+        ...payload,
+      };
+
+      investorStorage.insert(investorId, updatedInvestor);
+
+      return Ok(updatedInvestor);
+    }
+  ),
+
+  // Delete Investor Profile
+  deleteInvestorProfile: update(
+    [text],
+    Result(Null, Message),
+    (investorId) => {
+      const investorOpt = investorStorage.get(investorId);
+      if ("None" in investorOpt) {
+        return Err({ NotFound: "Investor with id=${investorId} not found." });
+      }
+
+      // Check if the caller is the owner of the Investor profile
+      if (ic.caller().toText() !== investorOpt.Some.principal.toText()) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Remove the investor profile
+      investorStorage.remove(investorId);
+
+      return Ok(null);
+    }
+  ),
+
+  // Get Investor Profile by ID
+  getInvestorProfileById: query([text], Result(Investor, Message), (investorId) => {
+    const investorOpt = investorStorage.get(investorId);
+    if ("None" in investorOpt) {
+      return Err({ NotFound: "Investor not found." });
+    }
+
+    return Ok(investorOpt.Some);
+  }),
+
+  // Get Investor Profile by Principal using filter
+  getInvestorProfileByPrincipal: query([], Result(Investor, Message), () => {
+    const investors = investorStorage.values().filter((Investor) => {
+      return Investor.principal.toText() === ic.caller().toText();
+    });
+
+    if (investors.length === 0) {
+      return Err({
+        NotFound: `Investor profile for owner=${ic.caller()} not found`,
+      });
+    }
+
+    return Ok(investors[0]);
+  }),
+
+  // Get All Investors  
+  getAllInvestors: query([], Result(Vec(Investor), Message), () => {
+    const investors = investorStorage.values();
+
+    // Check if there are any investors
+    if (investors.length === 0) {
+      return Err({ NotFound: "No investors found." });
+    }
+
+    return Ok(investors);
+  }),
 
   // Create Asset
   createAsset: update([AssetPayload], Result(Asset, text), (payload) => {
