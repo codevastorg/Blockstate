@@ -30,6 +30,7 @@ import {
   hexAddressFromPrincipal,
 } from "azle/canisters/ledger";
 import { hashCode } from "hashcode";
+import { memo } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // PropertyOwnerStatus Enum
@@ -87,15 +88,27 @@ const Offering = Record({
   status: text, // "Ongoing", "Completed"
 });
 
+// Transaaction Status Enum
+const TransactionStatus = Variant({
+  PaymentPending: text,
+  Completed: text,
+  Cancelled: text,
+});
+
 // Transaction Struct
 const Transaction = Record({
   id: text,
+  propertyOwnerId: text,
   investorId: text,
   assetId: text,
+  propertyOwner: Principal,
+  Investor: Principal,
   amountInvested: nat64,
   tokensPurchased: nat64,
+  status: TransactionStatus,
+  paid_at_block: Opt(nat64),
   transactionDate: text,
-  status: text, // "Pending", "Completed"
+  memo: text,
 });
 
 // Message Struct
@@ -155,7 +168,17 @@ const propertyOwnerStorage = StableBTreeMap(0, text, PropertyOwner);
 const investorStorage = StableBTreeMap(1, text, Investor);
 const assetStorage = StableBTreeMap(2, text, Asset);
 const offeringStorage = StableBTreeMap(3, text, Offering);
-const transactionStorage = StableBTreeMap(4, text, Transaction);
+const persistedInvestmentsReserves = StableBTreeMap(4, Principal, Transaction);
+const pendingInvestmentsReserves = StableBTreeMap(5, nat64, Transaction);
+
+// Reservation period in seconds
+const TIMEOUT_PERIOD = 9600n;
+
+/* 
+    initialization of the Ledger canister. The principal text value is hardcoded because 
+    we set it in the `dfx.json`
+*/
+const icpCanister = Ledger(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"));
 
 // Functions
 
