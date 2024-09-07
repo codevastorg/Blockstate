@@ -90,27 +90,44 @@ const Offering = Record({
 // Transaction Struct
 const Transaction = Record({
   id: text,
-  investorId: text, // Investor ID
-  assetId: text, // Asset ID
+  investorId: text,
+  assetId: text,
   amountInvested: nat64,
   tokensPurchased: nat64,
   transactionDate: text,
   status: text, // "Pending", "Completed"
 });
 
+// Message Struct
+const Message = Variant({
+  Success: text,
+  Error: text,
+  NotFound: text,
+  InvalidPayload: text,
+  InvalidEmail: text,
+  EmailAlreadyExists: text,
+  UnauthorizedAccess: text,
+  PaymentFailed: text,
+  PaymentCompleted: text,
+});
+
 // Payloads
+
+// PropertyOwner Payload
 const PropertyOwnerPayload = Record({
   name: text,
   phoneNumber: text,
   email: text,
 });
 
+// Investor Payload
 const InvestorPayload = Record({
   name: text,
   email: text,
   phoneNumber: text,
 });
 
+// Asset Payload
 const AssetPayload = Record({
   title: text,
   description: text,
@@ -119,12 +136,14 @@ const AssetPayload = Record({
   totalTokens: nat64,
 });
 
+// Offering Payload
 const OfferingPayload = Record({
   assetId: text,
   pricePerToken: nat64,
   availableTokens: nat64,
 });
 
+// Transaction Payload
 const TransactionPayload = Record({
   investorId: text,
   assetId: text,
@@ -144,34 +163,183 @@ export default Canister({
   // Create PropertyOwner
   createPropertyOwner: update(
     [PropertyOwnerPayload],
-    Result(PropertyOwner, text),
+    Result(PropertyOwner, Message),
     (payload) => {
+      // Check if required fields are provided
       if (!payload.name || !payload.email || !payload.phoneNumber) {
-        return Err("Missing required fields");
+        return Err({ InvalidPayload: "Missing required fields" });
+      }
+
+      // Check for valid email format (simple regex example)
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(payload.email)) {
+        return Err({
+          InvalidEmail: "Invalid email format, ensure it is in correct format!",
+        });
+      }
+
+      // Validation for unique email check
+      const propertyOwners = propertyOwnerStorage.values();
+      const existingOwner = propertyOwners.find(
+        (owner) => owner.email === payload.email
+      );
+
+      if (existingOwner) {
+        return Err({
+          EmailAlreadyExists:
+            "Email already exists, please use a different email.",
+        });
       }
 
       const propertyOwnerId = uuidv4();
       const propertyOwner = {
+        ...payload,
         id: propertyOwnerId,
         owner: ic.caller(),
-        name: payload.name,
-        phoneNumber: payload.phoneNumber,
-        email: payload.email,
         propertiesOwned: [],
         joinedAt: new Date().toISOString(),
       };
+
+      // Insert the property owner into the storage
       propertyOwnerStorage.insert(propertyOwnerId, propertyOwner);
-      return Ok(propertyOwner);
+
+      return Ok(propertyOwner); // Successfully return the created property owner
     }
   ),
+
+  // Update PropertyOwner Profile
+  updatePropertyOwnerProfile: update(
+    [text, PropertyOwnerPayload],
+    Result(PropertyOwner, Message),
+    (ownerId, payload) => {
+      // Check if the property owner exists
+      const propertyOwnerOpt = propertyOwnerStorage.get(ownerId);
+      if ("None" in propertyOwnerOpt) {
+        return Err({ NotFound: "Property owner not found." });
+      }
+
+      // Check if required fields are
+      if (!payload.name || !payload.email || !payload.phoneNumber) {
+        return Err({ InvalidPayload: "Missing required fields" });
+      }
+
+      // Check for valid email format.
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(payload.email)) {
+        return Err({
+          InvalidEmail: "Invalid email format, ensure it is in correct format!",
+        });
+      }
+
+      // Validation for unique email check
+      const propertyOwners = propertyOwnerStorage.values();
+      const existingOwner = propertyOwners.find(
+        (owner) => owner.email === payload.email
+      );
+
+      if (existingOwner && existingOwner.id !== ownerId) {
+        return Err({
+          EmailAlreadyExists:
+            "Email already exists, please use a different email.",
+        });
+      }
+
+      // Check if the caller is the owner of the PropertyOwner profile
+      if (ic.caller().toText() !== propertyOwnerOpt.Some.owner.toText()) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Update the property owner profile
+      const updatedOwner = {
+        ...propertyOwnerOpt.Some,
+        ...payload,
+      };
+
+      propertyOwnerStorage.insert(ownerId, updatedOwner);
+
+      return Ok(updatedOwner);
+    }
+  ),
+
+  // Delete PropertyOwner Profile
+  deletePropertyOwnerProfile: update(
+    [text],
+    Result(Null, Message),
+    (ownerId) => {
+      const propertyOwnerOpt = propertyOwnerStorage.get(ownerId);
+      if ("None" in propertyOwnerOpt) {
+        return Err({
+          NotFound: "Property owner with id=${ownerId} not found.",
+        });
+      }
+
+      // Check if the caller is the owner of the PropertyOwner profile
+      if (ic.caller().toText() !== propertyOwnerOpt.Some.owner.toText()) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Remove the property owner profile 
+      propertyOwnerStorage.remove(ownerId);
+
+      return Ok(null);
+    }
+  ),
+
+  // Get PropertyOwner Profile by ID
+  getPropertyOwnerProfileById: query(
+    [text],
+    Result(PropertyOwner, Message),
+    (ownerId) => {
+      const propertyOwnerOpt = propertyOwnerStorage.get(ownerId);
+      if ("None" in propertyOwnerOpt) {
+        return Err({ NotFound: "Property owner not found." });
+      }
+
+      return Ok(propertyOwnerOpt.Some);
+    }
+  ),
+
+  // Get PropertyOwner Profile by Principal using filter
+  getPropertyOwnerProfileByPrincipal: query(
+    [],
+    Result(PropertyOwner, Message),
+    () => {
+      const propertyOwners = propertyOwnerStorage
+        .values()
+        .filter((PropertyOwner) => {
+          return PropertyOwner.owner.toText() === ic.caller().toText();
+        });
+
+      if (propertyOwners.length === 0) {
+        return Err({
+          NotFound: `PropertyOwner profile for owner=${ic.caller()} not found`,
+        });
+      }
+
+      return Ok(propertyOwners[0]);
+    }
+  ),
+
+  // Get All PropertyOwners
+  getAllPropertyOwners: query([], Result(Vec(PropertyOwner), Message), () => {
+    const propertyOwners = propertyOwnerStorage.values();
+
+    // Check if there are any property owners
+    if (propertyOwners.length === 0) {
+      return Err({ NotFound: "No property owners found." });
+    }
+
+    return Ok(propertyOwners);
+  }),
 
   // Create Investor
   createInvestor: update(
     [InvestorPayload],
-    Result(Investor, text),
+    Result(Investor, Message),
     (payload) => {
+      // Check if required fields are provided
       if (!payload.name || !payload.email || !payload.phoneNumber) {
-        return Err("Missing required fields");
+        return Err({ InvalidPayload: "Missing required fields" });
       }
 
       const investorId = uuidv4();
@@ -256,7 +424,8 @@ export default Canister({
         return Err("Asset not found.");
       }
 
-      const tokensPurchased = payload.amountInvested / assetOpt.Some.pricePerToken;
+      const tokensPurchased =
+        payload.amountInvested / assetOpt.Some.pricePerToken;
       if (tokensPurchased > assetOpt.Some.availableTokens) {
         return Err("Not enough tokens available.");
       }
@@ -284,13 +453,17 @@ export default Canister({
   ),
 
   // Get PropertyOwner by ID
-  getPropertyOwnerById: query([text], Result(PropertyOwner, text), (ownerId) => {
-    const propertyOwnerOpt = propertyOwnerStorage.get(ownerId);
-    if ("None" in propertyOwnerOpt) {
-      return Err("Property owner not found.");
+  getPropertyOwnerById: query(
+    [text],
+    Result(PropertyOwner, text),
+    (ownerId) => {
+      const propertyOwnerOpt = propertyOwnerStorage.get(ownerId);
+      if ("None" in propertyOwnerOpt) {
+        return Err("Property owner not found.");
+      }
+      return Ok(propertyOwnerOpt.Some);
     }
-    return Ok(propertyOwnerOpt.Some);
-  }),
+  ),
 
   // Get Investor by ID
   getInvestorById: query([text], Result(Investor, text), (investorId) => {
@@ -316,6 +489,8 @@ export default Canister({
   // Get All Transactions
   getAllTransactions: query([], Result(Vec(Transaction), text), () => {
     const transactions = transactionStorage.values();
-    return transactions.length ? Ok(transactions) : Err("No transactions found.");
+    return transactions.length
+      ? Ok(transactions)
+      : Err("No transactions found.");
   }),
 });
