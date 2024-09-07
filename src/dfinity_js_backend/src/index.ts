@@ -32,6 +32,13 @@ import {
 import { hashCode } from "hashcode";
 import { v4 as uuidv4 } from "uuid";
 
+// PropertyOwnerStatus Enum
+const PropertyOwnerStatus = Variant({
+  Active: text,
+  Inactive: text,
+  Suspended: text,
+});
+
 // PropertyOwner Struct
 const PropertyOwner = Record({
   id: text,
@@ -41,13 +48,6 @@ const PropertyOwner = Record({
   email: text,
   propertiesOwned: Vec(text),
   joinedAt: text,
-});
-
-// PropertyOwnerStatus Enum
-const PropertyOwnerStatus = Variant({
-  Active: text,
-  Inactive: text,
-  Suspended: text,
 });
 
 // Investor Struct
@@ -165,34 +165,55 @@ export default Canister({
     }
   ),
 
-  // Create Asset
-  createAsset: update(
-    [AssetPayload],
-    Result(Asset, text),
+  // Create Investor
+  createInvestor: update(
+    [InvestorPayload],
+    Result(Investor, text),
     (payload) => {
-      const propertyOwnerOpt = propertyOwnerStorage.get(ic.caller().toText());
-      if ("None" in propertyOwnerOpt) {
-        return Err("Property owner not found.");
+      if (!payload.name || !payload.email || !payload.phoneNumber) {
+        return Err("Missing required fields");
       }
 
-      const assetId = uuidv4();
-      const asset = {
-        id: assetId,
-        owner: ic.caller().toText(),
-        title: payload.title,
-        description: payload.description,
-        location: payload.location,
-        totalValue: payload.totalValue,
-        totalTokens: payload.totalTokens,
-        availableTokens: payload.totalTokens,
-        status: "Available",
-        listedAt: new Date().toISOString(),
+      const investorId = uuidv4();
+      const investor = {
+        id: investorId,
+        principal: ic.caller(),
+        name: payload.name,
+        email: payload.email,
+        phoneNumber: payload.phoneNumber,
+        investments: [],
+        totalInvested: 0n,
+        joinedAt: new Date().toISOString(),
       };
-
-      assetStorage.insert(assetId, asset);
-      return Ok(asset);
+      investorStorage.insert(investorId, investor);
+      return Ok(investor);
     }
   ),
+
+  // Create Asset
+  createAsset: update([AssetPayload], Result(Asset, text), (payload) => {
+    const propertyOwnerOpt = propertyOwnerStorage.get(ic.caller().toText());
+    if ("None" in propertyOwnerOpt) {
+      return Err("Property owner not found.");
+    }
+
+    const assetId = uuidv4();
+    const asset = {
+      id: assetId,
+      owner: ic.caller().toText(),
+      title: payload.title,
+      description: payload.description,
+      location: payload.location,
+      totalValue: payload.totalValue,
+      totalTokens: payload.totalTokens,
+      availableTokens: payload.totalTokens,
+      status: "Available",
+      listedAt: new Date().toISOString(),
+    };
+
+    assetStorage.insert(assetId, asset);
+    return Ok(asset);
+  }),
 
   // Create Offering
   createOffering: update(
@@ -235,18 +256,29 @@ export default Canister({
         return Err("Asset not found.");
       }
 
+      const tokensPurchased = payload.amountInvested / assetOpt.Some.pricePerToken;
+      if (tokensPurchased > assetOpt.Some.availableTokens) {
+        return Err("Not enough tokens available.");
+      }
+
       const transactionId = uuidv4();
       const transaction = {
         id: transactionId,
         investorId: payload.investorId,
         assetId: payload.assetId,
         amountInvested: payload.amountInvested,
-        tokensPurchased: payload.amountInvested / assetOpt.Some.pricePerToken,
+        tokensPurchased: tokensPurchased,
         transactionDate: new Date().toISOString(),
         status: "Completed",
       };
 
+      // Update storage
+      assetStorage.insert(payload.assetId, {
+        ...assetOpt.Some,
+        availableTokens: assetOpt.Some.availableTokens - tokensPurchased,
+      });
       transactionStorage.insert(transactionId, transaction);
+
       return Ok(transaction);
     }
   ),
@@ -260,6 +292,15 @@ export default Canister({
     return Ok(propertyOwnerOpt.Some);
   }),
 
+  // Get Investor by ID
+  getInvestorById: query([text], Result(Investor, text), (investorId) => {
+    const investorOpt = investorStorage.get(investorId);
+    if ("None" in investorOpt) {
+      return Err("Investor not found.");
+    }
+    return Ok(investorOpt.Some);
+  }),
+
   // Get All Assets
   getAllAssets: query([], Result(Vec(Asset), text), () => {
     const assets = assetStorage.values();
@@ -270,5 +311,11 @@ export default Canister({
   getAllOfferings: query([], Result(Vec(Offering), text), () => {
     const offerings = offeringStorage.values();
     return offerings.length ? Ok(offerings) : Err("No offerings found.");
+  }),
+
+  // Get All Transactions
+  getAllTransactions: query([], Result(Vec(Transaction), text), () => {
+    const transactions = transactionStorage.values();
+    return transactions.length ? Ok(transactions) : Err("No transactions found.");
   }),
 });

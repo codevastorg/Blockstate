@@ -1,9 +1,12 @@
 service: () -> {
     createAsset: (record {title:text; totalValue:nat64; totalTokens:nat64; description:text; location:text}) -> (variant {Ok:record {id:text; status:text; title:text; listedAt:text; totalValue:nat64; owner:text; totalTokens:nat64; description:text; availableTokens:nat64; location:text}; Err:text});
+    createInvestor: (record {name:text; email:text; phoneNumber:text}) -> (variant {Ok:record {id:text; "principal":principal; totalInvested:nat64; name:text; joinedAt:text; investments:vec text; email:text; phoneNumber:text}; Err:text});
     createOffering: (record {assetId:text; pricePerToken:nat64; availableTokens:nat64}) -> (variant {Ok:record {id:text; status:text; endDate:opt text; assetId:text; pricePerToken:nat64; availableTokens:nat64; startDate:text}; Err:text});
     createPropertyOwner: (record {name:text; email:text; phoneNumber:text}) -> (variant {Ok:record {id:text; owner:principal; name:text; joinedAt:text; email:text; propertiesOwned:vec text; phoneNumber:text}; Err:text});
     getAllAssets: () -> (variant {Ok:vec record {id:text; status:text; title:text; listedAt:text; totalValue:nat64; owner:text; totalTokens:nat64; description:text; availableTokens:nat64; location:text}; Err:text}) query;
     getAllOfferings: () -> (variant {Ok:vec record {id:text; status:text; endDate:opt text; assetId:text; pricePerToken:nat64; availableTokens:nat64; startDate:text}; Err:text}) query;
+    getAllTransactions: () -> (variant {Ok:vec record {id:text; status:text; tokensPurchased:nat64; transactionDate:text; assetId:text; investorId:text; amountInvested:nat64}; Err:text}) query;
+    getInvestorById: (text) -> (variant {Ok:record {id:text; "principal":principal; totalInvested:nat64; name:text; joinedAt:text; investments:vec text; email:text; phoneNumber:text}; Err:text}) query;
     getPropertyOwnerById: (text) -> (variant {Ok:record {id:text; owner:principal; name:text; joinedAt:text; email:text; propertiesOwned:vec text; phoneNumber:text}; Err:text}) query;
     makeInvestment: (record {assetId:text; investorId:text; amountInvested:nat64}) -> (variant {Ok:record {id:text; status:text; tokensPurchased:nat64; transactionDate:text; assetId:text; investorId:text; amountInvested:nat64}; Err:text});
 }
