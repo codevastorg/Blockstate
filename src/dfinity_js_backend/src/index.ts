@@ -438,36 +438,36 @@ export default Canister({
   ),
 
   // Delete Investor Profile
-  deleteInvestorProfile: update(
+  deleteInvestorProfile: update([text], Result(Null, Message), (investorId) => {
+    const investorOpt = investorStorage.get(investorId);
+    if ("None" in investorOpt) {
+      return Err({ NotFound: "Investor with id=${investorId} not found." });
+    }
+
+    // Check if the caller is the owner of the Investor profile
+    if (ic.caller().toText() !== investorOpt.Some.principal.toText()) {
+      return Err({ UnauthorizedAccess: "Unauthorized access." });
+    }
+
+    // Remove the investor profile
+    investorStorage.remove(investorId);
+
+    return Ok(null);
+  }),
+
+  // Get Investor Profile by ID
+  getInvestorProfileById: query(
     [text],
-    Result(Null, Message),
+    Result(Investor, Message),
     (investorId) => {
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
-        return Err({ NotFound: "Investor with id=${investorId} not found." });
+        return Err({ NotFound: "Investor not found." });
       }
 
-      // Check if the caller is the owner of the Investor profile
-      if (ic.caller().toText() !== investorOpt.Some.principal.toText()) {
-        return Err({ UnauthorizedAccess: "Unauthorized access." });
-      }
-
-      // Remove the investor profile
-      investorStorage.remove(investorId);
-
-      return Ok(null);
+      return Ok(investorOpt.Some);
     }
   ),
-
-  // Get Investor Profile by ID
-  getInvestorProfileById: query([text], Result(Investor, Message), (investorId) => {
-    const investorOpt = investorStorage.get(investorId);
-    if ("None" in investorOpt) {
-      return Err({ NotFound: "Investor not found." });
-    }
-
-    return Ok(investorOpt.Some);
-  }),
 
   // Get Investor Profile by Principal using filter
   getInvestorProfileByPrincipal: query([], Result(Investor, Message), () => {
@@ -484,7 +484,7 @@ export default Canister({
     return Ok(investors[0]);
   }),
 
-  // Get All Investors  
+  // Get All Investors
   getAllInvestors: query([], Result(Vec(Investor), Message), () => {
     const investors = investorStorage.values();
 
@@ -497,38 +497,212 @@ export default Canister({
   }),
 
   // Create Asset
-  createAsset: update([AssetPayload], Result(Asset, text), (payload) => {
-    const propertyOwnerOpt = propertyOwnerStorage.get(ic.caller().toText());
-    if ("None" in propertyOwnerOpt) {
-      return Err("Property owner not found.");
+  createAsset: update([AssetPayload], Result(Asset, Message), (payload) => {
+    // Check if required fields are provided
+    if (
+      !payload.title ||
+      !payload.description ||
+      !payload.location ||
+      !payload.totalValue ||
+      !payload.totalTokens
+    ) {
+      return Err({
+        InvalidPayload: "Ensure all required fields are provided!",
+      });
+    }
+
+    // Check if the caller is a PropertyOwner
+    const propertyOwners = propertyOwnerStorage.values();
+    const propertyOwner = propertyOwners.find(
+      (owner) => owner.owner.toText() === ic.caller().toText()
+    );
+
+    if (!propertyOwner) {
+      return Err({ UnauthorizedAccess: "Unauthorized access." });
     }
 
     const assetId = uuidv4();
     const asset = {
       id: assetId,
-      owner: ic.caller().toText(),
-      title: payload.title,
-      description: payload.description,
-      location: payload.location,
-      totalValue: payload.totalValue,
-      totalTokens: payload.totalTokens,
+      owner: propertyOwner.id,
+      ...payload,
       availableTokens: payload.totalTokens,
       status: "Available",
       listedAt: new Date().toISOString(),
     };
 
+    // Insert the asset into the storage
     assetStorage.insert(assetId, asset);
+
+    // Successfully return the created asset
     return Ok(asset);
+  }),
+
+  // Update Asset
+  updateAsset: update(
+    [text, AssetPayload],
+    Result(Asset, Message),
+    (assetId, payload) => {
+      // Check if the asset exists
+      const assetOpt = assetStorage.get(assetId);
+      if ("None" in assetOpt) {
+        return Err({ NotFound: "Asset not found." });
+      }
+
+      // Check if required fields are provided
+      if (
+        !payload.title ||
+        !payload.description ||
+        !payload.location ||
+        !payload.totalValue ||
+        !payload.totalTokens
+      ) {
+        return Err({
+          InvalidPayload: "Ensure all required fields are provided!",
+        });
+      }
+
+      // Check if the caller is the owner of the Asset
+      const propertyOwners = propertyOwnerStorage.values();
+      const propertyOwner = propertyOwners.find(
+        (owner) => owner.owner.toText() === ic.caller().toText()
+      );
+
+      if (assetOpt.Some.owner !== propertyOwner.id) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Update the asset
+      const updatedAsset = {
+        ...assetOpt.Some,
+        ...payload,
+      };
+
+      assetStorage.insert(assetId, updatedAsset);
+
+      return Ok(updatedAsset);
+    }
+  ),
+
+  // Delete Asset
+  deleteAsset: update([text], Result(Null, Message), (assetId) => {
+    const assetOpt = assetStorage.get(assetId);
+    if ("None" in assetOpt) {
+      return Err({ NotFound: "Asset with id=${assetId} not found." });
+    }
+
+    // Check if the caller is the owner of the Asset
+    const propertyOwners = propertyOwnerStorage.values();
+    const propertyOwner = propertyOwners.find(
+      (owner) => owner.owner.toText() === ic.caller().toText()
+    );
+
+    if (assetOpt.Some.owner !== propertyOwner.id) {
+      return Err({ UnauthorizedAccess: "Unauthorized access." });
+    }
+
+    // Remove the asset
+    assetStorage.remove(assetId);
+
+    return Ok(null);
+  }),
+
+  // Get Asset by ID
+  getAssetById: query([text], Result(Asset, Message), (assetId) => {
+    const assetOpt = assetStorage.get(assetId);
+    if ("None" in assetOpt) {
+      return Err({
+        NotFound: `Asset with id=${assetId} not found`,
+      });
+    }
+
+    return Ok(assetOpt.Some);
+  }),
+
+  // Get all Assets
+  getAllAssets: query([], Result(Vec(Asset), Message), () => {
+    const assets = assetStorage.values();
+
+    // Check if there are any assets
+    if (assets.length === 0) {
+      return Err({ NotFound: "No assets found." });
+    }
+
+    return Ok(assets);
+  }),
+
+  // Get Assets by Owner
+  getAssetsByOwner: query([text], Result(Vec(Asset), Message), (ownerId) => {
+    const assets = assetStorage.values().filter((asset) => {
+      return asset.owner === ownerId;
+    });
+
+    // Check if there are any assets
+    if (assets.length === 0) {
+      return Err({ NotFound: "No assets found for the owner" });
+    }
+
+    return Ok(assets);
+  }),
+
+  // Get available Assets
+  getAvailableAssets: query([], Result(Vec(Asset), Message), () => {
+    const assets = assetStorage.values().filter((asset) => {
+      return asset.status === "Available";
+    });
+
+    // Check if there are any available assets
+    if (assets.length === 0) {
+      return Err({ NotFound: "No available assets found." });
+    }
+
+    return Ok(assets);
+  }),
+
+  // Get Sold Out Assets
+  getSoldOutAssets: query([], Result(Vec(Asset), Message), () => {
+    const assets = assetStorage.values().filter((asset) => {
+      return asset.status === "Sold Out";
+    });
+
+    // Check if there are any sold out assets
+    if (assets.length === 0) {
+      return Err({ NotFound: "No sold out assets found." });
+    }
+
+    return Ok(assets);
   }),
 
   // Create Offering
   createOffering: update(
     [OfferingPayload],
-    Result(Offering, text),
+    Result(Offering, Message),
     (payload) => {
+      // Check if required fields are provided
+      if (
+        !payload.assetId ||
+        !payload.pricePerToken ||
+        !payload.availableTokens
+      ) {
+        return Err({
+          InvalidPayload: "Ensure all required fields are provided!",
+        });
+      }
+
+      // Check if the asset exists
       const assetOpt = assetStorage.get(payload.assetId);
       if ("None" in assetOpt) {
-        return Err("Asset not found.");
+        return Err({ NotFound: "Asset not found." });
+      }
+
+      // Check if the caller is the owner of the Asset
+      const propertyOwners = propertyOwnerStorage.values();
+      const propertyOwner = propertyOwners.find(
+        (owner) => owner.owner.toText() === ic.caller().toText()
+      );
+
+      if (assetOpt.Some.owner !== propertyOwner.id) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
       }
 
       const offeringId = uuidv4();
@@ -538,14 +712,137 @@ export default Canister({
         pricePerToken: payload.pricePerToken,
         availableTokens: payload.availableTokens,
         startDate: new Date().toISOString(),
-        endDate: None,
-        status: "Ongoing",
+        endDate: None, // Optional endDate
+        status: "Ongoing", // Status for the offering
       };
 
+      // Insert the offering into the storage
       offeringStorage.insert(offeringId, offering);
+
+      // Successfully return the created offering
       return Ok(offering);
     }
   ),
+
+  // Update Offering
+  updateOffering: update(
+    [text, OfferingPayload],
+    Result(Offering, Message),
+    (offeringId, payload) => {
+      // Check if the offering exists
+      const offeringOpt = offeringStorage.get(offeringId);
+      if ("None" in offeringOpt) {
+        return Err({ NotFound: "Offering not found." });
+      }
+
+      // Check if required fields are provided
+      if (
+        !payload.assetId ||
+        !payload.pricePerToken ||
+        !payload.availableTokens
+      ) {
+        return Err({
+          InvalidPayload: "Ensure all required fields are provided!",
+        });
+      }
+
+      // Check if the asset exists
+      const assetOpt = assetStorage.get(payload.assetId);
+      if ("None" in assetOpt) {
+        return Err({ NotFound: "Asset not found." });
+      }
+
+      // Check if the caller is the owner of the Asset
+      const propertyOwners = propertyOwnerStorage.values();
+      const propertyOwner = propertyOwners.find(
+        (owner) => owner.owner.toText() === ic.caller().toText()
+      );
+
+      if (assetOpt.Some.owner !== propertyOwner.id) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Update the offering
+      const updatedOffering = {
+        ...offeringOpt.Some,
+        ...payload,
+      };
+
+      offeringStorage.insert(offeringId, updatedOffering);
+
+      return Ok(updatedOffering);
+    }
+  ),
+
+  // Get Offering by ID
+  getOfferingById: query([text], Result(Offering, Message), (offeringId) => {
+    const offeringOpt = offeringStorage.get(offeringId);
+    if ("None" in offeringOpt) {
+      return Err({
+        NotFound: `Offering with id=${offeringId} not found`,
+      });
+    }
+
+    return Ok(offeringOpt.Some);
+  }),
+
+  // Get all Offerings
+  getAllOfferings: query([], Result(Vec(Offering), Message), () => {
+    const offerings = offeringStorage.values();
+
+    // Check if there are any offerings
+    if (offerings.length === 0) {
+      return Err({ NotFound: "No offerings found." });
+    }
+
+    return Ok(offerings);
+  }),
+
+  // Get Offerings by Asset
+  getOfferingsByAsset: query(
+    [text],
+    Result(Vec(Offering), Message),
+    (assetId) => {
+      const offerings = offeringStorage.values().filter((offering) => {
+        return offering.assetId === assetId;
+      });
+
+      // Check if there are any offerings
+      if (offerings.length === 0) {
+        return Err({ NotFound: "No offerings found for the asset" });
+      }
+
+      return Ok(offerings);
+    }
+  ),
+
+  // Get Ongoing Offerings
+  getOngoingOfferings: query([], Result(Vec(Offering), Message), () => {
+    const offerings = offeringStorage.values().filter((offering) => {
+      return offering.status === "Ongoing";
+    });
+
+    // Check if there are any ongoing offerings
+    if (offerings.length === 0) {
+      return Err({ NotFound: "No ongoing offerings found." });
+    }
+
+    return Ok(offerings);
+  }),
+
+  // Get Completed Offerings
+  getCompletedOfferings: query([], Result(Vec(Offering), Message), () => {
+    const offerings = offeringStorage.values().filter((offering) => {
+      return offering.status === "Completed";
+    });
+
+    // Check if there are any completed offerings
+    if (offerings.length === 0) {
+      return Err({ NotFound: "No completed offerings found." });
+    }
+
+    return Ok(offerings);
+  }),
 
   // Make Investment
   makeInvestment: update(
@@ -589,46 +886,4 @@ export default Canister({
       return Ok(transaction);
     }
   ),
-
-  // Get PropertyOwner by ID
-  getPropertyOwnerById: query(
-    [text],
-    Result(PropertyOwner, text),
-    (ownerId) => {
-      const propertyOwnerOpt = propertyOwnerStorage.get(ownerId);
-      if ("None" in propertyOwnerOpt) {
-        return Err("Property owner not found.");
-      }
-      return Ok(propertyOwnerOpt.Some);
-    }
-  ),
-
-  // Get Investor by ID
-  getInvestorById: query([text], Result(Investor, text), (investorId) => {
-    const investorOpt = investorStorage.get(investorId);
-    if ("None" in investorOpt) {
-      return Err("Investor not found.");
-    }
-    return Ok(investorOpt.Some);
-  }),
-
-  // Get All Assets
-  getAllAssets: query([], Result(Vec(Asset), text), () => {
-    const assets = assetStorage.values();
-    return assets.length ? Ok(assets) : Err("No assets found.");
-  }),
-
-  // Get All Offerings
-  getAllOfferings: query([], Result(Vec(Offering), text), () => {
-    const offerings = offeringStorage.values();
-    return offerings.length ? Ok(offerings) : Err("No offerings found.");
-  }),
-
-  // Get All Transactions
-  getAllTransactions: query([], Result(Vec(Transaction), text), () => {
-    const transactions = transactionStorage.values();
-    return transactions.length
-      ? Ok(transactions)
-      : Err("No transactions found.");
-  }),
 });
