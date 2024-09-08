@@ -63,7 +63,7 @@ const Investor = Record({
   joinedAt: text,
 });
 
-// Asset Struct
+// Asset/Property Struct
 const Asset = Record({
   id: text,
   owner: text, // PropertyOwner ID
@@ -147,7 +147,6 @@ const AssetPayload = Record({
   description: text,
   location: text,
   totalValue: nat64,
-  totalTokens: nat64,
 });
 
 // Offering Payload
@@ -528,8 +527,7 @@ export default Canister({
       !payload.title ||
       !payload.description ||
       !payload.location ||
-      !payload.totalValue ||
-      !payload.totalTokens
+      !payload.totalValue
     ) {
       return Err({
         InvalidPayload: "Ensure all required fields are provided!",
@@ -546,12 +544,22 @@ export default Canister({
       return Err({ UnauthorizedAccess: "Unauthorized access." });
     }
 
+    // Logic to automate division of property into tokens based on it's total value.
+    const tokenValue = 1000n; // 1 token
+
+    // Calculate the total tokens based on the total value of the property
+    const totalTokens = payload.totalValue / tokenValue;
+
+    // Generate a unique asset ID
     const assetId = uuidv4();
+
+    // Create the asset object
     const asset = {
       id: assetId,
       owner: propertyOwner.id,
       ...payload,
-      availableTokens: payload.totalTokens,
+      totalTokens: totalTokens,
+      availableTokens: totalTokens,
       status: "Available",
       listedAt: new Date().toISOString(),
     };
@@ -579,8 +587,7 @@ export default Canister({
         !payload.title ||
         !payload.description ||
         !payload.location ||
-        !payload.totalValue ||
-        !payload.totalTokens
+        !payload.totalValue
       ) {
         return Err({
           InvalidPayload: "Ensure all required fields are provided!",
