@@ -1018,7 +1018,6 @@ export default Canister({
         });
       }
 
-      // Decrease the number of available tokens for the asset involved in the transaction
 
       // Update the investor total invested amount
       const investor = investorOpt.Some;
