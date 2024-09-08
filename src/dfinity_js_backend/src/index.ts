@@ -991,6 +991,7 @@ export default Canister({
         });
       }
 
+      // Update the reserve status to completed
       const reserve = pendingReserveOpt.Some;
       const updatedReserve = {
         ...reserve,
@@ -1005,6 +1006,9 @@ export default Canister({
         });
       }
 
+      // Decrease the number of available tokens for the asset involved in the transaction
+
+      // Update the investor total invested amount
       const investor = investorOpt.Some;
       investor.totalInvested += reserve.amountInvested;
       investorStorage.insert(investorId, investor);
@@ -1061,6 +1065,28 @@ globalThis.crypto = {
 };
 
 // HELPER FUNCTIONS
+
+// Function to update available tokens for an asset after an investment
+function updateAvailableTokensForAsset(assetId: text, tokensPurchased: nat64) {
+  // Fetch the asset from the storage
+  const assetOpt = assetStorage.get(assetId);
+
+  // Check if the asset exists
+  if ("None" in assetOpt) {
+    return Err({
+      NotFound: `Asset with id=${assetId} not found`,
+    });
+  }
+
+  const asset = assetOpt.Some;
+  asset.availableTokens -= tokensPurchased;
+
+  // Update the asset in storage
+  assetStorage.insert(assetId, asset);
+
+  return Ok(asset);
+}
+
 function generateCorrelationId(bookId: text): nat64 {
   const correlationId = `${bookId}_${ic.caller().toText()}_${ic.time()}`;
   return hash(correlationId);
