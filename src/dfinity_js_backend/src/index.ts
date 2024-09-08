@@ -121,7 +121,15 @@ const Leasing = Record({
   leaseEndDate: text,
   rentalPricePerToken: nat64, // Rent price per token (ownership)
   status: text, // "Active", "Expired", "Terminated"
+  creator: Principal,
   totalRentCollected: nat64, // Total rent collected from leasing
+});
+
+// Rent Transaction Status Enum
+const RentTransactionStatus = Variant({
+  PaymentPending: text,
+  Completed: text,
+  Cancelled: text,
 });
 
 // Rent Transaction Struct
@@ -135,11 +143,12 @@ const RentTransaction = Record({
   amountPaid: nat64,
   paid_at_block: Opt(nat64),
   transactionDate: text,
+  status: RentTransactionStatus,
   memo: nat64,
 });
 
-// Dividend Struct
-const Dividend = Record({
+// Dividend Transaction Struct
+const DividendTransaction = Record({
   id: text,
   assetId: text,
   propertyOwnerId: text,
@@ -148,7 +157,7 @@ const Dividend = Record({
   tokensOwned: nat64, // Number of tokens owned by the investor
   dividendAmount: nat64, // Dividend amount for this investor
   paid_at_block: Opt(nat64),
-  transactionDate: text,
+  distributedAt: text,
   memo: nat64,
 });
 
@@ -207,8 +216,7 @@ const TransactionPayload = Record({
 const LeasingPayload = Record({
   assetId: text,
   propertyOwnerId: text,
-  leaseStartDate: text,
-  leaseEndDate: text,
+  leaseDurationInDays: nat64,
   rentalPricePerToken: nat64,
 });
 
@@ -217,8 +225,21 @@ const propertyOwnerStorage = StableBTreeMap(0, text, PropertyOwner);
 const investorStorage = StableBTreeMap(1, text, Investor);
 const assetStorage = StableBTreeMap(2, text, Asset);
 const offeringStorage = StableBTreeMap(3, text, Offering);
+const leaseStorage = StableBTreeMap(4, text, Leasing);
 const persistedInvestmentsReserves = StableBTreeMap(4, Principal, Transaction);
 const pendingInvestmentsReserves = StableBTreeMap(5, nat64, Transaction);
+const persistedRentTransactions = StableBTreeMap(6, Principal, RentTransaction);
+const pendingRentTransactions = StableBTreeMap(7, nat64, RentTransaction);
+const persistedDividendTransactions = StableBTreeMap(
+  8,
+  Principal,
+  DividendTransaction
+);
+const pendingDividendTransactions = StableBTreeMap(
+  9,
+  nat64,
+  DividendTransaction
+);
 
 // Reservation period in seconds
 const TIMEOUT_PERIOD = 9600n;
@@ -1091,6 +1112,202 @@ export default Canister({
       return await verifyPaymentInternal(propertyOwner, amount, block, memo);
     }
   ),
+
+  // Function for a property owner tp create a lease for an asset
+  createLease: update([LeasingPayload], Result(Leasing, Message), (payload) => {
+    // Check if required fields are provided
+    if (
+      !payload.assetId ||
+      !payload.propertyOwnerId ||
+      !payload.leaseDurationInDays ||
+      !payload.rentalPricePerToken
+    ) {
+      return Err({
+        InvalidPayload: "Ensure all required fields are provided!",
+      });
+    }
+
+    const leaseStartDate = new Date().toISOString();
+    const leaseEndDate = new Date();
+    leaseEndDate.setDate(
+      leaseEndDate.getDate() + Number(payload.leaseDurationInDays)
+    );
+
+    // Check if the asset exists
+    const assetOpt = assetStorage.get(payload.assetId);
+    if ("None" in assetOpt) {
+      return Err({ NotFound: "Asset not found." });
+    }
+
+    // Check if the caller is the owner of the Asset
+    const propertyOwners = propertyOwnerStorage.values();
+    const propertyOwner = propertyOwners.find(
+      (owner) => owner.owner.toText() === ic.caller().toText()
+    );
+
+    if (assetOpt.Some.owner !== propertyOwner.id) {
+      return Err({ UnauthorizedAccess: "Unauthorized access." });
+    }
+
+    // Generate a unique lease ID
+    const leaseId = uuidv4();
+
+    // Create the lease object
+    const lease = {
+      id: leaseId,
+      ...payload,
+      leaseStartDate: leaseStartDate,
+      leaseEndDate: leaseEndDate.toISOString(),
+      creator: ic.caller(),
+      status: "Active",
+      totalRentCollected: 0n,
+    };
+
+    // Insert the lease into the storage
+    leaseStorage.insert(leaseId, lease);
+
+    // Successfully return the created lease
+    return Ok(lease);
+  }),
+
+  // FUnction to reserve rent for an active lease
+  RentReservation: update(
+    [text, text, text, nat64],
+    Result(RentTransaction, Message),
+    (propertyOwnerId, tenantId, leaseId, amountPaid) => {
+      // Check if the property owner exists
+      const propertyOwnerOpt = propertyOwnerStorage.get(propertyOwnerId);
+      if ("None" in propertyOwnerOpt) {
+        return Err({
+          NotFound: `Cannot reserve rent collection: property owner with id=${propertyOwnerId} not found`,
+        });
+      }
+
+      const propertyOwner = propertyOwnerOpt.Some;
+
+      // Check if the tenant exists
+      const tenantOpt = investorStorage.get(tenantId);
+      if ("None" in tenantOpt) {
+        return Err({
+          NotFound: `Cannot reserve rent collection: tenant with id=${tenantId} not found`,
+        });
+      }
+
+      const tenant = tenantOpt.Some;
+
+      // Check if the lease exists
+      const leaseOpt = leaseStorage.get(leaseId);
+      if ("None" in leaseOpt) {
+        return Err({
+          NotFound: `Cannot reserve rent collection: lease with id=${leaseId} not found`,
+        });
+      }
+
+      const lease = leaseOpt.Some;
+
+      // Check if the lease is active
+      if (lease.status !== "Active") {
+        return Err({ Error: "Lease is not active." });
+      }
+
+      // Check if the caller is the tenant
+      if (ic.caller().toText() !== tenantId) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Generate a unique rent transaction ID
+      const rentTransactionId = uuidv4();
+
+      // Create the rent transaction object
+      const rentTransaction = {
+        id: rentTransactionId,
+        propertyOwnerId: propertyOwner.id,
+        tenantId: tenantId,
+        leaseId: leaseId,
+        lessor: lease.creator,
+        lessee: tenant.owner,
+        amountPaid: amountPaid,
+        paid_at_block: None,
+        transactionDate: new Date().toISOString(),
+        status: { PaymentPending: "Payment Pending" },
+        memo: generateCorrelationId(tenantId),
+      };
+
+      // Console log the rentTransaction
+      console.log("RentTransaction Reserve", rentTransaction);
+
+      // Insert the rent transaction into the storage
+      pendingRentTransactions.insert(rentTransaction.memo, rentTransaction);
+
+      // Discard the reservation after a specific period
+      discardByTimeout(rentTransaction.memo, TIMEOUT_PERIOD);
+
+      // Successfully return the created rent transaction
+      return Ok(rentTransaction);
+    }
+  ),
+
+  // Complete rent reservation
+  completeRentReservation: update(
+    [Principal, text, nat64, nat64, nat64],
+    Result(RentTransaction, Message),
+    async (reservor, tenantId, reservedPrice, block, memo) => {
+      const paymentVerified = await verifyPaymentInternal(
+        reservor,
+        reservedPrice,
+        block,
+        memo
+      );
+
+      if (!paymentVerified) {
+        return Err({
+          NotFound: `cannot complete the rent reservation: cannot verify the payment, memo=${memo}`,
+        });
+      }
+
+      const pendingRentTransactionOpt = pendingRentTransactions.remove(memo);
+
+      if ("None" in pendingRentTransactionOpt) {
+        return Err({
+          NotFound: `Cannot complete the rent reservation: there is no pending reserve with id=${tenantId}`,
+        });
+      }
+
+      // Update the reserve status to completed
+      const rentTransaction = pendingRentTransactionOpt.Some;
+      const updatedRentTransaction = {
+        ...rentTransaction,
+        status: { PaymentCompleted: "Payment Completed" },
+        paid_at_block: block,
+      };
+
+      const propertyOwnerOpt = propertyOwnerStorage.get(
+        rentTransaction.propertyOwnerId
+      );
+      if ("None" in propertyOwnerOpt) {
+        return Err({
+          NotFound: `Property owner with id=${rentTransaction.propertyOwnerId} not found`,
+        });
+      }
+
+      // Update the total rent collected for the lease
+      const tenantOpt = investorStorage.get(tenantId);
+      if ("None" in tenantOpt) {
+        return Err({
+          NotFound: `Tenant with id=${tenantId} not found`,
+        });
+      }
+
+      const tenant = tenantOpt.Some;
+      tenant.totalRentPaid += reservedPrice;
+      investorStorage.insert(tenantId, tenant);
+      persistedRentTransactions.insert(ic.caller(), updatedRentTransaction);
+
+      return Ok(updatedRentTransaction);
+    }
+  ),
+
+  // Function to distribute dividends from the rent collected
 
   /*
               a helper function to get address from the principal
