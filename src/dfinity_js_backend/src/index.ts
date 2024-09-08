@@ -100,7 +100,7 @@ const Transaction = Record({
   id: text,
   propertyOwnerId: text,
   investorId: text,
-  assetId: text,
+  offeringId: text,
   propertyOwner: Principal,
   Investor: Principal,
   amountInvested: nat64,
@@ -159,7 +159,7 @@ const OfferingPayload = Record({
 // Transaction Payload
 const TransactionPayload = Record({
   investorId: text,
-  assetId: text,
+  offeringId: text,
   amountInvested: nat64,
 });
 
@@ -868,45 +868,4 @@ export default Canister({
   }),
 
   // Make Investment
-  makeInvestment: update(
-    [TransactionPayload],
-    Result(Transaction, text),
-    (payload) => {
-      const investorOpt = investorStorage.get(payload.investorId);
-      if ("None" in investorOpt) {
-        return Err("Investor not found.");
-      }
-
-      const assetOpt = assetStorage.get(payload.assetId);
-      if ("None" in assetOpt) {
-        return Err("Asset not found.");
-      }
-
-      const tokensPurchased =
-        payload.amountInvested / assetOpt.Some.pricePerToken;
-      if (tokensPurchased > assetOpt.Some.availableTokens) {
-        return Err("Not enough tokens available.");
-      }
-
-      const transactionId = uuidv4();
-      const transaction = {
-        id: transactionId,
-        investorId: payload.investorId,
-        assetId: payload.assetId,
-        amountInvested: payload.amountInvested,
-        tokensPurchased: tokensPurchased,
-        transactionDate: new Date().toISOString(),
-        status: "Completed",
-      };
-
-      // Update storage
-      assetStorage.insert(payload.assetId, {
-        ...assetOpt.Some,
-        availableTokens: assetOpt.Some.availableTokens - tokensPurchased,
-      });
-      transactionStorage.insert(transactionId, transaction);
-
-      return Ok(transaction);
-    }
-  ),
 });
