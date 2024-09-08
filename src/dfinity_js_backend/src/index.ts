@@ -67,6 +67,7 @@ const Investor = Record({
 const Asset = Record({
   id: text,
   owner: text, // PropertyOwner ID
+  imageUrl: text,
   title: text,
   description: text,
   location: text,
@@ -143,6 +144,7 @@ const InvestorPayload = Record({
 
 // Asset Payload
 const AssetPayload = Record({
+  imageUrl: text,
   title: text,
   description: text,
   location: text,
@@ -152,8 +154,6 @@ const AssetPayload = Record({
 // Offering Payload
 const OfferingPayload = Record({
   assetId: text,
-  pricePerToken: nat64,
-  availableTokens: nat64,
 });
 
 // Transaction Payload
@@ -527,7 +527,8 @@ export default Canister({
       !payload.title ||
       !payload.description ||
       !payload.location ||
-      !payload.totalValue
+      !payload.totalValue ||
+      !payload.imageUrl
     ) {
       return Err({
         InvalidPayload: "Ensure all required fields are provided!",
@@ -711,11 +712,7 @@ export default Canister({
     Result(Offering, Message),
     (payload) => {
       // Check if required fields are provided
-      if (
-        !payload.assetId ||
-        !payload.pricePerToken ||
-        !payload.availableTokens
-      ) {
+      if (!payload.assetId) {
         return Err({
           InvalidPayload: "Ensure all required fields are provided!",
         });
@@ -737,10 +734,18 @@ export default Canister({
         return Err({ UnauthorizedAccess: "Unauthorized access." });
       }
 
+      // Fetch the assetValue from the asset
+      const assetValue = assetOpt.Some.totalValue;
+
+      // Generate a unique offering ID
       const offeringId = uuidv4();
+
+      // Create the offering object
       const offering = {
         id: offeringId,
         ...payload,
+        pricePerToken: assetValue,
+        availableTokens: assetOpt.Some.totalTokens,
         creator: ic.caller(),
         startDate: new Date().toISOString(),
         endDate: None, // Optional endDate
@@ -767,11 +772,7 @@ export default Canister({
       }
 
       // Check if required fields are provided
-      if (
-        !payload.assetId ||
-        !payload.pricePerToken ||
-        !payload.availableTokens
-      ) {
+      if (!payload.assetId) {
         return Err({
           InvalidPayload: "Ensure all required fields are provided!",
         });
