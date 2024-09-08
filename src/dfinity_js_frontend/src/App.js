@@ -8,6 +8,7 @@ import "./index.css";
 // import "./styles/font.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home/Home";
+import HomeLanding from "./pages/Home/HomeLanding";
 import Donor from "./pages/Donor/Donor";
 import Charity from "./pages/Charity/Charity";
 import SelectorPage from "./pages/Home/SelectorPage";
@@ -17,7 +18,8 @@ const App = function AppWrapper() {
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<HomeLanding />} />
           <Route path="/donor" element={<Donor />} />
           <Route path="/charity" element={<Charity />} />
           <Route path="/selector" element={<SelectorPage />} />
