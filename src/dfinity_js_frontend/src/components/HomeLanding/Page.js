@@ -32,7 +32,7 @@ const Page = ({ className = "" }) => {
             />
             <div className="flex-1 flex flex-col items-start justify-start pt-[17.5px] px-0 pb-0">
               <a className="[text-decoration:none] self-stretch relative tracking-[0.1em] font-bold text-[inherit] whitespace-nowrap">
-                Equixtoken
+              BlockState
               </a>
             </div>
           </div>
@@ -56,7 +56,7 @@ const Page = ({ className = "" }) => {
                 />
               </div>
               <a className="[text-decoration:none] relative text-lg leading-[26px] font-medium font-manrope text-shades-black text-center inline-block min-w-[94px] whitespace-nowrap">
-                Add Listing
+                Create Account
               </a>
             </button>
           </div>

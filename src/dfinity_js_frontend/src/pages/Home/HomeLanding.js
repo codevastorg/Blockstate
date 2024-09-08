@@ -3,6 +3,8 @@ import Page from "../../components/HomeLanding/Page";
 import PropertyCard1 from "../../components/HomeLanding/PropertyCard1";
 import PropertyCard from "../../components/HomeLanding/PropertyCard";
 import FooterInfo from "../../components/HomeLanding/FooterInfo";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const HomeLanding = () => {
   return (
@@ -24,10 +26,10 @@ const HomeLanding = () => {
                         <span className="font-medium">Anytime</span>
                       </div>
                       <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
-                        <img
+                        <Img
                           className="w-6 h-6 relative"
                           alt=""
-                          src="/angledown-2.svg"
+                          src={Images.imgAngledown2}
                         />
                       </div>
                     </div>
@@ -37,23 +39,23 @@ const HomeLanding = () => {
               <div className="self-stretch flex flex-col items-end justify-start gap-[63px] max-w-full mq750:gap-[31px] mq450:gap-4">
                 <div className="self-stretch flex flex-row items-start justify-start flex-wrap content-start gap-x-10 gap-y-[30px] min-h-[1008px] max-w-full">
                   <PropertyCard1
-                    cardBackground="/card-background@2x.png"
+                    cardBackground={Images.imgCardBackground}
                     prop="£22,250"
                     penthouse="Penthouse"
                     manchesterCity="Manchester city"
                     bedroomPlaceholder="3"
                     bathroomPlaceholder="2"
-                    carousels="/carousels.svg"
+                    carousels={Images.imgCarousels}
                     forSale="Sold Out"
                   />
                   <PropertyCard
-                    rectangle34624569="/rectangle-34624569-1@2x.png"
+                    rectangle34624569={Images.imgRectangle_34624569_1}
                     prop="£654,250"
                     semiDetachedHouse="Semi detached house"
                     southfieldRoadOxfordOX4="Southfield Road, Oxford OX4"
                     prop1="3"
                     semiFurnished="Semi-furnished"
-                    carousels="/carousels-1.svg"
+                    carousels={Images.imgCarousels_1}
                     forSale="Coming soon"
                   />
                   <PropertyCard1
@@ -62,7 +64,7 @@ const HomeLanding = () => {
                     propBorderRadius="30px"
                     propAlignSelf="stretch"
                     propWidth="unset"
-                    cardBackground="/rectangle-34624569-2@2x.png"
+                    cardBackground={Images.imgRectangle_34624569_2}
                     propBorderRadius1="12px"
                     propBorderRadius2="unset"
                     prop="£926,250"
@@ -76,7 +78,7 @@ const HomeLanding = () => {
                     propFontWeight="unset"
                     propBackgroundColor="#000"
                     propBorderRadius3="0px 12px 12px 0px"
-                    carousels="/carousels-2.svg"
+                    carousels={Images.imgCarousels_2}
                     forSale="Live"
                     propColor1="#fff"
                     propMinWidth2="24px"
@@ -89,7 +91,7 @@ const HomeLanding = () => {
                     propBorderRadius="unset"
                     propAlignSelf="stretch"
                     propWidth="unset"
-                    cardBackground="/card-background@2x.png"
+                    cardBackground={Images.imgCardBackground}
                     propBorderRadius1="30px"
                     propBorderRadius2="unset"
                     prop="£22,250"
@@ -103,7 +105,7 @@ const HomeLanding = () => {
                     propFontWeight="unset"
                     propBackgroundColor="#000"
                     propBorderRadius3="0px 12px 12px 0px"
-                    carousels="/carousels-2.svg"
+                    carousels={Images.imgCarousels_2}
                     forSale="Live"
                     propColor1="#fff"
                     propMinWidth2="24px"
@@ -116,7 +118,7 @@ const HomeLanding = () => {
                     propBorderRadius="unset"
                     propAlignSelf="stretch"
                     propWidth="unset"
-                    cardBackground="/rectangle-34624569-1@2x.png"
+                    cardBackground={Images.imgRectangle_34624569_1 }
                     propBorderRadius1="30px"
                     propBorderRadius2="30px"
                     prop="£654,250"
@@ -130,7 +132,7 @@ const HomeLanding = () => {
                     propFontWeight="unset"
                     propBackgroundColor="#000"
                     propBorderRadius3="30px"
-                    carousels="/carousels-2.svg"
+                    carousels={Images.imgCarousels_2}
                     forSale="Live"
                     propColor1="#fff"
                     propMinWidth2="24px"
@@ -141,7 +143,7 @@ const HomeLanding = () => {
                     propFlex="1"
                     propMinWidth="372px"
                     propBorderRadius="30px"
-                    rectangle34624569="/rectangle-34624569-2@2x.png"
+                    rectangle34624569={Images.imgRectangle_34624569_2 }
                     propBorderRadius1="12px"
                     propBorderRadius2="unset"
                     prop="£926,250"
@@ -153,7 +155,7 @@ const HomeLanding = () => {
                     propMinWidth1="100px"
                     propBackgroundColor="#b6af9d"
                     propBorderRadius3="30px"
-                    carousels="/carousels-1.svg"
+                    carousels={Images.imgCarousels_1}
                     forSale="Coming soon"
                     propMinWidth2="77px"
                   />
@@ -169,10 +171,10 @@ const HomeLanding = () => {
                         <span className="font-medium">Anytime</span>
                       </div>
                       <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
-                        <img
+                        <Img
                           className="w-6 h-6 relative"
                           alt=""
-                          src="/angledown-2.svg"
+                          src={Images.imgAngledown2}
                         />
                       </div>
                     </div>
@@ -187,7 +189,7 @@ const HomeLanding = () => {
                     propBorderRadius="unset"
                     propAlignSelf="stretch"
                     propWidth="unset"
-                    cardBackground="/rectangle-34624569-6@2x.png"
+                    cardBackground={Images.imgRectangle_34624569_6}
                     propBorderRadius1="30px"
                     propBorderRadius2="unset"
                     prop="£107,250"
@@ -201,7 +203,7 @@ const HomeLanding = () => {
                     propFontWeight="unset"
                     propBackgroundColor="#000"
                     propBorderRadius3="0px 12px 12px 0px"
-                    carousels="/carousels-2.svg"
+                    carousels={Images.imgCarousels_2}
                     forSale="Live"
                     propColor1="#fff"
                     propMinWidth2="24px"
@@ -212,7 +214,7 @@ const HomeLanding = () => {
                     propFlex="unset"
                     propMinWidth="300px"
                     propBorderRadius="unset"
-                    rectangle34624569="/rectangle-34624569-7@2x.png"
+                    rectangle34624569={Images.imgRectangle_34624569_7}
                     propBorderRadius1="30px"
                     propBorderRadius2="unset"
                     prop="£829,250"
@@ -224,7 +226,7 @@ const HomeLanding = () => {
                     propMinWidth1="81px"
                     propBackgroundColor="#e8ae00"
                     propBorderRadius3="0px 12px 12px 0px"
-                    carousels="/carousels.svg"
+                    carousels={Images.imgCarousels}
                     forSale="Sold out"
                     propMinWidth2="49px"
                     tagsDisabled
@@ -235,7 +237,7 @@ const HomeLanding = () => {
                     propBorderRadius="unset"
                     propAlignSelf="stretch"
                     propWidth="unset"
-                    cardBackground="/rectangle-34624569-8@2x.png"
+                    cardBackground={Images.imgRectangle_34624569_8}
                     propBorderRadius1="30px"
                     propBorderRadius2="unset"
                     prop="£100,250"
@@ -249,7 +251,7 @@ const HomeLanding = () => {
                     propFontWeight="unset"
                     propBackgroundColor="#000"
                     propBorderRadius3="0px 12px 12px 0px"
-                    carousels="/carousels-2.svg"
+                    carousels={Images.imgCarousels_2}
                     forSale="Live"
                     propColor1="#fff"
                     propMinWidth2="24px"
@@ -260,17 +262,17 @@ const HomeLanding = () => {
               </div>
               <div className="w-[120px] flex flex-row items-start justify-start gap-2">
                 <div className="flex-1 [filter:drop-shadow(0px_20px_24px_rgba(255,_235,_176,_0.04))_drop-shadow(0px_8px_11px_rgba(45,_54,_67,_0.04))] rounded-xl border-amber-600 border-[1.5px] border-solid flex flex-row items-center justify-center p-3.5 opacity-[0.2]">
-                  <img
+                  <Img
                     className="h-6 w-6 relative"
                     alt=""
-                    src="/angleleft.svg"
+                    src={Images.imgAngleleft}
                   />
                 </div>
                 <div className="flex-1 [filter:drop-shadow(0px_20px_24px_rgba(255,_235,_176,_0.04))_drop-shadow(0px_8px_11px_rgba(45,_54,_67,_0.04))] rounded-xl border-amber-600 border-[1.5px] border-solid flex flex-row items-center justify-center p-3.5">
-                  <img
+                  <Img
                     className="h-6 w-6 relative"
                     alt=""
-                    src="/angleright.svg"
+                    src={Images.imgAngleright}
                   />
                 </div>
               </div>
@@ -279,10 +281,10 @@ const HomeLanding = () => {
         </section>
       </main>
       <footer className="self-stretch h-[361px] overflow-hidden shrink-0 flex flex-col items-start justify-start relative gap-2.5 max-w-full z-[1] text-left text-lg text-gray-300 font-body-copy-b4-medium mq750:h-auto">
-        <img
+        <Img
           className="w-[1569px] h-[535px] absolute !m-[0] top-[-135px] left-[-65px] overflow-hidden shrink-0"
           alt=""
-          src="/buildingillustration-1.svg"
+          src={Images.imgBuildingIllustration1}
         />
         <div className="mt-[-135px] self-stretch flex flex-col items-center justify-start pt-[259.5px] px-5 pb-[90.5px] box-border relative gap-[55px] shrink-0 [debug_commit:0448091] max-w-full mq750:gap-[27px] mq750:pt-[169px] mq750:pb-[59px] mq750:box-border">
           <div className="w-[1440px] h-[181px] hidden flex-col items-center justify-center pt-[100px] px-0 pb-14 box-border relative max-w-full z-[0] mq750:h-auto mq750:min-h-[181]">
@@ -296,10 +298,10 @@ const HomeLanding = () => {
                   <div className="self-stretch relative leading-[26px] font-medium flex items-center justify-center">
                     Subscribe
                   </div>
-                  <img
+                  <Img
                     className="h-6 w-6 relative"
                     alt=""
-                    src="/angleright-1.svg"
+                    src={Images.imgAngleright1}
                   />
                 </div>
               </div>
