@@ -75,6 +75,7 @@ const Asset = Record({
   totalTokens: nat64,
   availableTokens: nat64,
   status: text, // "Available", "Sold Out"
+  creator: Principal,
   listedAt: text,
 });
 
@@ -153,6 +154,8 @@ const DividendTransaction = Record({
   assetId: text,
   propertyOwnerId: text,
   investorId: text,
+  propertyOwner: Principal,
+  tenant: Principal,
   totalDividend: nat64, // Total dividend amount
   tokensOwned: nat64, // Number of tokens owned by the investor
   dividendAmount: nat64, // Dividend amount for this investor
@@ -631,6 +634,7 @@ export default Canister({
       totalTokens: totalTokens,
       availableTokens: totalTokens,
       status: "Available",
+      creator: ic.caller(),
       listedAt: new Date().toISOString(),
     };
 
@@ -1307,7 +1311,144 @@ export default Canister({
     }
   ),
 
-  // Function to distribute dividends from the rent collected
+  // Function to reserve a dividend for an asset
+  // Function to reserve a dividend for an asset
+  reserveDividend: update(
+    [text, text, text, nat64],
+    Result(DividendTransaction, Message),
+    (propertyOwnerId, investorId, assetId, reservedPrice) => {
+      // Check if the property owner exists
+      const propertyOwnerOpt = propertyOwnerStorage.get(propertyOwnerId);
+      if ("None" in propertyOwnerOpt) {
+        return Err({
+          NotFound: `Cannot reserve dividend collection: property owner with id=${propertyOwnerId} not found`,
+        });
+      }
+
+      const propertyOwner = propertyOwnerOpt.Some;
+
+      // Check if the investor exists
+      const investorOpt = investorStorage.get(investorId);
+      if ("None" in investorOpt) {
+        return Err({
+          NotFound: `Cannot reserve dividend collection: investor with id=${investorId} not found`,
+        });
+      }
+
+      const investor = investorOpt.Some;
+
+      // Check if the asset exists
+      const assetOpt = assetStorage.get(assetId);
+      if ("None" in assetOpt) {
+        return Err({
+          NotFound: `Cannot reserve dividend collection: asset with id=${assetId} not found`,
+        });
+      }
+
+      const asset = assetOpt.Some;
+
+      // Check if the caller is the owner of the Asset
+      if (ic.caller().toText() !== propertyOwner.owner.toText()) {
+        return Err({ UnauthorizedAccess: "Unauthorized access." });
+      }
+
+      // Generate a unique dividend transaction ID
+      const dividendTransactionId = uuidv4();
+
+      // Create the dividend transaction object
+      const dividendTransaction = {
+        id: dividendTransactionId,
+        assetId: assetId,
+        propertyOwnerId: propertyOwner.id,
+        investorId: investorId,
+        propertyOwner: asset.owner,
+        tenant: investor.owner,
+        totalDividend: reservedPrice,
+        tokensOwned: BigInt(0),
+        dividendAmount: BigInt(0),
+        paid_at_block: None,
+        distributedAt: new Date().toISOString(),
+        memo: generateCorrelationId(propertyOwner.id),
+      };
+
+      // Insert the dividend transaction into the storage
+      pendingDividendTransactions.insert(
+        dividendTransaction.memo,
+        dividendTransaction
+      );
+
+      // Discard the reservation after a specific period
+      discardByTimeout(dividendTransaction.memo, TIMEOUT_PERIOD);
+
+      // Successfully return the created dividend transaction
+      return Ok(dividendTransaction);
+    }
+  ),
+
+  // Complete dividend reservation
+  completeDividendReservation: update(
+    [Principal, text, nat64, nat64, nat64],
+    Result(DividendTransaction, Message),
+    async (reservor, assetId, reservedPrice, block, memo) => {
+      const paymentVerified = await verifyPaymentInternal(
+        reservor,
+        reservedPrice,
+        block,
+        memo
+      );
+
+      if (!paymentVerified) {
+        return Err({
+          NotFound: `Cannot complete the dividend reservation: cannot verify the payment, memo=${memo}`,
+        });
+      }
+
+      const pendingDividendTransactionOpt = pendingDividendTransactions.remove(
+        memo
+      );
+
+      if ("None" in pendingDividendTransactionOpt) {
+        return Err({
+          NotFound: `Cannot complete the dividend reservation: there is no pending reserve with id=${assetId}`,
+        });
+      }
+
+      // Update the reserve status to completed
+      const dividendTransaction = pendingDividendTransactionOpt.Some;
+      const updatedDividendTransaction = {
+        ...dividendTransaction,
+        status: { PaymentCompleted: "Payment Completed" },
+        paid_at_block: block,
+      };
+
+      const propertyOwnerOpt = propertyOwnerStorage.get(
+        dividendTransaction.propertyOwnerId
+      );
+      if ("None" in propertyOwnerOpt) {
+        return Err({
+          NotFound: `Property owner with id=${dividendTransaction.propertyOwnerId} not found`,
+        });
+      }
+
+      // Update the total rent collected for the lease
+      const assetOpt = assetStorage.get(assetId);
+      if ("None" in assetOpt) {
+        return Err({
+          NotFound: `Asset with id=${assetId} not found`,
+        });
+      }
+
+      const asset = assetOpt.Some;
+      asset.totalDividendsPaid += reservedPrice;
+      assetStorage.insert(assetId, asset);
+      persistedDividendTransactions.insert(
+        ic.caller(),
+        updatedDividendTransaction
+      );
+
+      return Ok(updatedDividendTransaction);
+    }
+  ),
 
   /*
               a helper function to get address from the principal
