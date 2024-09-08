@@ -3,6 +3,8 @@ import { useState, useCallback } from "react";
 import AddListing from "./AddListing";
 import PortalPopup from "./PortalPopup";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const Page = ({ className = "" }) => {
   const [isAddListingOpen, setAddListingOpen] = useState(false);
@@ -22,11 +24,11 @@ const Page = ({ className = "" }) => {
       >
         <header className="self-stretch shadow-[0px_20px_24px_-4px_rgba(255,_235,_176,_0.04),_0px_8px_11px_-4px_rgba(45,_54,_67,_0.04)] rounded-11xl bg-gray1-900 flex flex-row items-start justify-center py-[14.5px] pl-[27px] pr-5 gap-[274.5px] top-[0] z-[99] sticky text-left text-5xl text-shades-white font-manrope lg:gap-[137px] mq750:gap-[69px] mq450:gap-[34px]">
           <div className="w-[244px] flex flex-row items-start justify-start gap-2.5">
-            <img
+            <Img
               className="h-[67px] w-[67px] relative rounded object-cover"
               loading="lazy"
               alt=""
-              src="/rectangle11@2x.png"
+              src={Images.imgRectangle11}
             />
             <div className="flex-1 flex flex-col items-start justify-start pt-[17.5px] px-0 pb-0">
               <a className="[text-decoration:none] self-stretch relative tracking-[0.1em] font-bold text-[inherit] whitespace-nowrap">
@@ -47,10 +49,10 @@ const Page = ({ className = "" }) => {
               onClick={openAddListing}
             >
               <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
-                <img
+                <Img
                   className="w-6 h-6 relative overflow-hidden shrink-0 object-cover"
                   alt=""
-                  src="/home-pounds@2x.png"
+                  src={Images.imgHomePounds}
                 />
               </div>
               <a className="[text-decoration:none] relative text-lg leading-[26px] font-medium font-manrope text-shades-black text-center inline-block min-w-[94px] whitespace-nowrap">
@@ -62,10 +64,10 @@ const Page = ({ className = "" }) => {
         <div className="self-stretch flex flex-row items-start justify-start py-0 px-1 box-border max-w-full">
           <div className="flex-1 flex flex-col items-start justify-start max-w-full">
             <div className="self-stretch rounded-23xl bg-gray1-900 overflow-hidden flex flex-col items-start justify-start py-[125px] pl-[53px] pr-5 box-border relative gap-5 max-w-full mq750:pl-[26px] mq750:box-border mq450:pt-[81px] mq450:pb-[81px] mq450:box-border">
-              <img
+              <Img
                 className="w-[1198.2px] h-[476.1px] absolute !m-[0] top-[-73px] right-[-350.2px]"
                 alt=""
-                src="/buildingillustration.svg"
+                src={Images.imgBuildingIllustration}
               />
               <h1 className="m-0 relative text-inherit leading-[72px] font-bold font-[inherit] inline-block max-w-full z-[1] mq1050:text-32xl mq1050:leading-[58px] mq450:text-19xl mq450:leading-[43px]">
                 Assets in the market
@@ -88,10 +90,10 @@ const Page = ({ className = "" }) => {
                     <div className="flex-1 relative text-lg leading-[26px] font-manrope text-shades-black text-left">
                       Price
                     </div>
-                    <img
+                    <Img
                       className="h-6 w-6 relative"
                       alt=""
-                      src="/angledown.svg"
+                      src={Images.imgAngledown}
                     />
                   </div>
                 </div>
@@ -99,24 +101,24 @@ const Page = ({ className = "" }) => {
                   <div className="flex-1 relative text-lg leading-[26px] font-manrope text-shades-black text-left">
                     Asset type
                   </div>
-                  <img
+                  <Img
                     className="h-6 w-6 relative"
                     alt=""
-                    src="/angledown.svg"
+                    src={Images.imgAngledown}
                   />
                 </div>
                 <button className="cursor-pointer border-amber-600 border-[1.5px] border-solid py-2.5 px-3.5 bg-[transparent] w-[116px] [filter:drop-shadow(0px_0px_1px_rgba(12,_26,_75,_0.24))_drop-shadow(0px_3px_8px_rgba(50,_50,_71,_0.05))] rounded-xl box-border flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-300 hover:border-darkgoldenrod-200 hover:border-[1.5px] hover:border-solid hover:box-border">
-                  <img
+                  <Img
                     className="h-6 w-6 relative overflow-hidden shrink-0"
                     alt=""
-                    src="/filter1.svg"
+                    src={Images.imgFilter1}
                   />
                   <a className="[text-decoration:none] relative text-lg leading-[26px] font-medium font-manrope text-shades-black text-center inline-block min-w-[52px]">
                     Filters
                   </a>
                 </button>
                 <button className="cursor-pointer [border:none] py-3 px-[22px] bg-amber-600 shadow-[0px_0px_1px_rgba(12,_26,_75,_0.24),_0px_3px_8px_-1px_rgba(50,_50,_71,_0.05)] rounded-xl flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-200">
-                  <img className="h-6 w-6 relative" alt="" src="/search.svg" />
+                  <Img className="h-6 w-6 relative" alt="" src={Images.imgSearch} />
                   <a className="[text-decoration:none] relative text-lg leading-[26px] font-medium font-manrope text-shades-black text-center inline-block min-w-[60px]">
                     Search
                   </a>
