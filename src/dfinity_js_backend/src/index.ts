@@ -89,14 +89,14 @@ const Offering = Record({
   status: text, // "Ongoing", "Completed"
 });
 
-// Transaaction Status Enum
+// Investment Transaction Status Enum
 const TransactionStatus = Variant({
   PaymentPending: text,
   Completed: text,
   Cancelled: text,
 });
 
-// Transaction Struct
+// Investment Transaction Struct
 const Transaction = Record({
   id: text,
   propertyOwnerId: text,
@@ -107,6 +107,46 @@ const Transaction = Record({
   amountInvested: nat64,
   tokensPurchased: nat64,
   status: TransactionStatus,
+  paid_at_block: Opt(nat64),
+  transactionDate: text,
+  memo: nat64,
+});
+
+// Leasing Struct
+const Leasing = Record({
+  id: text, // Unique lease ID
+  assetId: text,
+  propertyOwnerId: text,
+  leaseStartDate: text,
+  leaseEndDate: text,
+  rentalPricePerToken: nat64, // Rent price per token (ownership)
+  status: text, // "Active", "Expired", "Terminated"
+  totalRentCollected: nat64, // Total rent collected from leasing
+});
+
+// Rent Transaction Struct
+const RentTransaction = Record({
+  id: text,
+  propertyOwnerId: text,
+  tenantId: text,
+  leaseId: text,
+  lessor: Principal,
+  lessee: Principal,
+  amountPaid: nat64,
+  paid_at_block: Opt(nat64),
+  transactionDate: text,
+  memo: nat64,
+});
+
+// Dividend Struct
+const Dividend = Record({
+  id: text,
+  assetId: text,
+  propertyOwnerId: text,
+  investorId: text,
+  totalDividend: nat64, // Total dividend amount
+  tokensOwned: nat64, // Number of tokens owned by the investor
+  dividendAmount: nat64, // Dividend amount for this investor
   paid_at_block: Opt(nat64),
   transactionDate: text,
   memo: nat64,
@@ -161,6 +201,15 @@ const TransactionPayload = Record({
   investorId: text,
   offeringId: text,
   amountInvested: nat64,
+});
+
+// Leasing Payload
+const LeasingPayload = Record({
+  assetId: text,
+  propertyOwnerId: text,
+  leaseStartDate: text,
+  leaseEndDate: text,
+  rentalPricePerToken: nat64,
 });
 
 // Storage
@@ -1000,7 +1049,7 @@ export default Canister({
       if ("Err" in assetUpdateResult) {
         return Err({
           Error: `An error occurred while updating the available tokens for the asset: ${assetUpdateResult.Err}`,
-        })
+        });
       }
 
       // Update the reserve status to completed
@@ -1017,7 +1066,6 @@ export default Canister({
           NotFound: `Investor with id=${investorId} not found`,
         });
       }
-
 
       // Update the investor total invested amount
       const investor = investorOpt.Some;
