@@ -54,7 +54,7 @@ const PropertyOwner = Record({
 // Investor Struct
 const Investor = Record({
   id: text,
-  principal: Principal,
+  owner: Principal,
   name: text,
   email: text,
   phoneNumber: text,
@@ -85,6 +85,7 @@ const Offering = Record({
   availableTokens: nat64,
   startDate: text,
   endDate: Opt(text),
+  creator: Principal,
   status: text, // "Ongoing", "Completed"
 });
 
@@ -108,7 +109,7 @@ const Transaction = Record({
   status: TransactionStatus,
   paid_at_block: Opt(nat64),
   transactionDate: text,
-  memo: text,
+  memo: nat64,
 });
 
 // Message Struct
@@ -158,6 +159,7 @@ const OfferingPayload = Record({
 
 // Transaction Payload
 const TransactionPayload = Record({
+  propertyOwnerId: text,
   investorId: text,
   offeringId: text,
   amountInvested: nat64,
@@ -176,7 +178,7 @@ const TIMEOUT_PERIOD = 9600n;
 
 /* 
     initialization of the Ledger canister. The principal text value is hardcoded because 
-    we set it in the `dfx.json`
+    it's set in the `dfx.json`
 */
 const icpCanister = Ledger(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"));
 
@@ -392,7 +394,7 @@ export default Canister({
       const investor = {
         id: investorId,
         ...payload,
-        principal: ic.caller(),
+        owner: ic.caller(),
         investments: [],
         totalInvested: 0n,
         joinedAt: new Date().toISOString(),
@@ -731,9 +733,8 @@ export default Canister({
       const offeringId = uuidv4();
       const offering = {
         id: offeringId,
-        assetId: payload.assetId,
-        pricePerToken: payload.pricePerToken,
-        availableTokens: payload.availableTokens,
+        ...payload,
+        creator: ic.caller(),
         startDate: new Date().toISOString(),
         endDate: None, // Optional endDate
         status: "Ongoing", // Status for the offering
@@ -868,4 +869,229 @@ export default Canister({
   }),
 
   // Make Investment
+
+  // This function is used to reserve an investment for a specific offering with the amount invested
+  reserveInvestment: update(
+    [TransactionPayload],
+    Result(Transaction, Message),
+    (payload) => {
+      // Ensure all the required fields are provided
+      if (
+        !payload.propertyOwnerId ||
+        !payload.investorId ||
+        !payload.offeringId ||
+        !payload.amountInvested
+      ) {
+        return Err({
+          InvalidPayload: "Ensure all required fields are provided!",
+        });
+      }
+
+      // Check if the investor exists
+      const investorOpt = investorStorage.get(payload.investorId);
+      if ("None" in investorOpt) {
+        return Err({
+          NotFound: `Cannot create the reserve: Investor with id=${payload.investorId} not found`,
+        });
+      }
+
+      const investor = investorOpt.Some;
+
+      // Check if the property owner exists
+      const propertyOwnerOpt = propertyOwnerStorage.get(
+        payload.propertyOwnerId
+      );
+      if ("None" in propertyOwnerOpt) {
+        return Err({
+          NotFound: `Cannot create the reserve: Property owner with id=${payload.propertyOwnerId} not found`,
+        });
+      }
+
+      const propertyOwner = propertyOwnerOpt.Some;
+
+      // Check if the offering exists
+      const offeringOpt = offeringStorage.get(payload.offeringId);
+      if ("None" in offeringOpt) {
+        return Err({
+          NotFound: `Cannot create the reserve: Offering with id=${payload.offeringId} not found`,
+        });
+      }
+
+      const offering = offeringOpt.Some;
+
+      try {
+        // Generate a unique transaction ID
+        const transactionId = uuidv4();
+
+        // Create the transaction object
+        const transaction = {
+          id: transactionId,
+          investorId: payload.investorId,
+          propertyOwnerId: payload.propertyOwnerId,
+          offeringId: payload.offeringId,
+          Investor: investor.owner,
+          propertyOwner: offering.creator,
+          amountInvested: payload.amountInvested,
+          tokensPurchased: 0n,
+          status: { PaymentPending: "Payment Pending" },
+          paid_at_block: None,
+          memo: generateCorrelationId(payload.investorId),
+          transactionDate: new Date().toISOString(),
+        };
+
+        // Log the Invesment details for debugging  purposes
+        console.log("Investment Details: ", transaction);
+
+        // Insert the transaction into the storage(pendingInvestmentsReserves)
+        pendingInvestmentsReserves.insert(transaction.memo, transaction);
+
+        // Discard the reservation after a specific period
+        discardByTimeout(transaction.memo, TIMEOUT_PERIOD);
+
+        // Successfully return the created transaction
+        return Ok(transaction);
+
+        // Handle any errors
+      } catch (error) {
+        return Err({
+          Error: `An error occurred while creating the reserve: ${error}`,
+        });
+      }
+    }
+  ),
+
+  // Complete a reserve for an investment
+  completeReserveInvestment: update(
+    [Principal, text, nat64, nat64, nat64],
+    Result(Transaction, Message),
+    async (reservor, investorId, reservePrice, block, memo) => {
+      const paymentVerified = await verifyPaymentInternal(
+        reservor,
+        reservePrice,
+        block,
+        memo
+      );
+      if (!paymentVerified) {
+        return Err({
+          NotFound: `Cannot complete the investment reserve: cannot verify the payment, memo=${memo}`,
+        });
+      }
+
+      const pendingReserveOpt = pendingInvestmentsReserves.remove(memo);
+      if ("None" in pendingReserveOpt) {
+        return Err({
+          NotFound: `Cannot complete the investment reserve: there is no pending reserve with id=${investorId}`,
+        });
+      }
+
+      const reserve = pendingReserveOpt.Some;
+      const updatedReserve = {
+        ...reserve,
+        status: TransactionStatus.Completed,
+        paid_at_block: block,
+      };
+
+      const investorOpt = investorStorage.get(investorId);
+      if ("None" in investorOpt) {
+        return Err({
+          NotFound: `Investor with id=${investorId} not found`,
+        });
+      }
+
+      const investor = investorOpt.Some;
+      investor.totalInvested += reserve.amountInvested;
+      investorStorage.insert(investorId, investor);
+      persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
+
+      return Ok(updatedReserve);
+    }
+  ),
+
+  /*
+        another example of a canister-to-canister communication
+        here we call the `query_blocks` function on the ledger canister
+        to get a single block with the given number `start`.
+        The `length` parameter is set to 1 to limit the return amount of blocks.
+        In this function we verify all the details about the transaction to make sure that we can mark the order as completed
+    */
+  verifyPayment: query(
+    [Principal, nat64, nat64, nat64],
+    bool,
+    async (propertyOwner, amount, block, memo) => {
+      return await verifyPaymentInternal(propertyOwner, amount, block, memo);
+    }
+  ),
+
+  /*
+              a helper function to get address from the principal
+              the address is later used in the transfer method
+          */
+  getAddressFromPrincipal: query([Principal], text, (principal) => {
+    return hexAddressFromPrincipal(principal, 0);
+  }),
 });
+
+/*
+    a hash function that is used to generate correlation ids for orders.
+    also, we use that in the verifyPayment function where we check if the used has actually paid the order
+*/
+function hash(input: any): nat64 {
+  return BigInt(Math.abs(hashCode().value(input)));
+}
+
+// a workaround to make uuid package work with Azle
+globalThis.crypto = {
+  // @ts-ignore
+  getRandomValues: () => {
+    let array = new Uint8Array(32);
+
+    for (let i = 0; i < array.length; i++) {
+      array[i] = Math.floor(Math.random() * 256);
+    }
+
+    return array;
+  },
+};
+
+// HELPER FUNCTIONS
+function generateCorrelationId(bookId: text): nat64 {
+  const correlationId = `${bookId}_${ic.caller().toText()}_${ic.time()}`;
+  return hash(correlationId);
+}
+
+/*
+    after the order is created, we give the `delay` amount of minutes to pay for the order.
+    if it's not paid during this timeframe, the order is automatically removed from the pending orders.
+*/
+function discardByTimeout(memo: nat64, delay: Duration) {
+  ic.setTimer(delay, () => {
+    const order = pendingInvestmentsReserves.remove(memo);
+    console.log(`Reserve discarded ${order}`);
+  });
+}
+
+async function verifyPaymentInternal(
+  receiver: Principal,
+  amount: nat64,
+  block: nat64,
+  memo: nat64
+): Promise<bool> {
+  const blockData = await ic.call(icpCanister.query_blocks, {
+    args: [{ start: block, length: 1n }],
+  });
+  const tx = blockData.blocks.find((block) => {
+    if ("None" in block.transaction.operation) {
+      return false;
+    }
+    const operation = block.transaction.operation.Some;
+    const senderAddress = binaryAddressFromPrincipal(ic.caller(), 0);
+    const receiverAddress = binaryAddressFromPrincipal(receiver, 0);
+    return (
+      block.transaction.memo === memo &&
+      hash(senderAddress) === hash(operation.Transfer?.from) &&
+      hash(receiverAddress) === hash(operation.Transfer?.to) &&
+      amount === operation.Transfer?.amount.e8s
+    );
+  });
+  return tx ? true : false;
+}
