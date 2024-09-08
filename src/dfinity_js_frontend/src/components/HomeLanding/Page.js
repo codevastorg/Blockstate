@@ -1,21 +1,19 @@
-import React from "react";
-import { useState, useCallback } from "react";
-import AddListing from "./AddListing";
-import PortalPopup from "./PortalPopup";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
 const Page = ({ className = "" }) => {
-  const [isAddListingOpen, setAddListingOpen] = useState(false);
+  const [isAddListingOpen, setIsAddListingOpen] = useState(false);
 
-  const openAddListing = useCallback(() => {
-    setAddListingOpen(true);
-  }, []);
+  // Using useNavigate for navigation
+  const navigate = useNavigate();
 
-  const closeAddListing = useCallback(() => {
-    setAddListingOpen(false);
-  }, []);
+  const handleCreateAccount = () => {
+    // Navigate to the RoleSelection page when the button is clicked
+    navigate("/role-selection?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai");
+  };
 
   return (
     <>
@@ -32,7 +30,7 @@ const Page = ({ className = "" }) => {
             />
             <div className="flex-1 flex flex-col items-start justify-start pt-[17.5px] px-0 pb-0">
               <a className="[text-decoration:none] self-stretch relative tracking-[0.1em] font-bold text-[inherit] whitespace-nowrap">
-              BlockState
+                BlockState
               </a>
             </div>
           </div>
@@ -46,7 +44,7 @@ const Page = ({ className = "" }) => {
           <div className="flex flex-col items-start justify-start pt-[4.5px] px-0 pb-0">
             <button
               className="cursor-pointer [border:none] py-4 px-6 bg-amber-600 rounded-11xl overflow-hidden flex flex-row items-start justify-start gap-2"
-              onClick={openAddListing}
+              onClick={handleCreateAccount} // Navigate to role selection
             >
               <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
                 <Img
@@ -118,7 +116,11 @@ const Page = ({ className = "" }) => {
                   </a>
                 </button>
                 <button className="cursor-pointer [border:none] py-3 px-[22px] bg-amber-600 shadow-[0px_0px_1px_rgba(12,_26,_75,_0.24),_0px_3px_8px_-1px_rgba(50,_50,_71,_0.05)] rounded-xl flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-200">
-                  <Img className="h-6 w-6 relative" alt="" src={Images.imgSearch} />
+                  <Img
+                    className="h-6 w-6 relative"
+                    alt=""
+                    src={Images.imgSearch}
+                  />
                   <a className="[text-decoration:none] relative text-lg leading-[26px] font-medium font-manrope text-shades-black text-center inline-block min-w-[60px]">
                     Search
                   </a>
@@ -128,15 +130,6 @@ const Page = ({ className = "" }) => {
           </div>
         </div>
       </div>
-      {isAddListingOpen && (
-        <PortalPopup
-          overlayColor="rgba(113, 113, 113, 0.3)"
-          placement="Centered"
-          onOutsideClick={closeAddListing}
-        >
-          <AddListing onClose={closeAddListing} />
-        </PortalPopup>
-      )}
     </>
   );
 };

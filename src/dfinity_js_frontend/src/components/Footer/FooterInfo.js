@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Img } from "../../components/Img";
+import { Img } from "../Img";
 import * as Images from "../../assets/images";
 
 const FooterInfo = ({ className = "" }) => {
@@ -46,7 +46,7 @@ const FooterInfo = ({ className = "" }) => {
       </div>
       <div className="relative leading-[24px] inline-block max-w-full z-[2]">
         <span className="font-medium">{`© 2024 `}</span>
-        <b>Equixtoken Capital</b>
+        <b>CodeVast</b>
         <span className="font-medium">. All rights reserved.</span>
       </div>
     </div>

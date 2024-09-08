@@ -8,6 +8,7 @@ import "./index.css";
 // import "./styles/font.css";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import HomeLanding from "./pages/Home/HomeLanding";
+import RoleSelection from "./pages/Home/RoleSelection";
 
 const App = function AppWrapper() {
   return (
@@ -15,6 +16,7 @@ const App = function AppWrapper() {
       <Router>
         <Routes>
           <Route path="/" element={<HomeLanding />} />
+          <Route path="/role-selection" element={<RoleSelection />} />
         </Routes>
       </Router>
     </>

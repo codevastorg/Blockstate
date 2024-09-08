@@ -2,7 +2,7 @@ import React from "react";
 import Page from "../../components/HomeLanding/Page";
 import PropertyCard1 from "../../components/HomeLanding/PropertyCard1";
 import PropertyCard from "../../components/HomeLanding/PropertyCard";
-import FooterInfo from "../../components/HomeLanding/FooterInfo";
+import FooterInfo from "../../components/Footer/FooterInfo";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
