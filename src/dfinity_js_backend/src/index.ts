@@ -991,6 +991,18 @@ export default Canister({
         });
       }
 
+      // Update available tokens for the asset
+      const assetUpdateResult = updateAvailableTokensForAsset(
+        pendingReserveOpt.Some.offeringId,
+        pendingReserveOpt.Some.amountInvested
+      );
+
+      if ("Err" in assetUpdateResult) {
+        return Err({
+          Error: `An error occurred while updating the available tokens for the asset: ${assetUpdateResult.Err}`,
+        })
+      }
+
       // Update the reserve status to completed
       const reserve = pendingReserveOpt.Some;
       const updatedReserve = {
