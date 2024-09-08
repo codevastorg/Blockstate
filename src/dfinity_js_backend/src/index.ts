@@ -85,7 +85,6 @@ const Offering = Record({
   pricePerToken: nat64,
   availableTokens: nat64,
   startDate: text,
-  endDate: Opt(text),
   creator: Principal,
   status: text, // "Ongoing", "Completed"
 });
