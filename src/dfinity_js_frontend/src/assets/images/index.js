@@ -2,350 +2,312 @@ import { CloseSVG } from "./close";
 import { SearchSVG } from "./search";
 
 // Importing images with their respective paths
-import imgAvatarCompanyIcon from "../images/images/-avatar-company-icon@2x.png";
-import imgDot from "../images/images/-dot.svg";
-import imgDot1 from "../images/images/-dot1.svg";
-import imgFileUploadIcon from "../images/images/-file-upload-icon.svg";
-import imgAnalyticsSvgrepocom from "../images/images/analytics-svgrepocom.svg";
-import imgArrowDown from "../images/images/arrowdown.svg";
-import imgArrowLeft from "../images/images/arrowleft.svg";
-import imgArrowRight from "../images/images/arrowright.svg";
-import imgArrowUp from "../images/images/arrowup.svg";
-import imgArrowUp1 from "../images/images/arrowup1.svg";
-import imgArrowUp_1 from "../images/images/arrowup-1.svg";
-import imgArrowUp_2 from "../images/images/arrowup-2.svg";
-import imgArrowUp_3 from "../images/images/arrowup-3.svg";
-import imgArrowUp_5 from "../images/images/arrowup-5.svg";
-import imgBarchart01 from "../images/images/barchart01.svg";
-import imgBarchart011 from "../images/images/barchart011.svg";
-import imgCapturaDeTela20230922As0809_1 from "../images/images/captura-de-tela-20230922-as-0809-1@2x.png";
-import imgCaretsmall from "../images/images/caretsmall.svg";
-import imgCarettiny from "../images/images/carettiny.svg";
-import imgCarettiny_1 from "../images/images/carettiny-1.svg";
-import imgChevrondown from "../images/images/chevrondown.svg";
-import imgChevronright from "../images/images/chevronright.svg";
+import imgAngledown from "../images/images/angledown.svg";
+import imgAngledown2 from "../images/images/angledown-2.svg";
+import imgAngleleft from "../images/images/angleleft.svg";
+import imgAngleright from "../images/images/angleright.svg";
+import imgAngleright1 from "../images/images/angleright-1.svg";
+import imgBackground from "../images/images/background.svg";
+import imgBackground1 from "../images/images/background1.svg";
+import imgBackground2 from "../images/images/background2.svg";
+import imgBars from "../images/images/bars@2x.png";
+import imgBathub1 from "../images/images/bathub-1.svg";
+import imgBed from "../images/images/bed.svg";
+import imgBuildingIllustration from "../images/images/buildingillustration.svg";
+import imgBuildingIllustration1 from "../images/images/buildingillustration-1.svg";
+import imgCardBackground from "../images/images/card-background@2x.png";
+import imgCarousels from "../images/images/carousels.svg";
+import imgCarousels1 from "../images/images/carousels1.svg";
+import imgCarousels_1 from "../images/images/carousels-1.svg";
+import imgCarousels_2 from "../images/images/carousels-2.svg";
+import imgChairs from "../images/images/chairs.svg";
 import imgCircle from "../images/images/circle.svg";
-import imgCurrencysmall from "../images/images/currencysmall.svg";
-import imgDivactive_1 from "../images/images/divactive-1@2x.png";
-import imgDivactive from "../images/images/divactive@2x.png";
-import imgDivcsss1fwqh_1 from "../images/images/divcsss1fwqh-1@2x.png";
-import imgDivcsss1fwqh_2 from "../images/images/divcsss1fwqh-2@2x.png";
-import imgDivcsss1fwqh_3 from "../images/images/divcsss1fwqh-3@2x.png";
-import imgDivcsss1fwqh_4 from "../images/images/divcsss1fwqh-4@2x.png";
-import imgDivcsss1fwqh_5 from "../images/images/divcsss1fwqh-5@2x.png";
-import imgDivcsss1fwqh_6 from "../images/images/divcsss1fwqh-6@2x.png";
-import imgDivcsss1fwqh_7 from "../images/images/divcsss1fwqh-7@2x.png";
-import imgDivcsss1fwqh from "../images/images/divcsss1fwqh@2x.png";
+import imgCombinedShape from "../images/images/combined-shape.svg";
 import imgDivider from "../images/images/divider.svg";
 import imgDivider1 from "../images/images/divider1.svg";
-import imgDivider2 from "../images/images/divider2.svg";
-import imgDivider3 from "../images/images/divider3.svg";
-import imgDivsibling_1 from "../images/images/divsibling-1@2x.png";
-import imgDivsibling_2 from "../images/images/divsibling-2@2x.png";
-import imgDivsibling_3 from "../images/images/divsibling-3@2x.png";
-import imgDivsibling from "../images/images/divsibling@2x.png";
-import imgDotsvertical from "../images/images/dotsvertical.svg";
-import imgEllipse8 from "../images/images/ellipse-8@2x.png";
-import imgEthersmall from "../images/images/ethersmall.svg";
-import imgFemaleMemojis_1 from "../images/images/female-memojis-1@2x.png";
-import imgFemaleMemojis_2 from "../images/images/female-memojis-2@2x.png";
-import imgFemaleMemojis_3 from "../images/images/female-memojis-3@2x.png";
-import imgFemaleMemojis_4 from "../images/images/female-memojis-4@2x.png";
-import imgFemaleMemojis from "../images/images/female-memojis@2x.png";
-import imgFrame from "../images/images/frame.svg";
-import imgFrame3 from "../images/images/frame-3.svg";
-import imgFrame10 from "../images/images/frame-10.svg";
-import imgFrame40 from "../images/images/frame-40.svg";
-import imgFrame40_1 from "../images/images/frame-40-1.svg";
-import imgFrame401 from "../images/images/frame-401.svg";
-import imgFrame5410_1 from "../images/images/frame-5410-1@2x.png";
-import imgFrame5410_2 from "../images/images/frame-5410-2@2x.png";
-import imgFrame5410_3 from "../images/images/frame-5410-3@2x.png";
-import imgFrame5410 from "../images/images/frame-5410@2x.png";
-import imgGoogleLogo from "../images/images/google-logo.svg";
-import imgGoogleplusBlack1 from "../images/images/googleplus-black1@2x.png";
-import imgGroup_1 from "../images/images/group-1.svg";
-import imgGroup6 from "../images/images/group-6.svg";
-import imgGroup20_1 from "../images/images/group-20-1@2x.png";
-import imgGroup20_2 from "../images/images/group-20-2@2x.png";
-import imgGroup20 from "../images/images/group-20@2x.png";
-import imgGroup29 from "../images/images/group-29@2x.png";
-import imgGroup2320 from "../images/images/group-2320.svg";
-import imgGroup2320_1 from "../images/images/group-2320-1.svg";
-import imgGroup3848 from "../images/images/group-3848.svg";
-import imgGroup3849 from "../images/images/group-3849@2x.png";
-import imgGroup38491 from "../images/images/group-38491@2x.png";
-import imgHeaderToolbarButtonSignInWithInternetIdentitySvg from "../images/images/header--toolbar--button--sign-in-with-internet-identity--svg.svg";
-import imgHomeline from "../images/images/homeline.svg";
+import imgDivider_1 from "../images/images/divider-1.svg";
+import imgEnvelope from "../images/images/envelope.svg";
+import imgEnvelope1 from "../images/images/envelope1.svg";
+import imgFacebook from "../images/images/facebook.svg";
+import imgFilter from "../images/images/filter.svg";
+import imgFilter1 from "../images/images/filter1.svg";
+import imgFrame1 from "../images/images/frame1@2x.png";
+import imgFrame_1 from "../images/images/frame-1@2x.png";
+import imgFrame_2 from "../images/images/frame-2.svg";
+import imgFrame_3 from "../images/images/frame-3@2x.png";
+import imgFrame_4 from "../images/images/frame-4@2x.png";
+import imgFrame_5 from "../images/images/frame-5@2x.png";
+import imgFrame_6 from "../images/images/frame-6.svg";
+import imgFrame_7 from "../images/images/frame-7@2x.png";
+import imgFrame_8 from "../images/images/frame-8.svg";
+import imgFrame_9 from "../images/images/frame-9.svg";
+import imgFrame_10 from "../images/images/frame-10@2x.png";
+import imgFrame_11 from "../images/images/frame-11@2x.png";
+import imgFrame_12 from "../images/images/frame-12@2x.png";
+import imgFrame_31 from "../images/images/frame-31@2x.png";
+import imgFrame_41 from "../images/images/frame-41@2x.png";
+import imgFrame_42 from "../images/images/frame-42@2x.png";
+import imgFrame_51 from "../images/images/frame-51@2x.png";
+import imgFrame_71 from "../images/images/frame-71@2x.png";
+import imgFrame_111 from "../images/images/frame-111@2x.png";
+import imgFrame_3186 from "../images/images/frame-3186.svg";
+import imgFrame_3187 from "../images/images/frame-3187.svg";
+import imgFrame_3188 from "../images/images/frame-3188.svg";
+import imgGoogle1 from "../images/images/google-1-1.svg";
+import imgGoogle11 from "../images/images/google-1-11.svg";
+import imgGraph from "../images/images/graph.svg";
+import imgGroup1 from "../images/images/group1@2x.png";
+import imgGroup2 from "../images/images/group2@2x.png";
+import imgGroup from "../images/images/group@2x.png";
+import imgHeart from "../images/images/heart.svg";
+import imgHomePounds from "../images/images/home-pounds@2x.png";
+import imgIcChevron1 from "../images/images/ic-chevron-1@2x.png";
+import imgIcChevron2 from "../images/images/ic-chevron-2@2x.png";
+import imgIcChevron from "../images/images/ic-chevron@2x.png";
 import imgIcon from "../images/images/icon.svg";
-import imgIcon1 from "../images/images/icon-1.svg";
-import imgIconbell from "../images/images/iconbell.svg";
-import imgIconbutton_1 from "../images/images/iconbutton-1@2x.png";
-import imgIconbutton from "../images/images/iconbutton@2x.png";
-import imgIconcheckcheck from "../images/images/iconcheckcheck.svg";
-import imgIconchevrondown from "../images/images/iconchevrondown.svg";
-import imgIconclock from "../images/images/iconclock.svg";
-import imgIconcurrencyeth from "../images/images/iconcurrencyeth.svg";
-import imgIconfilesignature from "../images/images/iconfilesignature.svg";
-import imgIconfilter2 from "../images/images/iconfilter2.svg";
-import imgIconheart from "../images/images/iconheart.svg";
-import imgIconheart1 from "../images/images/iconheart-1.svg";
-import imgIconhearthandshake from "../images/images/iconhearthandshake.svg";
-import imgIconmappin from "../images/images/iconmappin.svg";
-import imgIconnewspaper from "../images/images/iconnewspaper.svg";
-import imgIconpencil from "../images/images/iconpencil.svg";
-import imgIconpiggybank from "../images/images/iconpiggybank.svg";
-import imgIconpluscircle from "../images/images/iconpluscircle.svg";
-import imgIcons2caretRight_2 from "../images/images/icons2caret-right-2@2x.png";
-import imgIcons2caretRight_3 from "../images/images/icons2caret-right-3@2x.png";
-import imgIcons2caretRight from "../images/images/icons2caret-right@2x.png";
-import imgIcons2rocket1 from "../images/images/icons2rocket1@2x.png";
-import imgIcons2rocket from "../images/images/icons2rocket@2x.png";
-import imgIconsettings from "../images/images/iconsettings.svg";
-import imgIconshare from "../images/images/iconshare.svg";
-import imgIconsunmoon from "../images/images/iconsunmoon.svg";
-import imgIconsunmoon1 from "../images/images/iconsunmoon1.svg";
-import imgIcontimer from "../images/images/icontimer.svg";
-import imgIcontruck from "../images/images/icontruck.svg";
-import imgIcontruck1 from "../images/images/icontruck1.svg";
-import imgIconuploadcloud from "../images/images/iconuploadcloud.svg";
-import imgIconx from "../images/images/iconx.svg";
+import imgIcon1 from "../images/images/icon1@2x.png";
+import imgIcon11 from "../images/images/icon11.svg";
+import imgIcon_1 from "../images/images/icon-1.svg";
+import imgIcon_2 from "../images/images/icon-2.svg";
+import imgIcon_3 from "../images/images/icon-3.svg";
+import imgIcon_4 from "../images/images/icon-4.svg";
+import imgIcon_5 from "../images/images/icon-5.svg";
+import imgIcon_6 from "../images/images/icon-6.svg";
+import imgIcon_11 from "../images/images/icon-11@2x.png";
+import imgIcon_21 from "../images/images/icon-21@2x.png";
+import imgIcon_41 from "../images/images/icon-41.svg";
+import imgIcon_51 from "../images/images/icon-51.svg";
+import imgIcon_61 from "../images/images/icon-61.svg";
+import imgIconEllipsis from "../images/images/icon--ellipsis.svg";
+import imgIconFolder from "../images/images/icon--folder.svg";
+import imgIconImage from "../images/images/icon--image@2x.png";
+import imgIconPdf from "../images/images/icon--pdf.svg";
+import imgIconRetry from "../images/images/icon--retry.svg";
+import imgIconSettings from "../images/images/icon--settings@2x.png";
+import imgIconTick from "../images/images/icon--tick.svg";
+import imgIconlyBoldCategory1 from "../images/images/iconlyboldcategory1@2x.png";
+import imgIconlyBoldCategory2 from "../images/images/iconlyboldcategory2@2x.png";
+import imgIconlyBoldCategory from "../images/images/iconlyboldcategory@2x.png";
+import imgIconlyBoldDocument1 from "../images/images/iconlybolddocument1@2x.png";
+import imgIconlyBoldDocument from "../images/images/iconlybolddocument@2x.png";
+import imgIconlyBoldSetting1 from "../images/images/iconlyboldsetting1@2x.png";
+import imgIconlyBoldSetting2 from "../images/images/iconlyboldsetting2@2x.png";
+import imgIconlyBoldSetting from "../images/images/iconlyboldsetting@2x.png";
+import imgIconOutlineArrowIosDown from "../images/images/iconoutlinearrowiosdown.svg";
+import imgIcTrendingDown24px from "../images/images/ictrendingdown24px.svg";
+import imgIcTrendingUp24px_1 from "../images/images/ictrendingup24px-1.svg";
+import imgImage1 from "../images/images/image1@2x.png";
 import imgImage_1 from "../images/images/image-1@2x.png";
-import imgImageOverlay from "../images/images/image-overlay@2x.png";
-import imgImage from "../images/images/image@3x.png";
-import imgImg1378_1_2_1 from "../images/images/img-1378-1-2-1@2x.png";
-import imgImg1378_1_2 from "../images/images/img-1378-1-2@2x.png";
-import imgInstagramBlack1 from "../images/images/instagram-black1@2x.png";
-import imgLayersSvgrepocom from "../images/images/layers-svgrepocom.svg";
-import imgLine17 from "../images/images/line-17.svg";
-import imgLinkedinBlack1 from "../images/images/linkedin-black1@2x.png";
-import imgMaleMemojis_3 from "../images/images/male-memojis-3@2x.png";
-import imgMaleMemojis_9 from "../images/images/male-memojis-9@2x.png";
-import imgMaleMemojis_10 from "../images/images/male-memojis-10@2x.png";
-import imgMaleMemojis_12 from "../images/images/male-memojis-12@2x.png";
-import imgMaleMemojis_13 from "../images/images/male-memojis-13@2x.png";
-import imgMaleMemojis_16 from "../images/images/male-memojis-16@2x.png";
-import imgMaleMemojis_17 from "../images/images/male-memojis-17@2x.png";
-import imgMaleMemojis_18 from "../images/images/male-memojis-18@2x.png";
-import imgMaleMemojis_19 from "../images/images/male-memojis-19@2x.png";
-import imgMaleMemojis_20 from "../images/images/male-memojis-20@2x.png";
-import imgMaleMemojis_21 from "../images/images/male-memojis-21@2x.png";
-import imgMaleMemojis_22 from "../images/images/male-memojis-22@2x.png";
-import imgMaleMemojis from "../images/images/male-memojis@2x.png";
-import imgMap from "../images/images/map@2x.png";
-import imgMarkerpin02 from "../images/images/markerpin02.svg";
-import imgMaskGroup from "../images/images/mask-group@2x.png";
-import imgMaterialsymbolsarrowforwardiosrounded from "../images/images/materialsymbolsarrowforwardiosrounded@2x.png";
-import imgNetworktiny from "../images/images/networktiny.svg";
-import imgPaymentMethodIcon_1 from "../images/images/payment-method-icon-1@2x.png";
-import imgPaymentMethodIcon_2 from "../images/images/payment-method-icon-2@2x.png";
-import imgPaymentMethodIcon_3 from "../images/images/payment-method-icon-3@2x.png";
-import imgPaymentMethodIcon from "../images/images/payment-method-icon@2x.png";
-import imgPegmanoffscreen2x from "../images/images/pegmanoffscreen2x@2x.png";
-import imgPinMarker from "../images/images/pin-marker.svg";
-import imgPlaceholder from "../images/images/placeholder.svg";
-import imgPlaceholder1 from "../images/images/placeholder1.svg";
-import imgPlaceholder2 from "../images/images/placeholder2.svg";
-import imgPlaceholder3 from "../images/images/placeholder3.svg";
-import imgPlaceholder4 from "../images/images/placeholder4.svg";
-import imgPlaceholder5 from "../images/images/placeholder5.svg";
-import imgPlaceholder6 from "../images/images/placeholder6.svg";
-import imgPlus from "../images/images/plus.svg";
-import imgPlus1 from "../images/images/plus1.svg";
-import imgPlus2 from "../images/images/plus2.svg";
-import imgPlus_1 from "../images/images/plus-1.svg";
-import imgRoundlocalprintshop24px from "../images/images/roundlocalprintshop24px@2x.png";
-import imgRoundphone24px from "../images/images/roundphone24px.svg";
-import imgRoundplace24px from "../images/images/roundplace24px@2x.png";
-import imgSearchlg from "../images/images/searchlg.svg";
-import imgSecondary1 from "../images/images/secondary1@2x.png";
-import imgSecondary from "../images/images/secondary@2x.png";
-import imgSvg from "../images/images/svg.svg";
-import imgSvg1 from "../images/images/svg1.svg";
-import imgSvg_1 from "../images/images/svg-1.svg";
-import imgSvg_2 from "../images/images/svg-2.svg";
-import imgSvg_3 from "../images/images/svg-3.svg";
-import imgSvg_11 from "../images/images/svg-11.svg";
-import imgTwitter from "../images/images/twitter.svg";
+import imgImage_2 from "../images/images/image-2@2x.png";
+import imgImage_3 from "../images/images/image-3@2x.png";
+import imgImage_4 from "../images/images/image-4@2x.png";
+import imgImage_5 from "../images/images/image-5@2x.png";
+import imgImage_6 from "../images/images/image-6@2x.png";
+import imgImage_7 from "../images/images/image-7@2x.png";
+import imgImage_8 from "../images/images/image-8@2x.png";
+import imgImage_9 from "../images/images/image-9@2x.png";
+import imgImage_10 from "../images/images/image-10@2x.png";
+import imgImage_11 from "../images/images/image-11@2x.png";
+import imgImage_21 from "../images/images/image-21@2x.png";
+import imgImage from "../images/images/image@2x.png";
+import imgIndexHtml from "../images/images/index.html";
+import imgInstagram from "../images/images/instagram.svg";
+import imgLeftIcon from "../images/images/lefticon.svg";
+import imgLeftIcon1 from "../images/images/lefticon1.svg";
+import imgLeftIcon2 from "../images/images/lefticon2.svg";
+import imgLeftIcon_7 from "../images/images/lefticon-7.svg";
+import imgLine from "../images/images/line.svg";
+import imgLinkedIn from "../images/images/linkedin.svg";
+import imgLockAlt from "../images/images/lockalt.svg";
+import imgLockAlt1 from "../images/images/lockalt1.svg";
+import imgLogo from "../images/images/logo.svg";
+import imgLogoBackground from "../images/images/logo-background.svg";
+import imgOutlineStroke from "../images/images/outline-stroke.svg";
+import imgPoint from "../images/images/point.svg";
+import imgRectangle1 from "../images/images/rectangle1@2x.png";
+import imgRectangle11 from "../images/images/rectangle11@2x.png";
+import imgRectangle_34624569_1 from "../images/images/rectangle-34624569-1@2x.png";
+import imgRectangle_34624569_2 from "../images/images/rectangle-34624569-2@2x.png";
+import imgRectangle_34624569_6 from "../images/images/rectangle-34624569-6@2x.png";
+import imgRectangle_34624569_7 from "../images/images/rectangle-34624569-7@2x.png";
+import imgRectangle_34624569_8 from "../images/images/rectangle-34624569-8@2x.png";
+import imgRectangle_34624569_21 from "../images/images/rectangle-34624569-21@2x.png";
+import imgRectangle_34624569 from "../images/images/rectangle-34624569@2x.png";
+import imgRectangle from "../images/images/rectangle@2x.png";
+import imgRightIcon from "../images/images/righticon.svg";
+import imgRightIcon_2 from "../images/images/righticon-2.svg";
+import imgSearch from "../images/images/search.svg";
+import imgShape from "../images/images/shape.svg";
+import imgSubtract from "../images/images/subtract.svg";
+import imgSubtract_1 from "../images/images/subtract-1.svg";
+import imgTypeOptions from "../images/images/type-options@2x.png";
+import imgUserAlt4 from "../images/images/useralt4.svg";
 import imgVector from "../images/images/vector.svg";
+import imgVector1 from "../images/images/vector1.svg";
+import imgVector11 from "../images/images/vector11.svg";
 import imgVector_1 from "../images/images/vector-1.svg";
-import imgWindowwithsecuritybadgeSvgrepocom from "../images/images/windowwithsecuritybadge-svgrepocom.svg";
-import imgX from "../images/images/x.svg";
-import imgYoutubeColor1 from "../images/images/youtube-color1@2x.png";
-import imgZoomControlButtons from "../images/images/zoom-control-buttons@2x.png";
+import imgVector_2 from "../images/images/vector-2.svg";
+import imgVector_10 from "../images/images/vector-10.svg";
+import imgVector_11 from "../images/images/vector-11@2x.png";
+import imgVector_101 from "../images/images/vector-101.svg";
+import imgVector_111 from "../images/images/vector-111.svg";
+import imgWallet from "../images/images/wallet@2x.png";
+import imgWaveElements from "../images/images/waveelements@2x.png";
+import imgYouTube from "../images/images/youtube.svg";
 
 export {
   CloseSVG,
   SearchSVG,
-  imgAvatarCompanyIcon,
-  imgDot,
-  imgDot1,
-  imgFileUploadIcon,
-  imgAnalyticsSvgrepocom,
-  imgArrowDown,
-  imgArrowLeft,
-  imgArrowRight,
-  imgArrowUp,
-  imgArrowUp1,
-  imgArrowUp_1,
-  imgArrowUp_2,
-  imgArrowUp_3,
-  imgArrowUp_5,
-  imgBarchart01,
-  imgBarchart011,
-  imgCapturaDeTela20230922As0809_1,
-  imgCaretsmall,
-  imgCarettiny,
-  imgCarettiny_1,
-  imgChevrondown,
-  imgChevronright,
+  imgAngledown,
+  imgAngledown2,
+  imgAngleleft,
+  imgAngleright,
+  imgAngleright1,
+  imgBackground,
+  imgBackground1,
+  imgBackground2,
+  imgBars,
+  imgBathub1,
+  imgBed,
+  imgBuildingIllustration,
+  imgBuildingIllustration1,
+  imgCardBackground,
+  imgCarousels,
+  imgCarousels1,
+  imgCarousels_1,
+  imgCarousels_2,
+  imgChairs,
   imgCircle,
-  imgCurrencysmall,
-  imgDivactive_1,
-  imgDivactive,
-  imgDivcsss1fwqh_1,
-  imgDivcsss1fwqh_2,
-  imgDivcsss1fwqh_3,
-  imgDivcsss1fwqh_4,
-  imgDivcsss1fwqh_5,
-  imgDivcsss1fwqh_6,
-  imgDivcsss1fwqh_7,
-  imgDivcsss1fwqh,
+  imgCombinedShape,
   imgDivider,
   imgDivider1,
-  imgDivider2,
-  imgDivider3,
-  imgDivsibling_1,
-  imgDivsibling_2,
-  imgDivsibling_3,
-  imgDivsibling,
-  imgDotsvertical,
-  imgEllipse8,
-  imgEthersmall,
-  imgFemaleMemojis_1,
-  imgFemaleMemojis_2,
-  imgFemaleMemojis_3,
-  imgFemaleMemojis_4,
-  imgFemaleMemojis,
-  imgFrame,
-  imgFrame3,
-  imgFrame10,
-  imgFrame40,
-  imgFrame40_1,
-  imgFrame401,
-  imgFrame5410_1,
-  imgFrame5410_2,
-  imgFrame5410_3,
-  imgFrame5410,
-  imgGoogleLogo,
-  imgGoogleplusBlack1,
-  imgGroup_1,
-  imgGroup6,
-  imgGroup20_1,
-  imgGroup20_2,
-  imgGroup20,
-  imgGroup29,
-  imgGroup2320,
-  imgGroup2320_1,
-  imgGroup3848,
-  imgGroup3849,
-  imgGroup38491,
-  imgHeaderToolbarButtonSignInWithInternetIdentitySvg,
-  imgHomeline,
+  imgDivider_1,
+  imgEnvelope,
+  imgEnvelope1,
+  imgFacebook,
+  imgFilter,
+  imgFilter1,
+  imgFrame1,
+  imgFrame_1,
+  imgFrame_2,
+  imgFrame_3,
+  imgFrame_4,
+  imgFrame_5,
+  imgFrame_6,
+  imgFrame_7,
+  imgFrame_8,
+  imgFrame_9,
+  imgFrame_10,
+  imgFrame_11,
+  imgFrame_12,
+  imgFrame_31,
+  imgFrame_41,
+  imgFrame_42,
+  imgFrame_51,
+  imgFrame_71,
+  imgFrame_111,
+  imgFrame_3186,
+  imgFrame_3187,
+  imgFrame_3188,
+  imgGoogle1,
+  imgGoogle11,
+  imgGraph,
+  imgGroup1,
+  imgGroup2,
+  imgGroup,
+  imgHeart,
+  imgHomePounds,
+  imgIcChevron1,
+  imgIcChevron2,
+  imgIcChevron,
   imgIcon,
   imgIcon1,
-  imgIconbell,
-  imgIconbutton_1,
-  imgIconbutton,
-  imgIconcheckcheck,
-  imgIconchevrondown,
-  imgIconclock,
-  imgIconcurrencyeth,
-  imgIconfilesignature,
-  imgIconfilter2,
-  imgIconheart,
-  imgIconheart1,
-  imgIconhearthandshake,
-  imgIconmappin,
-  imgIconnewspaper,
-  imgIconpencil,
-  imgIconpiggybank,
-  imgIconpluscircle,
-  imgIcons2caretRight_2,
-  imgIcons2caretRight_3,
-  imgIcons2caretRight,
-  imgIcons2rocket1,
-  imgIcons2rocket,
-  imgIconsettings,
-  imgIconshare,
-  imgIconsunmoon,
-  imgIconsunmoon1,
-  imgIcontimer,
-  imgIcontruck,
-  imgIcontruck1,
-  imgIconuploadcloud,
-  imgIconx,
+  imgIcon11,
+  imgIcon_1,
+  imgIcon_2,
+  imgIcon_3,
+  imgIcon_4,
+  imgIcon_5,
+  imgIcon_6,
+  imgIcon_11,
+  imgIcon_21,
+  imgIcon_41,
+  imgIcon_51,
+  imgIcon_61,
+  imgIconEllipsis,
+  imgIconFolder,
+  imgIconImage,
+  imgIconPdf,
+  imgIconRetry,
+  imgIconSettings,
+  imgIconTick,
+  imgIconlyBoldCategory1,
+  imgIconlyBoldCategory2,
+  imgIconlyBoldCategory,
+  imgIconlyBoldDocument1,
+  imgIconlyBoldDocument,
+  imgIconlyBoldSetting1,
+  imgIconlyBoldSetting2,
+  imgIconlyBoldSetting,
+  imgIconOutlineArrowIosDown,
+  imgIcTrendingDown24px,
+  imgIcTrendingUp24px_1,
+  imgImage1,
   imgImage_1,
-  imgImageOverlay,
+  imgImage_2,
+  imgImage_3,
+  imgImage_4,
+  imgImage_5,
+  imgImage_6,
+  imgImage_7,
+  imgImage_8,
+  imgImage_9,
+  imgImage_10,
+  imgImage_11,
+  imgImage_21,
   imgImage,
-  imgImg1378_1_2_1,
-  imgImg1378_1_2,
-  imgInstagramBlack1,
-  imgLayersSvgrepocom,
-  imgLine17,
-  imgLinkedinBlack1,
-  imgMaleMemojis_3,
-  imgMaleMemojis_9,
-  imgMaleMemojis_10,
-  imgMaleMemojis_12,
-  imgMaleMemojis_13,
-  imgMaleMemojis_16,
-  imgMaleMemojis_17,
-  imgMaleMemojis_18,
-  imgMaleMemojis_19,
-  imgMaleMemojis_20,
-  imgMaleMemojis_21,
-  imgMaleMemojis_22,
-  imgMaleMemojis,
-  imgMap,
-  imgMarkerpin02,
-  imgMaskGroup,
-  imgMaterialsymbolsarrowforwardiosrounded,
-  imgNetworktiny,
-  imgPaymentMethodIcon_1,
-  imgPaymentMethodIcon_2,
-  imgPaymentMethodIcon_3,
-  imgPaymentMethodIcon,
-  imgPegmanoffscreen2x,
-  imgPinMarker,
-  imgPlaceholder,
-  imgPlaceholder1,
-  imgPlaceholder2,
-  imgPlaceholder3,
-  imgPlaceholder4,
-  imgPlaceholder5,
-  imgPlaceholder6,
-  imgPlus,
-  imgPlus1,
-  imgPlus2,
-  imgPlus_1,
-  imgRoundlocalprintshop24px,
-  imgRoundphone24px,
-  imgRoundplace24px,
-  imgSearchlg,
-  imgSecondary1,
-  imgSecondary,
-  imgSvg,
-  imgSvg1,
-  imgSvg_1,
-  imgSvg_2,
-  imgSvg_3,
-  imgSvg_11,
-  imgTwitter,
+  imgIndexHtml,
+  imgInstagram,
+  imgLeftIcon,
+  imgLeftIcon1,
+  imgLeftIcon2,
+  imgLeftIcon_7,
+  imgLine,
+  imgLinkedIn,
+  imgLockAlt,
+  imgLockAlt1,
+  imgLogo,
+  imgLogoBackground,
+  imgOutlineStroke,
+  imgPoint,
+  imgRectangle1,
+  imgRectangle11,
+  imgRectangle_34624569_1,
+  imgRectangle_34624569_2,
+  imgRectangle_34624569_6,
+  imgRectangle_34624569_7,
+  imgRectangle_34624569_8,
+  imgRectangle_34624569_21,
+  imgRectangle_34624569,
+  imgRectangle,
+  imgRightIcon,
+  imgRightIcon_2,
+  imgSearch,
+  imgShape,
+  imgSubtract,
+  imgSubtract_1,
+  imgTypeOptions,
+  imgUserAlt4,
   imgVector,
+  imgVector1,
+  imgVector11,
   imgVector_1,
-  imgWindowwithsecuritybadgeSvgrepocom,
-  imgX,
-  imgYoutubeColor1,
-  imgZoomControlButtons,
+  imgVector_2,
+  imgVector_10,
+  imgVector_11,
+  imgVector_101,
+  imgVector_111,
+  imgWallet,
+  imgWaveElements,
+  imgYouTube,
 };
