@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getPropertyOwnerProfileByPrincipal } from "../../utils/propertyTokenization";
 import { Notification } from "../../components/utils/Notifications";
 import Wallet from "../../components/Wallet";
-import PropertyOwnerDashboard from "./PropertyOwnerDashboard";
+// import PropertyOwnerDashboard from "./PropertyOwnerDashboard";
 import CreatePropertyOwnerProfile from "../../components/PropertyOwner/CreatePropertyOwnerProfile";
 import Loader from "../../components/utils/Loader";
 import Cover from "../../components/utils/Cover";
@@ -13,7 +13,7 @@ const PropertyOwner = () => {
     const [PropertyOwner, setPropertyOwner] = useState({});
     const [loading, setLoading] = useState(false);
 
-    const isAuthenticated = window.Authent.isAuthenticated;
+    const isAuthenticated = window.auth.isAuthenticated;
 
     const fetchPropertyOwner = useCallback(async () => {
         try {
@@ -47,7 +47,7 @@ const PropertyOwner = () => {
                 </Nav.Item>
               </Nav>
               <main>
-                <PropertyOwnerDashboard PropertyOwner={PropertyOwner} />
+                {/* <PropertyOwnerDashboard PropertyOwner={PropertyOwner} /> */}
               </main>
                     </>
                 ) : (
@@ -58,7 +58,7 @@ const PropertyOwner = () => {
                 )
 
             ) : (
-                <cover login={login}/>
+                <Cover login={login}/>
             )}
         </>
     );

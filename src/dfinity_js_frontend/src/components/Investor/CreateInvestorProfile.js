@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { createPropertyOwner } from "../../utils/propertyTokenization";
+import { createInvestorProfile } from "../../utils/propertyTokenization";
 
-const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
+const CreateInvestorProfile = ({ fetchInvestor }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -9,17 +9,17 @@ const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
   const handlePublishProfile = async (event) => {
     event.preventDefault();
     try {
-      const propertyOwner = {
+      const investor = {
         name,
         email,
         phoneNumber,
       };
-      await createPropertyOwner(propertyOwner).then((res) => {
+      await createInvestorProfile(investor).then((res) => {
         console.log(res);
-        fetchPropertyOwner();
+        fetchInvestor();
       });
     } catch (error) {
-      console.log("Failed to create property owner profile:", error);
+      console.log("Failed to create investor profile:", error);
     }
   };
 
@@ -28,7 +28,7 @@ const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
       <div className="w-full max-w-md bg-white rounded-lg shadow dark:border dark:bg-gray-800 dark:border-gray-700">
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-3xl dark:text-white">
-            Create Property Owner Profile
+            Create Investor Profile
           </h1>
           <form
             className="space-y-4 md:space-y-6"
@@ -101,4 +101,4 @@ const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
   );
 };
 
-export default CreatePropertyOwnerProfile;
+export default CreateInvestorProfile;

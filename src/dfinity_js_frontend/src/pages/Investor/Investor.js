@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { getInvestorProfileByPrincipal } from "utils/donorFund";
+import { getInvestorProfileByPrincipal } from "../../utils/propertyTokenization";
 import { Notification } from "../../components/utils/Notifications";
 import Wallet from "../../components/Wallet";
-import InvestorDashboard from "./InvestorDashboard";
+// import InvestorDashboard from "./InvestorDashboard";
 import CreateInvestorProfile from "../../components/Investor/CreateInvestorProfile";
 import Loader from "../../components/utils/Loader";
 import Cover from "../../components/utils/Cover";
@@ -13,7 +13,7 @@ const Investor = () => {
   const [investor, setInvestor] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const isAuthenticated = window.Authent.isAuthenticated;
+  const isAuthenticated = window.auth.isAuthenticated;
 
   const fetchInvestor = useCallback(async () => {
     try {
@@ -48,7 +48,7 @@ const Investor = () => {
                 </Nav.Item>
               </Nav>
               <main>
-                <InvestorDashboard investor={investor} />
+                {/* <InvestorDashboard investor={investor} /> */}
               </main>
             </>
           ) : (
@@ -63,3 +63,6 @@ const Investor = () => {
     </>
   );
 };
+
+
+export default Investor;
