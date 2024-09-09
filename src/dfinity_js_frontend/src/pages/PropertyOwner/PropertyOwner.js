@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getPropertyOwnerProfileByPrincipal } from "../../utils/propertyTokenization";
 import { Notification } from "../../components/utils/Notifications";
 import Wallet from "../../components/Wallet";
-// import PropertyOwnerDashboard from "./PropertyOwnerDashboard";
+import PropertyOwnerDashboard from "./PropertyOwnerDashboard";
 import CreatePropertyOwnerProfile from "../../components/PropertyOwner/CreatePropertyOwnerProfile";
 import Loader from "../../components/utils/Loader";
 import Cover from "../../components/utils/Cover";
@@ -10,59 +10,55 @@ import { login } from "../../utils/auth";
 import { Nav } from "react-bootstrap";
 
 const PropertyOwner = () => {
-    const [PropertyOwner, setPropertyOwner] = useState({});
-    const [loading, setLoading] = useState(false);
+  const [propertyOwner, setPropertyOwner] = useState({});
+  const [loading, setLoading] = useState(false);
 
-    const isAuthenticated = window.auth.isAuthenticated;
+  const isAuthenticated = window.auth.isAuthenticated;
 
-    const fetchPropertyOwner = useCallback(async () => {
-        try {
-            setLoading(true);
-            setPropertyOwner(await getPropertyOwnerProfileByPrincipal().then(async (res) => {
-                console.log(res);
-                return res.ok;
-            }));
-            setLoading(false);
-        } catch (error) {
-            console.log(error);
-            setLoading(false);
-        }
-    });
-
-    useEffect(() => {
-        fetchPropertyOwner();
+  const fetchPropertyOwner = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await getPropertyOwnerProfileByPrincipal();
+      if (res.Ok) { 
+        console.log(res.Ok); // Log the entire profile data for debugging
+        setPropertyOwner(res.Ok); 
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
     }
-    , []);
+  }, []); // Make sure to include dependencies if necessary
+  
 
-    return (
-        <>
-        <Notification />
-        {isAuthenticated ? (
-            !loading ? (
-                PropertyOwner?.name ? (
-                    <>
-                                  <Nav className="justify-content-end pt-3 pb-5 mr-4">
-                <Nav.Item>
-                  <Wallet />
-                </Nav.Item>
-              </Nav>
+  useEffect(() => {
+    fetchPropertyOwner();
+  }, []);
+
+  return (
+    <>
+      <Notification />
+      {isAuthenticated ? (
+        !loading ? (
+          propertyOwner?.name ? (
+            <>
               <main>
-                {/* <PropertyOwnerDashboard PropertyOwner={PropertyOwner} /> */}
+                <PropertyOwnerDashboard propertyOwner={propertyOwner} />
               </main>
-                    </>
-                ) : (
-                    <CreatePropertyOwnerProfile fetchPropertyOwner={fetchPropertyOwner} />
-                )
-            ) : (
-                <Loader />
-                )
-
-            ) : (
-                <Cover login={login}/>
-            )}
-        </>
-    );
+            </>
+          ) : (
+            <CreatePropertyOwnerProfile
+              fetchPropertyOwner={fetchPropertyOwner}
+            />
+          )
+        ) : (
+          <Loader />
+        )
+      ) : (
+        <Cover login={login} />
+      )}
+    </>
+  );
 };
 
 export default PropertyOwner;
-

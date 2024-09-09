@@ -16,7 +16,7 @@ const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
         email,
         phoneNumber,
       };
-      await createPropertyOwner(propertyOwner).then((res) => {
+      await createPropertyOwnerProfile(propertyOwner).then((res) => {
         console.log(res);
         toast.success("Profile created successfully!");
         fetchPropertyOwner();
