@@ -19,7 +19,7 @@ const RoleSelection = () => {
         </p>
         <div className="flex flex-col space-y-6">
           {/* Property Owner Role */}
-          <Link to="/property-owner" className="text-center no-underline">
+          <Link to="/property-owner?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai" className="text-center no-underline">
             <div className="bg-blue-500 hover:bg-blue-600 text-white py-4 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out cursor-pointer">
               <h2 className="text-2xl font-bold mb-2 no-underline">Property Owner</h2>
               <p className="text-sm no-underline">
@@ -29,7 +29,7 @@ const RoleSelection = () => {
           </Link>
 
           {/* Investor Role */}
-          <Link to="/investor" className="text-center no-underline">
+          <Link to="/investor?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai" className="text-center no-underline">
             <div className="bg-green-500 hover:bg-green-600 text-white py-4 px-6 rounded-lg shadow-lg transition duration-300 ease-in-out cursor-pointer">
               <h2 className="text-2xl font-bold mb-2 no-underline">Investor</h2>
               <p className="text-sm no-underline">
