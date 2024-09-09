@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 import AddAsset from "../PropertyOwner/Asset/ListAsset";
+import { createAsset } from "../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 

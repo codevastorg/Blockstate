@@ -45,7 +45,7 @@ const AddAsset = ({ save, userId, show, handleClose }) => {
   return (
     <>
       <Modal show={show} onHide={handleClose} centered>
-        <Modal.Header closeButton className="bg-primary text-white">
+        <Modal.Header closeButton className="bg-amber-600 text-white">
           <Modal.Title>List a New Asset</Modal.Title>
         </Modal.Header>
         <Modal.Body className="p-4">
@@ -126,7 +126,7 @@ const AddAsset = ({ save, userId, show, handleClose }) => {
                 Cancel
               </Button>
               <Button
-                variant="primary"
+                style={{ backgroundColor: "#D97706", borderColor: "#D97706" }} // Amber-600 color
                 type="submit"
                 onClick={handleSubmit}
                 className="shadow-sm"
