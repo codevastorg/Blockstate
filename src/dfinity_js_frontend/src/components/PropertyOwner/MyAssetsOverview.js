@@ -29,8 +29,8 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
       if (response?.Ok) {
         toast.success("Asset added successfully");
 
-        // You might want to update the assets list using the actual response data
-        const newAsset = response.Ok[0]; // Assuming the asset is inside the Ok variant array
+        // Update the assets list using the actual response data
+        const newAsset = response.Ok[0];
         setAssets((prevAssets) => [...prevAssets, newAsset]);
       } else if (response?.Err) {
         console.error("Error listing asset:", response.Err);
