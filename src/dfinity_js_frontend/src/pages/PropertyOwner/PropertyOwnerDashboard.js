@@ -3,6 +3,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import MainContent from "../../components/PropertyOwner/MainContent";
 import MyAssetsOverview from "../../components/PropertyOwner/MyAssetsOverview";
+import MyOfferingsOverview from "../../components/PropertyOwner/Offerings/MyOfferingsOverview"
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
@@ -303,9 +304,8 @@ const OwnerDashboard = ({ propertyOwner }) => {
       </div>
       <main className="flex-1 flex flex-col items-start justify-start gap-7 max-w-[calc(100%_-_255px)] mq975:max-w-full">
         <MainContent propertyOwner={name} />
-        <MyAssetsOverview 
-         propertyOwner={id}
-        />
+        <MyAssetsOverview propertyOwner={id} />
+        <MyOfferingsOverview propertyOwner={id} />
       </main>
     </div>
   );
