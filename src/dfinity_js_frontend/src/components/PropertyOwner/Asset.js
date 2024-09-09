@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
-const Asset = ({ className = "" }) => {
+const Asset = ({ title, location, totalValue, className = "" }) => {
   return (
     <div
       className={`flex-1 flex flex-col items-start justify-start min-w-[76px] text-left text-xs text-shades-white font-manrope ${className}`}
@@ -12,7 +12,7 @@ const Asset = ({ className = "" }) => {
         <Img
           className="w-full h-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] rounded-3xl max-w-full overflow-hidden max-h-full object-cover z-[1]"
           loading="lazy"
-          alt=""
+          alt={title}
           src={Images.imgVector_11}
         />
         <div className="self-stretch flex flex-row items-start justify-start">
@@ -34,22 +34,22 @@ const Asset = ({ className = "" }) => {
         <div className="flex flex-col items-start justify-start gap-2">
           <div className="flex flex-col items-start justify-start gap-1">
             <div className="relative tracking-[0.1em] font-semibold inline-block min-w-[77px]">
-              Bungalow
+              {title} {/* Use the dynamic title prop */}
             </div>
             <div className="flex flex-row items-start justify-start gap-1 text-3xs text-gray1-2100">
               <Img
                 className="h-3 w-3 relative object-contain"
                 loading="lazy"
-                alt=""
-                src={Images.imgFrame_111}
+                alt={location}
+                src={Images.imgFrame_111} // This can be dynamic if needed
               />
               <div className="relative font-light inline-block min-w-[78px]">
-                Leeds city center
+                {location} {/* Use the dynamic location prop */}
               </div>
             </div>
           </div>
           <div className="relative text-base tracking-[0.1em] font-semibold inline-block min-w-[74px] whitespace-nowrap">
-            $755.00
+            ${totalValue} {/* Use the dynamic totalValue prop */}
           </div>
         </div>
       </div>
@@ -58,6 +58,10 @@ const Asset = ({ className = "" }) => {
 };
 
 Asset.propTypes = {
+  title: PropTypes.string.isRequired,
+  location: PropTypes.string.isRequired,
+  totalValue: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   className: PropTypes.string,
 };
 
