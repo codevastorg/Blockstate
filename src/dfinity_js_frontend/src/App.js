@@ -22,7 +22,7 @@ const App = function AppWrapper() {
           <Route path="/role-selection" element={<RoleSelection />} />
           <Route path="/investor" element={<Investor />} />
           <Route path="/property-owner" element={<PropertyOwner />} />
-          <Route path="/property-owner/portfolio" element={<Portfolio />} />
+          <Route path="/portfolio" element={<Portfolio />} />
         </Routes>
       </Router>
     </>

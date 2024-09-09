@@ -1,8 +1,8 @@
-import react from "react";
+import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useState, useMemo, useCallback } from "react";
 import TokenizationRequest from "./TokenizationRequest";
 import PortalPopup from "./PortalPopup";
-import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 const SideBarNav = ({
@@ -182,16 +182,20 @@ const SideBarNav = ({
                 className="flex flex-row items-start justify-start gap-[11px]"
                 style={frameDiv1Style}
               >
+                <Link to="/property-owner?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai">
                 <img
                   className="h-[38px] w-[38px] relative rounded object-cover min-h-[38px]"
                   loading="lazy"
                   alt=""
                   src="/rectangle1@2x.png"
                 />
+                </Link>
                 <div className="flex flex-col items-start justify-start pt-[3px] px-0 pb-0">
-                  <a className="[text-decoration:none] relative tracking-[0.1em] font-semibold text-[inherit] mq450:text-lgi">
-                    BlockState
-                  </a>
+                <Link to="/property-owner?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai">
+                    <span className="[text-decoration:none] relative tracking-[0.1em] font-semibold text-[inherit] mq450:text-lgi">
+                      BlockState
+                    </span>
+                  </Link>
                 </div>
               </div>
             </div>

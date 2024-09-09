@@ -1,4 +1,4 @@
-import react from "react";
+import React from "react";
 import SideBarNav from "../../components/PropertyOwner/SideBarNav";
 import AssetsPortfolio from "../../components/PropertyOwner/AssetsPortfolio";
 
