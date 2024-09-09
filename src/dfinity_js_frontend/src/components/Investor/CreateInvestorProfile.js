@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { createInvestorProfile } from "../../utils/propertyTokenization";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreateInvestorProfile = ({ fetchInvestor }) => {
   const [name, setName] = useState("");
@@ -16,10 +18,12 @@ const CreateInvestorProfile = ({ fetchInvestor }) => {
       };
       await createInvestorProfile(investor).then((res) => {
         console.log(res);
+        toast.success("Investor profile created successfully!");
         fetchInvestor();
       });
     } catch (error) {
       console.log("Failed to create investor profile:", error);
+      toast.error("Failed to create investor profile. Please try again.");
     }
   };
 
@@ -30,10 +34,7 @@ const CreateInvestorProfile = ({ fetchInvestor }) => {
           <h1 className="text-2xl font-bold leading-tight tracking-tight text-gray-900 md:text-3xl dark:text-white">
             Create Investor Profile
           </h1>
-          <form
-            className="space-y-4 md:space-y-6"
-            onSubmit={handlePublishProfile}
-          >
+          <form className="space-y-4 md:space-y-6" onSubmit={handlePublishProfile}>
             <div>
               <label
                 htmlFor="name"
@@ -97,6 +98,7 @@ const CreateInvestorProfile = ({ fetchInvestor }) => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </section>
   );
 };

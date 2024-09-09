@@ -2,8 +2,8 @@ import { Principal } from "@dfinity/principal";
 import { transferICP } from "./ledger";
 
 // createPropertyOwner
-export async function createPropertyOwner(profile) {
-  return window.canister.farmWorkChain.createPropertyOwner(profile);
+export async function createPropertyOwnerProfile(profile) {
+  return window.canister.farmWorkChain.createPropertyOwnerProfile(profile);
 }
 
 // getPropertyOwnerProfileById
@@ -22,8 +22,8 @@ export async function getPropertyOwnerProfileByPrincipal() {
 }
 
 // createInvestor
-export async function createInvestor(profile) {
-  return window.canister.farmWorkChain.createInvestor(profile);
+export async function createInvestorProfile(profile) {
+  return window.canister.farmWorkChain.createInvestorProfile(profile);
 }
 
 // getInvestorProfileById

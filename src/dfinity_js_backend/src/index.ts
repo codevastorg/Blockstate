@@ -257,7 +257,7 @@ const icpCanister = Ledger(Principal.fromText("ryjl3-tyaaa-aaaaa-aaaba-cai"));
 
 export default Canister({
   // Create PropertyOwner
-  createPropertyOwner: update(
+  createPropertyOwnerProfile: update(
     [PropertyOwnerPayload],
     Result(PropertyOwner, Message),
     (payload) => {
@@ -429,7 +429,7 @@ export default Canister({
   }),
 
   // Create Investor
-  createInvestor: update(
+  createInvestorProfile: update(
     [InvestorPayload],
     Result(Investor, Message),
     (payload) => {

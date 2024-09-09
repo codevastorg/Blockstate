@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { createPropertyOwner } from "../../utils/propertyTokenization";
+import { createPropertyOwnerProfile } from "../../utils/propertyTokenization";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
   const [name, setName] = useState("");
@@ -16,10 +18,12 @@ const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
       };
       await createPropertyOwner(propertyOwner).then((res) => {
         console.log(res);
+        toast.success("Profile created successfully!");
         fetchPropertyOwner();
       });
     } catch (error) {
       console.log("Failed to create property owner profile:", error);
+      toast.error("Failed to create profile. Please try again.");
     }
   };
 
@@ -97,6 +101,7 @@ const CreatePropertyOwnerProfile = ({ fetchPropertyOwner }) => {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </section>
   );
 };
