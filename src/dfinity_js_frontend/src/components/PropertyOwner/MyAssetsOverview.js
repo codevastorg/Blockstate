@@ -25,11 +25,14 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
     try {
       const response = await createAsset(assetPayload);
 
-      if (response.ok) {
+      // Check if the response contains 'Ok'
+      if (response?.Ok) {
         toast.success("Asset added successfully");
-        // Update the assets list after successful save (optional)
-        setAssets((prevAssets) => [...prevAssets, assetPayload]);
-      } else if (response.Err) {
+
+        // You might want to update the assets list using the actual response data
+        const newAsset = response.Ok[0]; // Assuming the asset is inside the Ok variant array
+        setAssets((prevAssets) => [...prevAssets, newAsset]);
+      } else if (response?.Err) {
         console.error("Error listing asset:", response.Err);
         toast.error(`Error listing an asset: ${response.Err}`);
       } else {
