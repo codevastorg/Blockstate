@@ -20,13 +20,20 @@ const MyAssetsOverview = ({ className = "" }) => {
       <div className="w-14 h-1.5 absolute !m-[0] top-[5px] left-[calc(50%_-_28px)] rounded-81xl bg-gray1-600" />
       <div className="self-stretch flex flex-row items-start justify-start py-0 px-3 box-border max-w-full">
         <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-5 mq700:flex-wrap">
+          {/* My Assets tab */}
           <div className="flex flex-col items-start justify-start pt-[5.5px] px-0 pb-0">
-            <div className="relative tracking-[0.1em] font-medium inline-block min-w-[115px] mq450:text-base">
+            <div className="relative tracking-[0.1em] font-medium inline-block min-w-[115px] mq450:text-base cursor-pointer hover:text-blue-500 hover:scale-105 transition-all duration-300">
               My Assets
             </div>
           </div>
+          {/* Add Assets tab */}
+          <div className="flex flex-col items-start justify-start pt-[5.5px] px-0 pb-0">
+            <div className="relative tracking-[0.1em] font-medium inline-block min-w-[115px] mq450:text-base cursor-pointer hover:text-blue-500 hover:scale-105 transition-all duration-300">
+              Add Assets
+            </div>
+          </div>
           <div
-            className="w-[238px] rounded-tl-11xl rounded-tr-8xs rounded-br-11xl rounded-bl-8xs border-cards-transparent-stroke border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[7px] px-9 pb-2 cursor-pointer text-sm"
+            className="w-[238px] rounded-tl-11xl rounded-tr-8xs rounded-br-11xl rounded-bl-8xs border-cards-transparent-stroke border-[1px] border-solid box-border flex flex-row items-start justify-start pt-[7px] px-9 pb-2 cursor-pointer text-sm hover:bg-gray-100 hover:scale-105 transition-all duration-300"
             onClick={onFilterDropContainerClick}
           >
             <div className="flex-1 relative tracking-[0.1em] font-medium">
@@ -42,6 +49,7 @@ const MyAssetsOverview = ({ className = "" }) => {
           </div>
         </div>
       </div>
+
       <div className="self-stretch flex flex-row items-start justify-center flex-wrap content-start pt-0 pb-[11px] pl-0 pr-1 gap-x-9 gap-y-[35px] text-xs mq700:gap-[17px]">
         <Asset />
         <Asset />
