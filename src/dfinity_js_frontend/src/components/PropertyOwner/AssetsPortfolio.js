@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const AssetsPortfolio = ({ className = "" }) => {
   return (
@@ -19,17 +21,17 @@ const AssetsPortfolio = ({ className = "" }) => {
             />
           </div>
           <button className="cursor-pointer border-amber-600 border-[1.5px] border-solid py-0.5 px-3.5 bg-[transparent] w-[116px] [filter:drop-shadow(0px_0px_1px_rgba(12,_26,_75,_0.24))_drop-shadow(0px_3px_8px_rgba(50,_50,_71,_0.05))] rounded-xl box-border flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-300 hover:border-darkgoldenrod-200 hover:border-[1.5px] hover:border-solid hover:box-border">
-            <img
+            <Img
               className="h-6 w-6 relative overflow-hidden shrink-0"
               alt=""
-              src="/filter.svg"
+              src={Images.imgFilter}
             />
             <a className="[text-decoration:none] relative text-lg leading-[26px] font-medium font-manrope text-shades-white text-center inline-block min-w-[52px]">
               Filters
             </a>
           </button>
           <button className="cursor-pointer [border:none] py-1 px-[22px] bg-amber-600 shadow-[0px_0px_1px_rgba(12,_26,_75,_0.24),_0px_3px_8px_-1px_rgba(50,_50,_71,_0.05)] rounded-xl flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-200">
-            <img className="h-6 w-6 relative" alt="" src="/search.svg" />
+            <Img className="h-6 w-6 relative" alt="" src={Images.imgSearch} />
             <div className="relative text-lg leading-[26px] font-medium font-manrope text-shades-black text-center inline-block min-w-[60px]">
               Search
             </div>
@@ -70,11 +72,11 @@ const AssetsPortfolio = ({ className = "" }) => {
               </div>
             </div>
           </div>
-          <img
+          <Img
             className="self-stretch relative max-w-full overflow-hidden max-h-full"
             loading="lazy"
             alt=""
-            src="/divider.svg"
+            src={Images.imgDivider}
           />
         </div>
       </div>

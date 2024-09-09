@@ -4,6 +4,8 @@ import { useState, useMemo, useCallback } from "react";
 import TokenizationRequest from "./TokenizationRequest";
 import PortalPopup from "./PortalPopup";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const SideBarNav = ({
   className = "",
@@ -183,16 +185,16 @@ const SideBarNav = ({
                 style={frameDiv1Style}
               >
                 <Link to="/property-owner?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai">
-                <img
-                  className="h-[38px] w-[38px] relative rounded object-cover min-h-[38px]"
-                  loading="lazy"
-                  alt=""
-                  src="/rectangle1@2x.png"
-                />
+                  <Img
+                    className="h-[38px] w-[38px] relative rounded object-cover min-h-[38px]"
+                    loading="lazy"
+                    alt=""
+                    src={Images.imgRectangle1}
+                  />
                 </Link>
                 <div className="flex flex-col items-start justify-start pt-[3px] px-0 pb-0">
-                <Link to="/property-owner?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai">
-                    <span className="[text-decoration:none] relative tracking-[0.1em] font-semibold text-[inherit] mq450:text-lgi">
+                  <Link to="/property-owner?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai">
+                    <span className="relative tracking-[0.1em] font-semibold text-[inherit] mq450:text-lgi no-underline text-inherit">
                       BlockState
                     </span>
                   </Link>
@@ -206,17 +208,17 @@ const SideBarNav = ({
                 </div>
               </div>
               <div className="h-8 w-4 relative">
-                <img
+                <Img
                   className="absolute top-[0px] left-[0px] w-4 h-4 object-cover"
                   loading="lazy"
                   alt=""
-                  src="/frame1@2x.png"
+                  src={Images.imgFrame1}
                 />
-                <img
+                <Img
                   className="absolute top-[16px] left-[0px] w-4 h-4 object-cover"
                   loading="lazy"
                   alt=""
-                  src="/frame-12@2x.png"
+                  src={Images.imgFrame_12}
                 />
               </div>
             </div>
@@ -224,7 +226,7 @@ const SideBarNav = ({
         </div>
         <div className="self-stretch flex flex-row items-start justify-end py-0 px-[9px] text-base">
           <div className="h-[504px] flex-1 relative">
-            <img
+            <Img
               className="absolute top-[19.4px] left-[26.5px] w-[11px] h-[8.4px]"
               alt=""
               src={vector}
@@ -233,15 +235,15 @@ const SideBarNav = ({
             <div className="absolute top-[0px] left-[0px] w-full flex flex-col items-start justify-start gap-[9px] h-full z-[1]">
               <button className="cursor-pointer [border:none] p-0 bg-[transparent] self-stretch flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9.4px] px-[35px] pb-[11px] relative gap-0.5">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full"
                     alt=""
-                    src="/vector-1.svg"
+                    src={Images.imgVector_1}
                   />
-                  <img
+                  <Img
                     className="h-[23.7px] w-[28.3px] relative object-contain z-[1]"
                     alt=""
-                    src="/iconlyboldcategory2@2x.png"
+                    src={Images.imgIconlyBoldCategory2}
                   />
                   <div className="flex flex-col items-start justify-start pt-[5.6px] px-0 pb-0">
                     <a
@@ -255,17 +257,17 @@ const SideBarNav = ({
               </button>
               <div className="self-stretch flex flex-row items-start justify-start top-[0] z-[99] sticky">
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full cursor-pointer"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                     onClick={onVectorClick2}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative overflow-hidden shrink-0 z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/frame-2.svg"
+                    src={Images.imgFrame_2}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <a
@@ -282,16 +284,16 @@ const SideBarNav = ({
                 onClick={onMarketplaceContainerClick}
               >
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative object-cover z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/frame-31@2x.png"
+                    src={Images.imgFrame_31}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <b
@@ -305,17 +307,17 @@ const SideBarNav = ({
               </div>
               <div className="self-stretch flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full cursor-pointer"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                     onClick={onVectorClick1}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative object-cover z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/iconlybolddocument1@2x.png"
+                    src={Images.imgIconlyBoldDocument1}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <b
@@ -329,16 +331,16 @@ const SideBarNav = ({
               </div>
               <div className="self-stretch flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative object-contain z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/frame-42@2x.png"
+                    src={Images.imgFrame_42}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <b
@@ -352,16 +354,16 @@ const SideBarNav = ({
               </div>
               <div className="self-stretch flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative object-cover z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/frame-51@2x.png"
+                    src={Images.imgFrame_51}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <b
@@ -375,16 +377,16 @@ const SideBarNav = ({
               </div>
               <div className="self-stretch flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative overflow-hidden shrink-0 z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/frame-6.svg"
+                    src={Images.imgFrame_6}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <b
@@ -401,16 +403,16 @@ const SideBarNav = ({
                 onClick={openTokenizationRequest}
               >
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative object-cover z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/frame-71@2x.png"
+                    src={Images.imgFrame_71}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <b
@@ -424,16 +426,16 @@ const SideBarNav = ({
               </div>
               <div className="self-stretch flex flex-row items-start justify-start">
                 <div className="flex-1 flex flex-row items-start justify-start pt-[9px] px-[38px] pb-[11px] relative gap-1">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full"
                     alt=""
-                    src="/vector-2.svg"
+                    src={Images.imgVector_2}
                   />
-                  <img
+                  <Img
                     className="h-6 w-6 relative object-cover z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/iconlyboldsetting1@2x.png"
+                    src={Images.imgIconlyBoldSetting1}
                   />
                   <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                     <b
@@ -452,11 +454,11 @@ const SideBarNav = ({
           <div className="h-[43px] w-[45px] relative rounded-23xl bg-silver-100">
             <div className="absolute top-[0px] left-[0px] rounded-23xl bg-silver-100 w-full h-full hidden" />
             <div className="absolute top-[0px] left-[0px] rounded-23xl bg-silver-100 w-full h-full z-[1]" />
-            <img
+            <Img
               className="absolute top-[0px] left-[0px] rounded-23xl w-full h-full object-cover z-[2]"
               loading="lazy"
               alt=""
-              src="/image1@2x.png"
+              src={Images.imgImage1}
             />
           </div>
           <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-1.5">
@@ -473,11 +475,11 @@ const SideBarNav = ({
             </div>
           </div>
           <div className="flex flex-col items-start justify-end pt-0 px-0 pb-[13.1px]">
-            <img
+            <Img
               className="w-[17.3px] h-[16.7px] relative object-cover"
               loading="lazy"
               alt=""
-              src="/group2@2x.png"
+              src={Images.imgGroup2}
             />
           </div>
         </div>

@@ -1,6 +1,8 @@
 import React from "react";
 import SideBarNav from "../../components/PropertyOwner/SideBarNav";
 import AssetsPortfolio from "../../components/PropertyOwner/AssetsPortfolio";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const Portfolio = () => {
   return (
@@ -44,11 +46,11 @@ const Portfolio = () => {
             Thursday 2 May, 2024
           </div>
         </div>
-        <img
+        <Img
           className="w-[646px] relative max-h-full max-w-full"
           loading="lazy"
           alt=""
-          src="/divider1.svg"
+          src={Images.imgDivider1}
         />
         <div className="w-[555px] rounded-23xl bg-light-black flex flex-col items-center justify-start pt-6 px-5 pb-10 box-border gap-8 max-w-full text-xl mq450:gap-4">
           <div className="w-[372px] flex flex-col items-center justify-center pt-0 px-0 pb-0 box-border gap-4 max-w-full">
@@ -57,29 +59,29 @@ const Portfolio = () => {
                 Asset Allocation
               </h3>
               <div className="w-[98px] rounded-lg bg-amber-600 border-darkslategray-200 border-[1px] border-solid box-border flex flex-row items-center justify-start py-1.5 px-[13px] gap-2.5 text-sm text-shades-black">
-                <img
+                <Img
                   className="h-5 w-5 relative min-h-[20px]"
                   alt=""
-                  src="/iconoutlinearrowiosdown.svg"
+                  src={Images.imgIconOutlineArrowIosDown}
                 />
                 <div className="relative leading-[130%] font-medium inline-block min-w-[40px]">
                   Today
                 </div>
               </div>
             </div>
-            <img
+            <Img
               className="self-stretch relative max-w-full overflow-hidden max-h-full"
               alt=""
-              src="/divider-1.svg"
+              src={Images.imgDivider_1}
             />
           </div>
           <div className="flex flex-row items-start justify-start py-0 pl-[31px] pr-8 box-border max-w-full text-sm">
             <div className="flex flex-row items-start justify-start gap-[27px] mq750:flex-wrap">
-              <img
+              <Img
                 className="h-44 w-44 relative mq750:flex-1"
                 loading="lazy"
                 alt=""
-                src="/circle.svg"
+                src={Images.imgCircle}
               />
               <div className="flex flex-col items-start justify-start pt-[16.5px] px-0 pb-0 box-border min-w-[106px] mq750:flex-1">
                 <div className="flex flex-col items-start justify-start gap-4">
