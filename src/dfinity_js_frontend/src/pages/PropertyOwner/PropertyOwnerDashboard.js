@@ -303,7 +303,9 @@ const OwnerDashboard = ({ propertyOwner }) => {
       </div>
       <main className="flex-1 flex flex-col items-start justify-start gap-7 max-w-[calc(100%_-_255px)] mq975:max-w-full">
         <MainContent propertyOwner={name} />
-        <MyAssetsOverview />
+        <MyAssetsOverview 
+         propertyOwner={id}
+        />
       </main>
     </div>
   );
