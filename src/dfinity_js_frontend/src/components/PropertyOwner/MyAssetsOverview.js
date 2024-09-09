@@ -90,9 +90,11 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
       </div>
 
       <div className="self-stretch flex flex-row items-start justify-center flex-wrap content-start pt-0 pb-[11px] pl-0 pr-1 gap-x-9 gap-y-[35px] text-xs mq700:gap-[17px]">
-        {assets.map((asset, index) => (
-          <Asset key={index} asset={asset} />
-        ))}
+        <Asset title="Asset 1" location="Location 1" totalValue="1000" />
+        <Asset title="Asset 2" location="Location 2" totalValue="2000" />
+        <Asset title="Asset 3" location="Location 3" totalValue="3000" />
+        <Asset title="Asset 4" location="Location 4" totalValue="4000" />
+        <Asset title="Asset 5" location="Location 5" totalValue="5000" />
       </div>
 
       {/* Add Asset Modal */}
