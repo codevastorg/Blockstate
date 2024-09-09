@@ -26,7 +26,7 @@ const Page = ({ className = "" }) => {
               className="h-[67px] w-[67px] relative rounded object-cover"
               loading="lazy"
               alt=""
-              src={Images.imgRectangle11}
+              src={Images.imgBlockstate}
             />
             <div className="flex-1 flex flex-col items-start justify-start pt-[17.5px] px-0 pb-0">
               <a className="[text-decoration:none] self-stretch relative tracking-[0.1em] font-bold text-[inherit] whitespace-nowrap">

@@ -154,6 +154,7 @@ import imgVector_111 from "../images/images/vector-111.svg";
 import imgWallet from "../images/images/wallet@2x.png";
 import imgWaveElements from "../images/images/waveelements@2x.png";
 import imgYouTube from "../images/images/youtube.svg";
+import imgBlockstate from "../images/images/blockstate-min.png";
 
 export {
   CloseSVG,
@@ -310,4 +311,5 @@ export {
   imgWallet,
   imgWaveElements,
   imgYouTube,
+  imgBlockstate,
 };
