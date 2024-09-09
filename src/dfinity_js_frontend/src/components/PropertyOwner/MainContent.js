@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import ValueSubComponents from "./ValueSubComponents";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const MainContent = ({ className = "", propertyOwner }) => {
   return (
@@ -10,20 +12,20 @@ const MainContent = ({ className = "", propertyOwner }) => {
       <div className="w-[1150px] h-[752px] relative rounded-23xl bg-gray1-1000 hidden max-w-full z-[0]" />
       <div className="w-[58px] h-[58px] absolute !m-[0] top-[192px] left-[490px] rounded-11xl bg-gray1-1600 border-cards-transparent-stroke border-[1px] border-solid box-border z-[2]">
         <div className="absolute top-[0px] left-[0px] rounded-11xl bg-gray1-1600 border-cards-transparent-stroke border-[1px] border-solid box-border w-full h-full hidden" />
-        <img
+        <Img
           className="absolute top-[17px] left-[17px] w-6 h-6 overflow-hidden z-[3]"
           loading="lazy"
           alt=""
-          src="/frame-8.svg"
+          src={Images.imgFrame_8}
         />
       </div>
       <div className="w-[58px] h-[58px] absolute !m-[0] top-[192px] left-[224px] rounded-11xl bg-gray1-1600 border-cards-transparent-stroke border-[1px] border-solid box-border z-[2]">
         <div className="absolute top-[0px] left-[0px] rounded-11xl bg-gray1-1600 border-cards-transparent-stroke border-[1px] border-solid box-border w-full h-full hidden" />
-        <img
+        <Img
           className="absolute top-[17px] left-[17px] w-6 h-6 overflow-hidden z-[3]"
           loading="lazy"
           alt=""
-          src="/frame-9.svg"
+          src={Images.imgFrame_9}
         />
       </div>
       <div className="self-stretch flex flex-row items-start justify-between max-w-full gap-5 mq700:flex-wrap">
@@ -41,11 +43,11 @@ const MainContent = ({ className = "", propertyOwner }) => {
         <div className="h-[43px] w-[45px] relative rounded-23xl bg-silver-100 z-[1]">
           <div className="absolute top-[0px] left-[0px] rounded-23xl bg-silver-100 w-full h-full hidden" />
           <div className="absolute top-[0px] left-[0px] rounded-23xl bg-silver-100 w-full h-full z-[1]" />
-          <img
+          <Img
             className="absolute top-[0px] left-[0px] rounded-23xl w-full h-full object-cover z-[2]"
             loading="lazy"
             alt=""
-            src="/image1@2x.png"
+            src={Images.imgImage1}
           />
         </div>
       </div>
@@ -57,12 +59,12 @@ const MainContent = ({ className = "", propertyOwner }) => {
           <div className="w-[504px] flex flex-col items-start justify-start gap-9 min-w-[504px] max-w-full mq700:gap-[18px] mq700:min-w-full mq975:flex-1">
             <div className="self-stretch flex flex-row items-start justify-start gap-7 mq700:flex-wrap">
               <ValueSubComponents
-                subtract="/subtract.svg"
+                subtract={Images.imgSubtract}
                 totalAssetValue="Total Asset Value"
                 balanceSeparator="$12,366.56"
               />
               <ValueSubComponents
-                subtract="/subtract-1.svg"
+                subtract={Images.imgSubtract_1}
                 totalAssetValue="Wallet balance"
                 propMinWidth="111px"
                 balanceSeparator="$123.456"
@@ -88,11 +90,11 @@ const MainContent = ({ className = "", propertyOwner }) => {
                     </div>
                   </div>
                   <div className="flex-1 flex flex-row items-end justify-start gap-[7px] min-w-[128px] text-sm text-goldenrod-200">
-                    <img
+                    <Img
                       className="h-[38px] w-[38px] relative rounded-19xl object-contain"
                       loading="lazy"
                       alt=""
-                      src="/image-21@2x.png"
+                      src={Images.imgImage_21}
                     />
                     <div className="flex-1 flex flex-col items-start justify-start gap-[19px]">
                       <div className="self-stretch flex flex-row items-start justify-end">
@@ -222,11 +224,11 @@ const MainContent = ({ className = "", propertyOwner }) => {
                             <div className="h-[53px] w-[237.9px] relative shadow-[0px_0px_2px_rgba(0,_0,_0,_0.25)] rounded-11xl bg-shades-white hidden" />
                             <div className="flex flex-col items-start justify-start pt-0.5 px-0 pb-0">
                               <div className="w-[34px] h-[33px] relative rounded-11xl overflow-hidden shrink-0 z-[2]">
-                                <img
+                                <Img
                                   className="absolute top-[2.8px] left-[2.9px] w-[28.3px] h-[27.5px] z-[1]"
                                   loading="lazy"
                                   alt=""
-                                  src="/vector-10.svg"
+                                  src={Images.imgVector_10}
                                 />
                               </div>
                             </div>

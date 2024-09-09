@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const Asset = ({ className = "" }) => {
   return (
@@ -7,11 +9,11 @@ const Asset = ({ className = "" }) => {
       className={`flex-1 flex flex-col items-start justify-start min-w-[76px] text-left text-xs text-shades-white font-manrope ${className}`}
     >
       <div className="self-stretch flex flex-col items-end justify-start pt-[29px] pb-[16.5px] pl-8 pr-[82px] relative gap-[55px]">
-        <img
+        <Img
           className="w-full h-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] rounded-3xl max-w-full overflow-hidden max-h-full object-cover z-[1]"
           loading="lazy"
           alt=""
-          src="/vector-11@2x.png"
+          src={Images.imgVector_11}
         />
         <div className="self-stretch flex flex-row items-start justify-start">
           <div className="[backdrop-filter:blur(12px)] rounded-md bg-gray1-1700 flex flex-row items-start justify-start p-1 z-[2]">
@@ -35,11 +37,11 @@ const Asset = ({ className = "" }) => {
               Bungalow
             </div>
             <div className="flex flex-row items-start justify-start gap-1 text-3xs text-gray1-2100">
-              <img
+              <Img
                 className="h-3 w-3 relative object-contain"
                 loading="lazy"
                 alt=""
-                src="/frame-111@2x.png"
+                src={Images.imgFrame_111}
               />
               <div className="relative font-light inline-block min-w-[78px]">
                 Leeds city center

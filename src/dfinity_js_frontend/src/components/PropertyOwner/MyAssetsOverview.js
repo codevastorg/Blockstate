@@ -3,6 +3,8 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Asset from "./Asset";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const MyAssetsOverview = ({ className = "" }) => {
   const navigate = useNavigate();
@@ -31,10 +33,10 @@ const MyAssetsOverview = ({ className = "" }) => {
               View all Offerings
             </div>
             <div className="flex flex-col items-start justify-start pt-[1.5px] px-0 pb-0">
-              <img
+              <Img
                 className="w-4 h-4 relative object-cover"
                 alt=""
-                src="/frame-10@2x.png"
+                src={Images.imgFrame_10}
               />
             </div>
           </div>
