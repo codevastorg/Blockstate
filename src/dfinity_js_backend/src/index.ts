@@ -803,9 +803,16 @@ export default Canister({
         (owner) => owner.owner.toText() === ic.caller().toText()
       );
 
-      if (assetOpt.Some.owner !== propertyOwner.id) {
-        return Err({ UnauthorizedAccess: "Unauthorized access." });
-      }
+      // // Handle the case where no matching property owner is found
+      // if (!propertyOwner) {
+      //   return Err({
+      //     UnauthorizedAccess: "Caller is not an owner of this asset.",
+      //   });
+      // }
+
+      // if (assetOpt.Some.owner !== propertyOwner.id) {
+      //   return Err({ UnauthorizedAccess: "Unauthorized access." });
+      // }
 
       // Fetch the assetValue from the asset
       const assetValue = assetOpt.Some.totalValue;

@@ -106,4 +106,53 @@ export async function getAllInvestments() {
   return window.canister.farmWorkChain.getAllInvestments();
 }
 
-// createTransaction
+// Make investment
+export async function makeInvestment(investment) {
+  const investmentCanister = window.canister.farmWorkChain;
+
+  // Step 1: Create a reservation for the investment
+  const investmentReserveResp = await investmentCanister.reserveInvestment({
+    propertyOwnerId: investment.propertyOwnerId,
+    investorId: investment.investorId,
+    offeringId: investment.offeringId,
+    amountInvested: investment.amount,
+  });
+
+  // Check if the reservation was successful
+  if ("Err" in investmentReserveResp) {
+    console.error(investmentReserveResp.Err);
+    return; // Handle error as needed
+  }
+
+  const reserve = investmentReserveResp.Ok;
+  console.log("Investment reserve created:", reserve);
+
+  // Step 2: Get the receiver (property owner)'s address
+  const receiverPrincipal = Principal.from(reserve.propertyOwner);
+  const receiverAddress = await investmentCanister.getAddressFromPrincipal(receiverPrincipal);
+
+  // Step 3: Transfer ICP tokens to the receiver's address
+  const block = await transferICP(
+    receiverAddress,
+    reserve.amountInvested,
+    reserve.memo
+  );
+
+  // Logging the transaction details
+  console.log(
+    receiverPrincipal,
+    investment.investorId, // Log the investor ID
+    reserve.amountInvested,
+    block,
+    reserve.memo
+  );
+
+  // Step 4: Complete the investment reserve
+  await investmentCanister.completeReserveInvestment(
+    receiverPrincipal,
+    investment.investorId,
+    reserve.amountInvested,
+    block,
+    reserve.memo
+  );
+}

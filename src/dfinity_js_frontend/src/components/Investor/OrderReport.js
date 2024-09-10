@@ -1,40 +1,40 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { getAllInvestments } from "../../utils/propertyTokenization";
+import { getAllOfferings } from "../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
 const OrderReport = ({ className = "" }) => {
-  const [investments, setInvestments] = useState([]);
+  const [offerings, setOfferings] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
-    async function fetchInvestments() {
+    async function fetchOfferings() {
       setLoading(true); // Set loading to true when fetch begins
       try {
-        const response = await getAllInvestments();
-        console.log("Investments Fetched:", response);
+        const response = await getAllOfferings();
+        console.log("offerings Fetched:", response);
         if (response?.Ok && Array.isArray(response.Ok)) {
-          setInvestments(response.Ok); // Ensure response.Ok is an array
+          setOfferings(response.Ok); // Ensure response.Ok is an array
         } else {
           console.error(
-            "Error fetching investments:",
+            "Error fetching offerings:",
             response?.Err || "Unexpected response"
           );
-          setError("Error fetching investments.");
+          setError("Error fetching offerings.");
         }
       } catch (error) {
-        console.error("Error fetching investments:", error);
-        setError("Error fetching investments. Please try again later.");
+        console.error("Error fetching offerings:", error);
+        setError("Error fetching offerings. Please try again later.");
       } finally {
         setLoading(false); // Set loading to false after fetch completes
       }
     }
 
-    fetchInvestments(); // Call the fetch function
+    fetchOfferings(); // Call the fetch function
   }, []);
 
   return (
@@ -43,7 +43,7 @@ const OrderReport = ({ className = "" }) => {
     >
       <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-5 text-left text-xl text-shades-white mq1275:flex-wrap">
         <h3 className="m-0 relative text-inherit leading-[140%] font-semibold font-[inherit] mq450:text-base mq450:leading-[22px]">
-          Investment Details
+          offering Details
         </h3>
         <div className="w-[561px] shadow-[0px_20px_24px_-4px_rgba(255,_235,_176,_0.04),_0px_8px_11px_-4px_rgba(45,_54,_67,_0.04)] rounded-xl flex flex-row items-center justify-center py-[5.5px] px-2.5 box-border gap-4 opacity-[0.9] max-w-full mq825:flex-wrap">
           <div className="flex-1 rounded-xl border-amber-100 border-[1px] border-solid box-border flex flex-row items-center justify-start py-0.5 px-4 min-w-[123px] whitespace-nowrap">
@@ -76,13 +76,13 @@ const OrderReport = ({ className = "" }) => {
           <div className="self-stretch flex flex-row items-start justify-start py-0 pl-2 pr-[13px] box-border max-w-full">
             <div className="flex-1 flex flex-row items-start justify-between max-w-full gap-5 mq825:flex-wrap">
               <div className="w-[103px] relative leading-[20px] font-semibold text-left inline-block shrink-0">
-                Asset type
+                Asset ID
               </div>
               <div className="relative leading-[20px] font-semibold inline-block min-w-[48px]">
-                Tokens
+                Price per Token
               </div>
               <div className="w-[66px] relative leading-[20px] font-semibold inline-block min-w-[66px]">
-                Unit Price
+                Available Tokens
               </div>
               <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-row items-start justify-start pt-1 px-3 pb-0 box-border text-accents-green">
                 <div className="w-[55px] relative leading-[22px] font-semibold inline-block shrink-0">
@@ -90,10 +90,13 @@ const OrderReport = ({ className = "" }) => {
                 </div>
               </div>
               <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                Market Value
+                Date listed
               </div>
               <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                Holdings Value
+                Status
+              </div>
+              <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
+                Action
               </div>
             </div>
           </div>
@@ -108,39 +111,39 @@ const OrderReport = ({ className = "" }) => {
       <div className="w-[910px] overflow-hidden flex flex-row items-start justify-start py-0 px-1 box-border max-w-full">
         <div className="flex-1 flex flex-col items-start justify-start gap-[27px] max-w-full">
           {loading ? (
-            <div>Loading investments...</div>
+            <div>Loading offerings...</div>
           ) : error ? (
             <div>{error}</div>
-          ) : investments.length > 0 ? (
-            investments.map((investment, index) => (
+          ) : offerings.length > 0 ? (
+            offerings.map((offering, index) => (
               <div
                 key={index}
                 className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap"
               >
                 <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
-                  {investment.assetName}
+                  {offering.assetId}
                 </div>
                 <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                  {investment.tokens}
+                  {offering.tokens}
                 </div>
                 <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                  {investment.unitPrice}
+                  {offering.pricePerToken}
                 </div>
                 <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
                   <div className="self-stretch relative leading-[22px] font-semibold">
-                    {investment.status}
+                    {offering.status}
                   </div>
                 </div>
                 <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                  {investment.marketValue}
+                  {offering.dateListed}
                 </div>
                 <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                  {investment.holdingsValue}
+                  <h1>Accept</h1>
                 </div>
               </div>
             ))
           ) : (
-            <p>No investments found</p>
+            <p>No offerings found</p>
           )}
         </div>
       </div>
