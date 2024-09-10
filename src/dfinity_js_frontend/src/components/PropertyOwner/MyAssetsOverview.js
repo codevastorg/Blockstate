@@ -33,11 +33,10 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
             "Error fetching assets:",
             response?.Err || "Unexpected response"
           );
-          toast.error("Error fetching assets.");
+          // toast.error("Error fetching assets.");
         }
       } catch (error) {
         console.error("Error fetching assets:", error);
-        toast.error("Error fetching assets.");
       } finally {
         setLoading(false); // Set loading to false after fetch completes
       }
@@ -97,7 +96,7 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
           </div>
           <div className="flex flex-col items-start justify-start pt-[5.5px] px-0 pb-0">
             <div
-              className="relative tracking-[0.1em] font-medium inline-block min-w-[115px] mq450:text-base cursor-pointer hover:text-blue-500 hover:scale-105 transition-all duration-300"
+              className="cursor-pointer [border:none] py-1 px-[22px] bg-amber-600 shadow-[0px_0px_1px_rgba(12,_26,_75,_0.24),_0px_3px_8px_-1px_rgba(50,_50,_71,_0.05)] rounded-xl flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-200"
               onClick={openModal} // Trigger modal opening
             >
               Add Assets
