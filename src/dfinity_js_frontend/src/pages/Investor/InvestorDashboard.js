@@ -39,10 +39,10 @@ const InvestorDashboard = ({ investor }) => {
               </div>
               <div className="h-2.5 w-2.5 relative z-[1]">
                 <div className="absolute h-full w-full top-[0%] right-[0%] bottom-[0%] left-[0%] rounded-11xl" />
-                <img
+                <Img
                   className="absolute h-3/5 w-full top-[20%] right-[0%] bottom-[20%] left-[0%] rounded-11xl max-w-full overflow-hidden max-h-full z-[1]"
                   alt=""
-                  src="/shape.svg"
+                  src={Images.imgShape}
                 />
               </div>
             </div>
@@ -68,32 +68,32 @@ const InvestorDashboard = ({ investor }) => {
               </div>
               <div className="flex-1 flex flex-col items-start justify-start pt-1 px-0 pb-0 box-border min-w-[649px] max-w-full mq1275:min-w-full">
                 <div className="self-stretch flex flex-row items-start justify-start pt-[7px] px-60 pb-[204.5px] relative mq450:pl-5 mq450:pr-5 mq450:box-border mq825:pl-[120px] mq825:pr-[120px] mq825:box-border">
-                  <img
+                  <Img
                     className="h-full w-full absolute !m-[0] top-[0px] right-[0px] bottom-[0px] left-[0px] max-w-full overflow-hidden max-h-full mix-blend-normal"
                     alt=""
-                    src="/line.svg"
+                    src={Images.imgLine}
                   />
-                  <img
+                  <Img
                     className="h-[195.4px] w-full absolute !m-[0] right-[0px] bottom-[-4px] left-[0px] max-w-full overflow-hidden z-[1]"
                     loading="lazy"
                     alt=""
-                    src="/graph.svg"
+                    src={Images.imgGraph}
                   />
                   <div className="h-[25.5px] w-20 relative">
-                    <img
+                    <Img
                       className="absolute top-[0px] left-[0px] rounded-11xl w-full h-full z-[1]"
                       loading="lazy"
                       alt=""
-                      src="/combined-shape.svg"
+                      src={Images.imgCombinedShape}
                     />
                     <b className="absolute top-[2px] left-[10px] inline-block min-w-[64px] z-[2]">
                       64,3664.77
                     </b>
                   </div>
-                  <img
+                  <Img
                     className="h-[205px] w-[938px] absolute !m-[0] bottom-[-5px] left-[-3px] z-[2]"
                     alt=""
-                    src="/point.svg"
+                    src="Images.ImgPoint"
                   />
                 </div>
               </div>

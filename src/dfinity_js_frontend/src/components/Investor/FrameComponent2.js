@@ -1,6 +1,8 @@
 import React from "react";
 import TotalOrder from "./TotalOrder";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const FrameComponent2 = ({ className = "" }) => {
   return (
@@ -21,18 +23,18 @@ const FrameComponent2 = ({ className = "" }) => {
                 2040
               </a>
             </div>
-            <img
+            <Img
               className="h-[60px] w-[60px] relative object-contain z-[1]"
               loading="lazy"
               alt=""
-              src="/icon-21@2x.png"
+              src={Images.imgIcon_21}
             />
           </div>
           <div className="flex flex-row items-start justify-start gap-2 text-gray1-2100">
-            <img
+            <Img
               className="h-6 w-6 relative min-h-[24px] z-[1]"
               alt=""
-              src="/ictrendingup24px-1.svg"
+              src={Images.imgIcTrendingUp24px_1}
             />
             <div className="flex flex-col items-start justify-start pt-px px-0 pb-0">
               <div className="relative font-semibold z-[1]">

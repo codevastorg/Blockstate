@@ -1,5 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const TotalOrder = ({ className = "" }) => {
   return (
@@ -16,11 +18,11 @@ const TotalOrder = ({ className = "" }) => {
             10293
           </a>
         </div>
-        <img
+        <Img
           className="h-[60px] w-[60px] relative object-contain z-[1]"
           loading="lazy"
           alt=""
-          src="/icon1@2x.png"
+          src={Images.imgIcon1}
         />
       </div>
       <div className="flex flex-row items-start justify-start gap-2 text-lightseagreen">
