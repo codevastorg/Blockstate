@@ -141,7 +141,7 @@ export async function makeInvestment(investment) {
   // Logging the transaction details
   console.log(
     receiverPrincipal,
-    investment.investorId, // Log the investor ID
+    investment.investorId, 
     reserve.amountInvested,
     block,
     reserve.memo

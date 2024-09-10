@@ -42,13 +42,16 @@ const OrderReport = ({ className = "" }) => {
     fetchOfferings(); // Call the fetch function
   }, []);
 
-  // Function to handle investment payment
-  const handleInvestment = async (offering) => {
+  // Function to handle investment payment with dynamic values
+  const handleInvestment = async (offeringId, pricePerToken) => {
     const investorId = "804b2c75-98e2-4216-8bb6-957656497b0f";
     const propertyOwnerId = "da6a63cb-f5ae-485a-8f0c-9fef77760cf9";
-    const offeringId = "80a428af-f0b6-4777-acfb-5fd0364730f3";
 
-    const amount = 1000; // Hardcoded amount
+    // Assuming pricePerToken is already in the correct format
+    const amountInvested = parseInt(pricePerToken, 10) * 10**8;
+    const amount = BigInt(amountInvested);
+
+    console.log("Dynamically fetched offeringId and pricePerTOken", offeringId, pricePerToken )
 
     try {
       await makeInvestment({
@@ -162,7 +165,11 @@ const OrderReport = ({ className = "" }) => {
                   {offering.status}
                 </div>
                 <div className="w-[102px] relative leading-[20px] font-semibold inline-block shrink-0 min-w-[102px]">
-                  <PayInvestmentButton invest={handleInvestment} />
+                  <PayInvestmentButton
+                    invest={() =>
+                      handleInvestment(offering.id, offering.pricePerToken)
+                    }
+                  />
                 </div>
               </div>
             ))
