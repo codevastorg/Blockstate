@@ -27,7 +27,7 @@ const Offering = ({
             Price per Token: {formatNumber(pricePerToken)} ICP
           </div>
           <div className="relative tracking-[0.1em] font-light inline-block min-w-[77px]">
-            Available Tokens: {formatNumber(availableTokens)} 
+            Available Tokens: {formatNumber(availableTokens)}
           </div>
           <div className="relative tracking-[0.1em] font-light inline-block min-w-[77px]">
             Start Date: {startDate}

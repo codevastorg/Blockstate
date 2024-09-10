@@ -64,12 +64,27 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
     }
   };
 
+  const handleEditOffering = (offering) => {
+    // Add logic to edit the offering
+    console.log("Editing offering:", offering);
+  };
+
+  const handleDeleteOffering = async (offeringId) => {
+    // Add logic to delete the offering
+    console.log("Deleting offering with ID:", offeringId);
+  };
+
   const openModal = () => {
     setActiveModal("offering");
   };
 
   const closeModal = () => {
     setActiveModal(null);
+  };
+
+  // Helper function to format numbers with commas
+  const formatNumber = (number) => {
+    return number.toLocaleString();
   };
 
   return (
@@ -148,6 +163,11 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
                   Date Created
                 </div>
               </div>
+              <div className="w-[120px] flex flex-col items-start justify-start py-0 box-border">
+                <div className="relative leading-[20px] font-semibold">
+                  Actions
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -169,10 +189,10 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
                   </div>
                 </div>
                 <div className="w-[97px] relative leading-[20px] font-semibold">
-                  ${offering.pricePerToken}
+                  {formatNumber(offering.pricePerToken)} ICP
                 </div>
                 <div className="w-[90px] relative leading-[20px] font-semibold">
-                  {offering.availableTokens}
+                  {formatNumber(offering.availableTokens)}
                 </div>
                 <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
                   <div className="self-stretch relative leading-[22px] font-semibold">
@@ -181,6 +201,20 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
                 </div>
                 <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
                   {offering.startDate}
+                </div>
+                <div className="w-[120px] flex flex-row items-center justify-start gap-2">
+                  <button
+                    className="cursor-pointer py-1 px-3 bg-blue-500 text-white rounded-md hover:bg-blue-700"
+                    onClick={() => handleEditOffering(offering)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="cursor-pointer py-1 px-3 bg-red-500 text-white rounded-md hover:bg-red-700"
+                    onClick={() => handleDeleteOffering(offering.id)}
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             ))
