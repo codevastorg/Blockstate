@@ -7,7 +7,7 @@ import PropTypes from "prop-types";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
-const FrameComponent3 = ({ className = "" }) => {
+const FrameComponent3 = ({ className = "", investor }) => {
   const [isTokenizationRequestOpen, setTokenizationRequestOpen] = useState(
     false
   );
@@ -297,7 +297,7 @@ const FrameComponent3 = ({ className = "" }) => {
           <div className="flex-1 flex flex-col items-start justify-end pt-0 px-0 pb-1.5">
             <div className="self-stretch flex flex-col items-start justify-start gap-px">
               <div className="self-stretch relative font-semibold">
-                Nombuso Kaluuya
+                {investor.name}
               </div>
               <div className="relative text-3xs text-gainsboro-500 inline-block min-w-[127px]">
                 0x1a2B3c4D5e6F7g8H9i0J

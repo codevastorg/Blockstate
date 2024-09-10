@@ -16,11 +16,13 @@ const InvestorDashboard = ({ investor }) => {
     joinedAt,
   } = investor;
 
+  console.log(investor.name);
+
   const navigate = useNavigate();
 
   return (
     <div className="w-full relative bg-gray1-400 flex flex-row items-start justify-start pt-[30px] px-[39px] pb-12 box-border gap-[58px] leading-[normal] tracking-[normal] mq825:gap-[29px] mq1575:flex-wrap">
-      <FrameComponent3 />
+      <FrameComponent3 investor={investor}/>
       <main className="w-[1287px] rounded-26xl bg-gray1-1000 flex flex-col items-start justify-start pt-12 px-[61px] pb-[37px] box-border gap-[51px] max-w-full mq1275:pt-[31px] mq1275:px-[30px] mq1275:pb-6 mq1275:box-border mq825:gap-[25px] mq825:pt-5 mq825:pb-5 mq825:box-border">
         <section className="w-[860px] flex flex-row items-start justify-start py-0 px-3 box-border max-w-full">
           <FrameComponent2 />
