@@ -43,7 +43,7 @@ const OrderReport = ({ className = "" }) => {
     >
       <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-5 text-left text-xl text-shades-white mq1275:flex-wrap">
         <h3 className="m-0 relative text-inherit leading-[140%] font-semibold font-[inherit] mq450:text-base mq450:leading-[22px]">
-          offering Details
+          Offerings Available
         </h3>
         <div className="w-[561px] shadow-[0px_20px_24px_-4px_rgba(255,_235,_176,_0.04),_0px_8px_11px_-4px_rgba(45,_54,_67,_0.04)] rounded-xl flex flex-row items-center justify-center py-[5.5px] px-2.5 box-border gap-4 opacity-[0.9] max-w-full mq825:flex-wrap">
           <div className="flex-1 rounded-xl border-amber-100 border-[1px] border-solid box-border flex flex-row items-center justify-start py-0.5 px-4 min-w-[123px] whitespace-nowrap">
@@ -84,11 +84,11 @@ const OrderReport = ({ className = "" }) => {
               <div className="w-[66px] relative leading-[20px] font-semibold inline-block min-w-[66px]">
                 Available Tokens
               </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-row items-start justify-start pt-1 px-3 pb-0 box-border text-accents-green">
+              {/* <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-row items-start justify-start pt-1 px-3 pb-0 box-border text-accents-green">
                 <div className="w-[55px] relative leading-[22px] font-semibold inline-block shrink-0">
                   Status
                 </div>
-              </div>
+              </div> */}
               <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
                 Date listed
               </div>
@@ -124,21 +124,18 @@ const OrderReport = ({ className = "" }) => {
                   {offering.assetId}
                 </div>
                 <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                  {offering.tokens}
+                  {String(offering.pricePerToken)}
                 </div>
                 <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                  {offering.pricePerToken}
+                  {String(offering.availableTokens)}
                 </div>
-                <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
+                <div className="w-[85px] flex flex-col items-center justify-center py-0.5 px-[15px] box-border">
                   <div className="self-stretch relative leading-[22px] font-semibold">
-                    {offering.status}
+                    {offering.startDate}
                   </div>
                 </div>
                 <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                  {offering.dateListed}
-                </div>
-                <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                  <h1>Accept</h1>
+                  {offering.status}
                 </div>
               </div>
             ))
