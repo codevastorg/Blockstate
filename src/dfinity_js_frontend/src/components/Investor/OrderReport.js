@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
+import PayInvestmentButton from "./PayInvestment"; 
 
 const OrderReport = ({ className = "" }) => {
   const [offerings, setOfferings] = useState([]);
@@ -36,6 +37,18 @@ const OrderReport = ({ className = "" }) => {
 
     fetchOfferings(); // Call the fetch function
   }, []);
+
+  // Function to handle investment (mock or real logic)
+  const handleInvestment = (offering) => {
+    return async () => {
+      try {
+        console.log(`Investing in offering: ${offering.assetId}`);
+        // Add investment logic here, such as calling an API
+      } catch (err) {
+        console.error("Investment failed:", err);
+      }
+    };
+  };
 
   return (
     <section
@@ -84,11 +97,6 @@ const OrderReport = ({ className = "" }) => {
               <div className="w-[66px] relative leading-[20px] font-semibold inline-block min-w-[66px]">
                 Available Tokens
               </div>
-              {/* <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-row items-start justify-start pt-1 px-3 pb-0 box-border text-accents-green">
-                <div className="w-[55px] relative leading-[22px] font-semibold inline-block shrink-0">
-                  Status
-                </div>
-              </div> */}
               <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
                 Date listed
               </div>
@@ -136,6 +144,9 @@ const OrderReport = ({ className = "" }) => {
                 </div>
                 <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
                   {offering.status}
+                </div>
+                <div className="w-[102px] relative leading-[20px] font-semibold inline-block shrink-0 min-w-[102px]">
+                  <PayInvestmentButton invest={handleInvestment(offering)} />
                 </div>
               </div>
             ))

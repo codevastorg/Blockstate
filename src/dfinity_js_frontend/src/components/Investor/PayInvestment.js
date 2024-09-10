@@ -25,7 +25,7 @@ const PayInvestmentButton = ({ invest }) => {
         disabled={loading}
         style={{ backgroundColor: "#FFA500", borderRadius: "20px" }}
       >
-        {loading ? <Spinner animation="border" size="sm" /> : "Donate"}
+        {loading ? <Spinner animation="border" size="sm" /> : "Invest"}
       </Button>
       {error && <div style={{ color: "red", marginTop: "10px" }}>{error}</div>}
     </>
