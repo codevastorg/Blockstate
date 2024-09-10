@@ -566,13 +566,8 @@ export default Canister({
   ),
 
   // Get Investor Profile by Principal using filter
-  getInvestorProfileByPrincipal: query(
-    [],
-     Result(Investor, Message),
-    () => {
-    const investors = investorStorage
-    .values()
-    .filter((Investor) => {
+  getInvestorProfileByPrincipal: query([], Result(Investor, Message), () => {
+    const investors = investorStorage.values().filter((Investor) => {
       return Investor.owner.toText() === ic.caller().toText();
     });
 
@@ -954,8 +949,6 @@ export default Canister({
     return Ok(offerings);
   }),
 
-  // Make Investment
-
   // This function is used to reserve an investment for a specific offering with the amount invested
   reserveInvestment: update(
     [TransactionPayload],
@@ -1121,6 +1114,18 @@ export default Canister({
       return await verifyPaymentInternal(propertyOwner, amount, block, memo);
     }
   ),
+
+  // Function to get all investments
+  getAllInvestments: query([], Result(Vec(Transaction), Message), () => {
+    const allInvestments = persistedInvestmentsReserves.values();
+
+    // Check if there are any investments
+    if (allInvestments.length === 0) {
+      return Err({ NotFound: "No investments found." });
+    }
+
+    return Ok(allInvestments);
+  }),
 
   // Function for a property owner tp create a lease for an asset
   createLease: update([LeasingPayload], Result(Leasing, Message), (payload) => {

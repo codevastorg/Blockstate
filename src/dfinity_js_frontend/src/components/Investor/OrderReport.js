@@ -1,9 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { getAllInvestments } from "../../utils/propertyTokenization";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
 const OrderReport = ({ className = "" }) => {
+  const [investments, setInvestments] = useState([]);
+  const [loading, setLoading] = useState(false); // Loading state
+  const [error, setError] = useState(null); // Error state
+
+  useEffect(() => {
+    async function fetchInvestments() {
+      setLoading(true); // Set loading to true when fetch begins
+      try {
+        const response = await getAllInvestments();
+        console.log("Investments Fetched:", response);
+        if (response?.Ok && Array.isArray(response.Ok)) {
+          setInvestments(response.Ok); // Ensure response.Ok is an array
+        } else {
+          console.error(
+            "Error fetching investments:",
+            response?.Err || "Unexpected response"
+          );
+          setError("Error fetching investments.");
+        }
+      } catch (error) {
+        console.error("Error fetching investments:", error);
+        setError("Error fetching investments. Please try again later.");
+      } finally {
+        setLoading(false); // Set loading to false after fetch completes
+      }
+    }
+
+    fetchInvestments(); // Call the fetch function
+  }, []);
+
   return (
     <section
       className={`w-[1020px] rounded-23xl bg-light-black flex flex-col items-start justify-start pt-[33px] pb-[9px] pl-[55px] pr-10 box-border gap-4 max-w-full z-[1] text-center text-sm text-gainsboro-200 font-manrope mq1275:pl-[27px] mq1275:box-border mq825:pt-[21px] mq825:pb-5 mq825:box-border ${className}`}
@@ -74,150 +107,41 @@ const OrderReport = ({ className = "" }) => {
       </div>
       <div className="w-[910px] overflow-hidden flex flex-row items-start justify-start py-0 px-1 box-border max-w-full">
         <div className="flex-1 flex flex-col items-start justify-start gap-[27px] max-w-full">
-          <div className="self-stretch flex flex-col items-start justify-start">
-            <div className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap">
-              <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Asset name
-              </div>
-              <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Menu
-              </div>
-              <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                Unit Price
-              </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
-                <div className="self-stretch relative leading-[22px] font-semibold">
-                  Status
+          {loading ? (
+            <div>Loading investments...</div>
+          ) : error ? (
+            <div>{error}</div>
+          ) : investments.length > 0 ? (
+            investments.map((investment, index) => (
+              <div
+                key={index}
+                className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap"
+              >
+                <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
+                  {investment.assetName}
+                </div>
+                <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
+                  {investment.tokens}
+                </div>
+                <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
+                  {investment.unitPrice}
+                </div>
+                <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
+                  <div className="self-stretch relative leading-[22px] font-semibold">
+                    {investment.status}
+                  </div>
+                </div>
+                <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
+                  {investment.marketValue}
+                </div>
+                <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
+                  {investment.holdingsValue}
                 </div>
               </div>
-              <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                Market Value
-              </div>
-              <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                Holdings Value
-              </div>
-            </div>
-          </div>
-          <div className="self-stretch flex flex-col items-start justify-start">
-            <div className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap">
-              <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Asset name
-              </div>
-              <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Menu
-              </div>
-              <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                Unit Price
-              </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
-                <div className="self-stretch relative leading-[22px] font-semibold">
-                  Status
-                </div>
-              </div>
-              <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                Market Value
-              </div>
-              <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                Holdings Value
-              </div>
-            </div>
-          </div>
-          <div className="self-stretch flex flex-col items-start justify-start">
-            <div className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap">
-              <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Asset name
-              </div>
-              <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Menu
-              </div>
-              <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                Unit Price
-              </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
-                <div className="self-stretch relative leading-[22px] font-semibold">
-                  Status
-                </div>
-              </div>
-              <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                Market Value
-              </div>
-              <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                Holdings Value
-              </div>
-            </div>
-          </div>
-          <div className="self-stretch flex flex-col items-start justify-start">
-            <div className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap">
-              <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Asset name
-              </div>
-              <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Menu
-              </div>
-              <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                Unit Price
-              </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
-                <div className="self-stretch relative leading-[22px] font-semibold">
-                  Status
-                </div>
-              </div>
-              <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                Market Value
-              </div>
-              <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                Holdings Value
-              </div>
-            </div>
-          </div>
-          <div className="self-stretch flex flex-col items-start justify-start">
-            <div className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap">
-              <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Asset name
-              </div>
-              <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Menu
-              </div>
-              <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                Unit Price
-              </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
-                <div className="self-stretch relative leading-[22px] font-semibold">
-                  Status
-                </div>
-              </div>
-              <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                Market Value
-              </div>
-              <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                Holdings Value
-              </div>
-            </div>
-          </div>
-          <div className="self-stretch flex flex-col items-start justify-start">
-            <div className="self-stretch flex flex-row items-start justify-between py-0 pl-0 pr-[25px] gap-5 mq825:flex-wrap">
-              <div className="w-[103px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Asset name
-              </div>
-              <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                Menu
-              </div>
-              <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                Unit Price
-              </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
-                <div className="self-stretch relative leading-[22px] font-semibold">
-                  Status
-                </div>
-              </div>
-              <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                Market Value
-              </div>
-              <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                Holdings Value
-              </div>
-            </div>
-          </div>
+            ))
+          ) : (
+            <p>No investments found</p>
+          )}
         </div>
       </div>
     </section>

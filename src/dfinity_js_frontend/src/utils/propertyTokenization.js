@@ -101,4 +101,9 @@ export async function getCompletedOfferings() {
   return window.canister.farmWorkChain.getCompletedOfferings();
 }
 
+// getAllInvestments
+export async function getAllInvestments() {
+  return window.canister.farmWorkChain.getAllInvestments();
+}
+
 // createTransaction
