@@ -83,6 +83,7 @@ const Asset = Record({
 const Offering = Record({
   id: text,
   assetId: text, // Asset ID
+  // propertOwnerId: text,
   pricePerToken: nat64,
   availableTokens: nat64,
   startDate: text,

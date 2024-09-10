@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { getAllOfferings } from "../../utils/propertyTokenization";
+import {
+  getAllOfferings,
+  makeInvestment,
+} from "../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
-import PayInvestmentButton from "./PayInvestment"; 
+import PayInvestmentButton from "./PayInvestment";
+import { off } from "process";
 
 const OrderReport = ({ className = "" }) => {
   const [offerings, setOfferings] = useState([]);
@@ -38,16 +42,28 @@ const OrderReport = ({ className = "" }) => {
     fetchOfferings(); // Call the fetch function
   }, []);
 
-  // Function to handle investment (mock or real logic)
-  const handleInvestment = (offering) => {
-    return async () => {
-      try {
-        console.log(`Investing in offering: ${offering.assetId}`);
-        // Add investment logic here, such as calling an API
-      } catch (err) {
-        console.error("Investment failed:", err);
-      }
-    };
+  // Function to handle investment payment
+  const handleInvestment = async (offering) => {
+    const investorId = "804b2c75-98e2-4216-8bb6-957656497b0f";
+    const propertyOwnerId = "da6a63cb-f5ae-485a-8f0c-9fef77760cf9";
+    const offeringId = "80a428af-f0b6-4777-acfb-5fd0364730f3";
+
+    const amount = 1000; // Hardcoded amount
+
+    try {
+      await makeInvestment({
+        investorId,
+        propertyOwnerId,
+        offeringId,
+        amount,
+      }).then((response) => {
+        console.log("Investment response:", response);
+        toast.success("Investment successful");
+      });
+    } catch (err) {
+      console.error("Check if wallet is funded", err);
+      toast.error("Payment failed. Please check if the wallet is funded.");
+    }
   };
 
   return (
@@ -146,7 +162,7 @@ const OrderReport = ({ className = "" }) => {
                   {offering.status}
                 </div>
                 <div className="w-[102px] relative leading-[20px] font-semibold inline-block shrink-0 min-w-[102px]">
-                  <PayInvestmentButton invest={handleInvestment(offering)} />
+                  <PayInvestmentButton invest={handleInvestment} />
                 </div>
               </div>
             ))
