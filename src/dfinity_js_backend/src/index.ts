@@ -566,9 +566,14 @@ export default Canister({
   ),
 
   // Get Investor Profile by Principal using filter
-  getInvestorProfileByPrincipal: query([], Result(Investor, Message), () => {
-    const investors = investorStorage.values().filter((Investor) => {
-      return Investor.principal.toText() === ic.caller().toText();
+  getInvestorProfileByPrincipal: query(
+    [],
+     Result(Investor, Message),
+    () => {
+    const investors = investorStorage
+    .values()
+    .filter((Investor) => {
+      return Investor.owner.toText() === ic.caller().toText();
     });
 
     if (investors.length === 0) {
