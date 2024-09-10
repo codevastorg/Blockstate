@@ -49,7 +49,7 @@ const OrderReport = ({ className = "" }) => {
 
     // Assuming pricePerToken is already in the correct format
     const amountInvested = parseInt(pricePerToken, 10) * 10**8;
-    const amount = BigInt(amountInvested);
+    const amountPayable = BigInt(amountInvested)
 
     console.log("Dynamically fetched offeringId and pricePerTOken", offeringId, pricePerToken )
 
@@ -58,7 +58,7 @@ const OrderReport = ({ className = "" }) => {
         investorId,
         propertyOwnerId,
         offeringId,
-        amount,
+        amountPayable,
       }).then((response) => {
         console.log("Investment response:", response);
         toast.success("Investment successful");

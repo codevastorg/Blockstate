@@ -1100,8 +1100,8 @@ export default Canister({
 
       // Update the investor total invested amount
       const investor = investorOpt.Some;
-      investor.totalInvested += reserve.amountInvested;
-      investorStorage.insert(investorId, investor);
+      investor.totalInvested += reserve.reservePrice;
+      investorStorage.insert(investor.id, investor);
       persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
 
       return Ok(updatedReserve);

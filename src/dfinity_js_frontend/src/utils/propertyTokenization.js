@@ -115,7 +115,7 @@ export async function makeInvestment(investment) {
     propertyOwnerId: investment.propertyOwnerId,
     investorId: investment.investorId,
     offeringId: investment.offeringId,
-    amountInvested: investment.amount,
+    amountInvested: investment.amountPayable,
   });
 
   // Check if the reservation was successful
@@ -137,6 +137,8 @@ export async function makeInvestment(investment) {
     reserve.amountInvested,
     reserve.memo
   );
+
+  console.log`Investment block: ${block}`;
 
   // Logging the transaction details
   console.log(
