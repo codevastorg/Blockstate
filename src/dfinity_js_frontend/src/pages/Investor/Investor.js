@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { getInvestorProfileByPrincipal } from "../../utils/propertyTokenization";
 import { Notification } from "../../components/utils/Notifications";
 import Wallet from "../../components/Wallet";
-// import InvestorDashboard from "./InvestorDashboard";
+import InvestorDashboard from "./InvestorDashboard";
 import CreateInvestorProfile from "../../components/Investor/CreateInvestorProfile";
 import Loader from "../../components/utils/Loader";
 import Cover from "../../components/utils/Cover";
@@ -18,18 +18,17 @@ const Investor = () => {
   const fetchInvestor = useCallback(async () => {
     try {
       setLoading(true);
-      setInvestor(
-        await getInvestorProfileByPrincipal().then(async (res) => {
-          console.log(res);
-          return res.ok;
-        })
-      );
+      const res = await getInvestorProfileByPrincipal();
+      if (res.Ok) {
+        console.log(res.Ok); // Log the entire profile data for debugging
+        setInvestor(res.Ok);
+      }
       setLoading(false);
     } catch (error) {
       console.log(error);
       setLoading(false);
     }
-  });
+  }, []); // Make sure to include dependencies if necessary
 
   useEffect(() => {
     fetchInvestor();
@@ -42,13 +41,8 @@ const Investor = () => {
         !loading ? (
           investor?.name ? (
             <>
-              <Nav className="justify-content-end pt-3 pb-5 mr-4">
-                <Nav.Item>
-                  <Wallet />
-                </Nav.Item>
-              </Nav>
               <main>
-                {/* <InvestorDashboard investor={investor} /> */}
+                <InvestorDashboard investor={investor} />
               </main>
             </>
           ) : (
@@ -63,6 +57,5 @@ const Investor = () => {
     </>
   );
 };
-
 
 export default Investor;

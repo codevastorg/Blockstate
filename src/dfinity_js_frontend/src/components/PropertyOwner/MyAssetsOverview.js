@@ -1,37 +1,59 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Asset from "./Asset";
 import PropTypes from "prop-types";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 import AddAsset from "../PropertyOwner/Asset/ListAsset";
-import { createAsset } from "../../utils/propertyTokenization";
+import { createAsset, getAllAssets } from "../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MyAssetsOverview = ({ className = "", propertyOwner }) => {
-  const { id } = propertyOwner;
+  const id = propertyOwner;
 
   const [assets, setAssets] = useState([]);
   const [activeModal, setActiveModal] = useState(null); // State for modal visibility
+  const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate();
 
   const onFilterDropContainerClick = useCallback(() => {
     navigate("/offerings");
   }, [navigate]);
 
+  useEffect(() => {
+    async function fetchAssets() {
+      setLoading(true); // Set loading to true when fetch begins
+      try {
+        const response = await getAllAssets();
+        if (response?.Ok && Array.isArray(response.Ok)) {
+          setAssets(response.Ok); // Ensure response.Ok is an array
+        } else {
+          console.error(
+            "Error fetching assets:",
+            response?.Err || "Unexpected response"
+          );
+          // toast.error("Error fetching assets.");
+        }
+      } catch (error) {
+        console.error("Error fetching assets:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetch completes
+      }
+    }
+
+    fetchAssets(); // Call the fetch function
+  }, []);
+
   // Function to save the asset
   const saveAsset = async (assetPayload) => {
     try {
       const response = await createAsset(assetPayload);
 
-      // Check if the response contains 'Ok'
       if (response?.Ok) {
         toast.success("Asset added successfully");
-
-        // Update the assets list using the actual response data
         const newAsset = response.Ok[0];
-        setAssets((prevAssets) => [...prevAssets, newAsset]);
+        setAssets((prevAssets) => [...prevAssets, newAsset]); // Add new asset to the list
       } else if (response?.Err) {
         console.error("Error listing asset:", response.Err);
         toast.error(`Error listing an asset: ${response.Err}`);
@@ -55,6 +77,11 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
     setActiveModal(null);
   };
 
+  // Helper function to format numbers with commas
+  const formatNumber = (number) => {
+    return number.toLocaleString();
+  };
+
   return (
     <section
       className={`self-stretch rounded-11xl bg-gray1-1000 overflow-hidden flex flex-col items-start justify-start pt-[33px] px-[27px] pb-[41px] box-border relative gap-[22px] max-w-full text-left text-xl text-shades-white font-manrope mq450:pt-[21px] mq450:pb-[27px] mq450:box-border ${className}`}
@@ -69,7 +96,7 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
           </div>
           <div className="flex flex-col items-start justify-start pt-[5.5px] px-0 pb-0">
             <div
-              className="relative tracking-[0.1em] font-medium inline-block min-w-[115px] mq450:text-base cursor-pointer hover:text-blue-500 hover:scale-105 transition-all duration-300"
+              className="cursor-pointer [border:none] py-1 px-[22px] bg-amber-600 shadow-[0px_0px_1px_rgba(12,_26,_75,_0.24),_0px_3px_8px_-1px_rgba(50,_50,_71,_0.05)] rounded-xl flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-200"
               onClick={openModal} // Trigger modal opening
             >
               Add Assets
@@ -80,7 +107,7 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
             onClick={onFilterDropContainerClick}
           >
             <div className="flex-1 relative tracking-[0.1em] font-medium">
-              View all Offerings
+              View all Assets
             </div>
             <div className="flex flex-col items-start justify-start pt-[1.5px] px-0 pb-0">
               <Img
@@ -93,12 +120,35 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
         </div>
       </div>
 
+      {/* Asset List */}
       <div className="self-stretch flex flex-row items-start justify-center flex-wrap content-start pt-0 pb-[11px] pl-0 pr-1 gap-x-9 gap-y-[35px] text-xs mq700:gap-[17px]">
-        <Asset title="Asset 1" location="Location 1" totalValue="1000" />
-        <Asset title="Asset 2" location="Location 2" totalValue="2000" />
-        <Asset title="Asset 3" location="Location 3" totalValue="3000" />
-        <Asset title="Asset 4" location="Location 4" totalValue="4000" />
-        <Asset title="Asset 5" location="Location 5" totalValue="5000" />
+        {loading ? ( // Show loading spinner while assets are being fetched
+          <div>Loading assets...</div>
+        ) : assets.length > 0 ? (
+          assets
+            .slice(-5) // Get the last 5 assets
+            .map((asset, index) => {
+              // Defensive check for undefined or missing id
+              if (!asset || !asset.id) {
+                console.error(
+                  `Asset is undefined or missing id at index ${index}`,
+                  asset
+                );
+                return null; // Skip rendering for invalid assets
+              }
+
+              return (
+                <Asset
+                  key={asset.id}
+                  title={asset.title}
+                  location={asset.location}
+                  totalValue={String(asset.totalValue)}
+                />
+              );
+            })
+        ) : (
+          <p>No assets available</p>
+        )}
       </div>
 
       {/* Add Asset Modal */}

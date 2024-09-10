@@ -568,7 +568,7 @@ export default Canister({
   // Get Investor Profile by Principal using filter
   getInvestorProfileByPrincipal: query([], Result(Investor, Message), () => {
     const investors = investorStorage.values().filter((Investor) => {
-      return Investor.principal.toText() === ic.caller().toText();
+      return Investor.owner.toText() === ic.caller().toText();
     });
 
     if (investors.length === 0) {
@@ -803,9 +803,16 @@ export default Canister({
         (owner) => owner.owner.toText() === ic.caller().toText()
       );
 
-      if (assetOpt.Some.owner !== propertyOwner.id) {
-        return Err({ UnauthorizedAccess: "Unauthorized access." });
-      }
+      // // Handle the case where no matching property owner is found
+      // if (!propertyOwner) {
+      //   return Err({
+      //     UnauthorizedAccess: "Caller is not an owner of this asset.",
+      //   });
+      // }
+
+      // if (assetOpt.Some.owner !== propertyOwner.id) {
+      //   return Err({ UnauthorizedAccess: "Unauthorized access." });
+      // }
 
       // Fetch the assetValue from the asset
       const assetValue = assetOpt.Some.totalValue;
@@ -948,8 +955,6 @@ export default Canister({
 
     return Ok(offerings);
   }),
-
-  // Make Investment
 
   // This function is used to reserve an investment for a specific offering with the amount invested
   reserveInvestment: update(
@@ -1116,6 +1121,18 @@ export default Canister({
       return await verifyPaymentInternal(propertyOwner, amount, block, memo);
     }
   ),
+
+  // Function to get all investments
+  getAllInvestments: query([], Result(Vec(Transaction), Message), () => {
+    const allInvestments = persistedInvestmentsReserves.values();
+
+    // Check if there are any investments
+    if (allInvestments.length === 0) {
+      return Err({ NotFound: "No investments found." });
+    }
+
+    return Ok(allInvestments);
+  }),
 
   // Function for a property owner tp create a lease for an asset
   createLease: update([LeasingPayload], Result(Leasing, Message), (payload) => {
