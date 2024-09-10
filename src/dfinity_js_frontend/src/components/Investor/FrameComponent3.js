@@ -22,11 +22,11 @@ const FrameComponent3 = ({ className = "", investor }) => {
   }, []);
 
   const onVectorClick = useCallback(() => {
-    navigate("/portfolio");
+    navigate("//portfolio?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai");
   }, [navigate]);
 
   const onMarketplaceContainerClick = useCallback(() => {
-    navigate("/marketplace");
+    navigate("/?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai");
   }, [navigate]);
 
   const onDocumentsContainerClick = useCallback(() => {
