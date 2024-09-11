@@ -11,7 +11,7 @@ import * as Images from "../../assets/images";
 import PayInvestmentButton from "./PayInvestment";
 import { off } from "process";
 
-const OrderReport = ({ className = "", investorId }) => {
+const OrderReport = ({ className = "", investorId , propertyOwnerId}) => {
   const [offerings, setOfferings] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -45,7 +45,7 @@ const OrderReport = ({ className = "", investorId }) => {
   // Function to handle investment payment with dynamic values
   const handleInvestment = async (offeringId, pricePerToken) => {
     // const investorId = "e6cfd595-5b40-4fcf-bd71-b9fd3aa1a3ca";
-    const propertyOwnerId = "7de71ea5-fe08-48f2-a3b8-a47154d4b7f5";
+    const propertyOwnerId = "76f0ddb4-428c-44e5-a468-d4fe6747a09c";
 
     // Assuming pricePerToken is already in the correct format
     const amountInvested = parseInt(pricePerToken, 10) * 10 ** 8;

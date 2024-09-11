@@ -43,6 +43,7 @@ const FrameComponent2 = ({ className = "" }) => {
             </div>
           </div>
         </div>
+        <h1>Wallet</h1>
       </div>
     </div>
   );
