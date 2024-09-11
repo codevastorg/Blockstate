@@ -11,7 +11,7 @@ import * as Images from "../../assets/images";
 import PayInvestmentButton from "./PayInvestment";
 import { off } from "process";
 
-const OrderReport = ({ className = "" }) => {
+const OrderReport = ({ className = "", investorId }) => {
   const [offerings, setOfferings] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -44,14 +44,18 @@ const OrderReport = ({ className = "" }) => {
 
   // Function to handle investment payment with dynamic values
   const handleInvestment = async (offeringId, pricePerToken) => {
-    const investorId = "804b2c75-98e2-4216-8bb6-957656497b0f";
-    const propertyOwnerId = "da6a63cb-f5ae-485a-8f0c-9fef77760cf9";
+    // const investorId = "e6cfd595-5b40-4fcf-bd71-b9fd3aa1a3ca";
+    const propertyOwnerId = "7de71ea5-fe08-48f2-a3b8-a47154d4b7f5";
 
     // Assuming pricePerToken is already in the correct format
-    const amountInvested = parseInt(pricePerToken, 10) * 10**8;
-    const amountPayable = BigInt(amountInvested)
+    const amountInvested = parseInt(pricePerToken, 10) * 10 ** 8;
+    const amountPayable = BigInt(amountInvested);
 
-    console.log("Dynamically fetched offeringId and pricePerTOken", offeringId, pricePerToken )
+    console.log(
+      "Dynamically fetched offeringId and pricePerTOken",
+      offeringId,
+      pricePerToken
+    );
 
     try {
       await makeInvestment({
@@ -184,6 +188,7 @@ const OrderReport = ({ className = "" }) => {
 
 OrderReport.propTypes = {
   className: PropTypes.string,
+  investorId: PropTypes.string.isRequired,
 };
 
 export default OrderReport;

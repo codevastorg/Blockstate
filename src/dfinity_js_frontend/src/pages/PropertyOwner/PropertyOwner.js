@@ -19,9 +19,9 @@ const PropertyOwner = () => {
     try {
       setLoading(true);
       const res = await getPropertyOwnerProfileByPrincipal();
-      if (res.Ok) { 
+      if (res.Ok) {
         console.log(res.Ok); // Log the entire profile data for debugging
-        setPropertyOwner(res.Ok); 
+        setPropertyOwner(res.Ok);
       }
       setLoading(false);
     } catch (error) {
@@ -29,7 +29,6 @@ const PropertyOwner = () => {
       setLoading(false);
     }
   }, []); // Make sure to include dependencies if necessary
-  
 
   useEffect(() => {
     fetchPropertyOwner();
@@ -42,6 +41,12 @@ const PropertyOwner = () => {
         !loading ? (
           propertyOwner?.name ? (
             <>
+              <Nav className="justify-content-end pt-3 pb-5 mr-4">
+                <Nav.Item>
+                  <Wallet />
+                </Nav.Item>
+              </Nav>
+
               <main>
                 <PropertyOwnerDashboard propertyOwner={propertyOwner} />
               </main>

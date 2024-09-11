@@ -30,7 +30,6 @@ import {
   hexAddressFromPrincipal,
 } from "azle/canisters/ledger";
 import { hashCode } from "hashcode";
-import { memo } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // PropertyOwnerStatus Enum
@@ -1088,7 +1087,7 @@ export default Canister({
       const updatedReserve = {
         ...reserve,
         status: TransactionStatus.Completed,
-        paid_at_block: block,
+        paid_at_block: Some(block),
       };
 
       const investorOpt = investorStorage.get(investorId);

@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import FrameComponent3 from "../../components/Investor/FrameComponent3";
 import FrameComponent2 from "../../components/Investor/FrameComponent2";
 import OrderReport from "../../components/Investor/OrderReport";
@@ -131,7 +130,8 @@ const InvestorDashboard = ({ investor }) => {
             </div>
           </div>
         </section>
-        <OrderReport />
+
+        <OrderReport investorId={id} />
       </main>
     </div>
   );
