@@ -11,7 +11,7 @@ import * as Images from "../../assets/images";
 import PayInvestmentButton from "./PayInvestment";
 import { off } from "process";
 
-const OrderReport = ({ className = "", investorId , propertyOwnerId}) => {
+const OrderReport = ({ className = "", investorId }) => {
   const [offerings, setOfferings] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -43,18 +43,20 @@ const OrderReport = ({ className = "", investorId , propertyOwnerId}) => {
   }, []);
 
   // Function to handle investment payment with dynamic values
-  const handleInvestment = async (offeringId, pricePerToken) => {
-    // const investorId = "e6cfd595-5b40-4fcf-bd71-b9fd3aa1a3ca";
-    const propertyOwnerId = "76f0ddb4-428c-44e5-a468-d4fe6747a09c";
-
+  const handleInvestment = async (
+    offeringId,
+    pricePerToken,
+    propertyOwnerId
+  ) => {
     // Assuming pricePerToken is already in the correct format
     const amountInvested = parseInt(pricePerToken, 10) * 10 ** 8;
     const amountPayable = BigInt(amountInvested);
 
     console.log(
-      "Dynamically fetched offeringId and pricePerTOken",
+      "Dynamically fetched offeringId, pricePerToken, and propertyOwnerId",
       offeringId,
-      pricePerToken
+      pricePerToken,
+      propertyOwnerId
     );
 
     try {
@@ -171,7 +173,7 @@ const OrderReport = ({ className = "", investorId , propertyOwnerId}) => {
                 <div className="w-[102px] relative leading-[20px] font-semibold inline-block shrink-0 min-w-[102px]">
                   <PayInvestmentButton
                     invest={() =>
-                      handleInvestment(offering.id, offering.pricePerToken)
+                      handleInvestment(offering.id, offering.pricePerToken, offering.propertyOwnerId)
                     }
                   />
                 </div>
