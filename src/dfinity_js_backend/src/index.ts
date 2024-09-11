@@ -83,7 +83,7 @@ const Asset = Record({
 const Offering = Record({
   id: text,
   assetId: text, // Asset ID
-  // propertOwnerId: text,
+  propertyOwnerId: text,
   pricePerToken: nat64,
   availableTokens: nat64,
   startDate: text,
@@ -206,6 +206,7 @@ const AssetPayload = Record({
 // Offering Payload
 const OfferingPayload = Record({
   assetId: text,
+  propertyOwnerId: text,
 });
 
 // Transaction Payload
@@ -1099,12 +1100,12 @@ export default Canister({
         });
       }
 
-    // Update the investor total invested amount and number of investments
-    const investor = investorOpt.Some;
-    investor.totalInvested += reserve.amountInvested;
-    investor.totalInvestments += 1n;
-    investor.investments.push(reserve.id); 
-    investorStorage.insert(investor.id, investor);
+      // Update the investor total invested amount and number of investments
+      const investor = investorOpt.Some;
+      investor.totalInvested += reserve.amountInvested;
+      investor.totalInvestments += 1n;
+      investor.investments.push(reserve.id);
+      investorStorage.insert(investor.id, investor);
 
       persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
 
