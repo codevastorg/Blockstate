@@ -115,7 +115,7 @@ export async function makeInvestment(investment) {
     propertyOwnerId: investment.propertyOwnerId,
     investorId: investment.investorId,
     offeringId: investment.offeringId,
-    amountInvested: investment.amount,
+    amountInvested: investment.amountPayable,
   });
 
   // Check if the reservation was successful
@@ -129,19 +129,23 @@ export async function makeInvestment(investment) {
 
   // Step 2: Get the receiver (property owner)'s address
   const receiverPrincipal = Principal.from(reserve.propertyOwner);
-  const receiverAddress = await investmentCanister.getAddressFromPrincipal(receiverPrincipal);
+  const receiverAddress = await investmentCanister.getAddressFromPrincipal(
+    receiverPrincipal
+  );
 
   // Step 3: Transfer ICP tokens to the receiver's address
   const block = await transferICP(
     receiverAddress,
-    reserve.amountInvested,
-    reserve.memo
+    BigInt(reserve.amountInvested),
+    BigInt(reserve.memo)
   );
+  
 
   // Logging the transaction details
   console.log(
+    "Logging the transaction details",
     receiverPrincipal,
-    investment.investorId, // Log the investor ID
+    investment.investorId,
     reserve.amountInvested,
     block,
     reserve.memo

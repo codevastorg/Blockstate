@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 
-// Offering payload structure
-const OfferingPayload = (assetId) => ({
+const OfferingPayload = (assetId, propertyOwnerId) => ({
   assetId,
+  propertyOwnerId,
 });
 
-const AddOffering = ({ save, initialAssetId = "", show, handleClose }) => {
+const AddOffering = ({ save, initialAssetId = "", show, handleClose, propertyOwnerId }) => {
   const [assetId, setAssetId] = useState(initialAssetId); // Manage assetId state
 
   // Handle form submission
@@ -14,7 +14,7 @@ const AddOffering = ({ save, initialAssetId = "", show, handleClose }) => {
     e.preventDefault();
     if (assetId) {
       // Create the offering payload based on the assetId
-      const offeringPayload = OfferingPayload(assetId);
+      const offeringPayload = OfferingPayload(assetId, propertyOwnerId);
 
       // Save the offering
       save(offeringPayload);

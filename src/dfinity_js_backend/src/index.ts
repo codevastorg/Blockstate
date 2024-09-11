@@ -30,7 +30,6 @@ import {
   hexAddressFromPrincipal,
 } from "azle/canisters/ledger";
 import { hashCode } from "hashcode";
-import { memo } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 // PropertyOwnerStatus Enum
@@ -60,6 +59,7 @@ const Investor = Record({
   phoneNumber: text,
   investments: Vec(text),
   totalInvested: nat64,
+  totalInvestments: nat64,
   joinedAt: text,
 });
 
@@ -83,6 +83,7 @@ const Asset = Record({
 const Offering = Record({
   id: text,
   assetId: text, // Asset ID
+  propertyOwnerId: text,
   pricePerToken: nat64,
   availableTokens: nat64,
   startDate: text,
@@ -205,6 +206,7 @@ const AssetPayload = Record({
 // Offering Payload
 const OfferingPayload = Record({
   assetId: text,
+  propertyOwnerId: text,
 });
 
 // Transaction Payload
@@ -468,6 +470,7 @@ export default Canister({
         owner: ic.caller(),
         investments: [],
         totalInvested: 0n,
+        totalInvestments: 0n,
         joinedAt: new Date().toISOString(),
       };
 
@@ -1087,7 +1090,7 @@ export default Canister({
       const updatedReserve = {
         ...reserve,
         status: TransactionStatus.Completed,
-        paid_at_block: block,
+        paid_at_block: Some(block),
       };
 
       const investorOpt = investorStorage.get(investorId);
@@ -1097,10 +1100,13 @@ export default Canister({
         });
       }
 
-      // Update the investor total invested amount
+      // Update the investor total invested amount and number of investments
       const investor = investorOpt.Some;
       investor.totalInvested += reserve.amountInvested;
-      investorStorage.insert(investorId, investor);
+      investor.totalInvestments += 1n;
+      investor.investments.push(reserve.id);
+      investorStorage.insert(investor.id, investor);
+
       persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
 
       return Ok(updatedReserve);
@@ -1133,6 +1139,33 @@ export default Canister({
 
     return Ok(allInvestments);
   }),
+
+  // Function to get the total number of investments of a specific investor
+  totalNumberOfInvestorInvestments: query(
+    [text],
+    Result(nat64, Message),
+    (investorId) => {
+      // Retrieve the investor profile
+      const investorOpt = investorStorage.get(investorId);
+      if ("None" in investorOpt) {
+        return Err({
+          NotFound: `Investor with id=${investorId} not found`,
+        });
+      }
+
+      const investor = investorOpt.Some;
+
+      // Retrieve the transactions for the investor
+      const transactions = persistedInvestmentsReserves
+        .values()
+        .filter((transaction) => transaction.investorId === investorId);
+
+      // Return the total number of investments
+      const totalInvestments = BigInt(transactions.length);
+
+      return Ok(totalInvestments);
+    }
+  ),
 
   // Function for a property owner tp create a lease for an asset
   createLease: update([LeasingPayload], Result(Leasing, Message), (payload) => {

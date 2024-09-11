@@ -53,7 +53,12 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
       if (response?.Ok) {
         toast.success("Offering added successfully");
         const newOffering = response.Ok[0];
-        setOfferings((prevOfferings) => [...prevOfferings, newOffering]);
+        if (newOffering && newOffering.id) {
+          // Check if newOffering is valid
+          setOfferings((prevOfferings) => [...prevOfferings, newOffering]);
+        } else {
+          console.error("New offering is invalid:", newOffering);
+        }
       } else {
         console.error("Error creating offering:", response.Err);
         toast.error(`Error creating an offering: ${response.Err}`);
@@ -64,13 +69,17 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
     }
   };
 
+  // Check if offerings is a valid array before rendering
+  if (!Array.isArray(offerings)) {
+    console.error("Offerings is not an array:", offerings);
+    return <p>There was an error loading offerings. Please try again later.</p>;
+  }
+
   const handleEditOffering = (offering) => {
-    // Add logic to edit the offering
     console.log("Editing offering:", offering);
   };
 
   const handleDeleteOffering = async (offeringId) => {
-    // Add logic to delete the offering
     console.log("Deleting offering with ID:", offeringId);
   };
 
@@ -228,6 +237,7 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
       <AddOffering
         save={saveOffering}
         userId={id}
+        propertyOwnerId={id}
         show={activeModal === "offering"}
         handleClose={closeModal}
       />
@@ -237,6 +247,7 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
 
 MyOfferingsOverview.propTypes = {
   className: PropTypes.string,
+  propertyOwner: PropTypes.string.isRequired,
 };
 
 export default MyOfferingsOverview;

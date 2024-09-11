@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-import { getAllOfferings } from "../../utils/propertyTokenization";
+import {
+  getAllOfferings,
+  makeInvestment,
+} from "../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
+import PayInvestmentButton from "./PayInvestment";
+import { off } from "process";
 
-const OrderReport = ({ className = "" }) => {
+const OrderReport = ({ className = "", investorId , propertyOwnerId}) => {
   const [offerings, setOfferings] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
@@ -37,13 +42,44 @@ const OrderReport = ({ className = "" }) => {
     fetchOfferings(); // Call the fetch function
   }, []);
 
+  // Function to handle investment payment with dynamic values
+  const handleInvestment = async (offeringId, pricePerToken) => {
+    // const investorId = "e6cfd595-5b40-4fcf-bd71-b9fd3aa1a3ca";
+    const propertyOwnerId = "76f0ddb4-428c-44e5-a468-d4fe6747a09c";
+
+    // Assuming pricePerToken is already in the correct format
+    const amountInvested = parseInt(pricePerToken, 10) * 10 ** 8;
+    const amountPayable = BigInt(amountInvested);
+
+    console.log(
+      "Dynamically fetched offeringId and pricePerTOken",
+      offeringId,
+      pricePerToken
+    );
+
+    try {
+      await makeInvestment({
+        investorId,
+        propertyOwnerId,
+        offeringId,
+        amountPayable,
+      }).then((response) => {
+        console.log("Investment response:", response);
+        toast.success("Investment successful");
+      });
+    } catch (err) {
+      console.error("Check if wallet is funded", err);
+      toast.error("Payment failed. Please check if the wallet is funded.");
+    }
+  };
+
   return (
     <section
       className={`w-[1020px] rounded-23xl bg-light-black flex flex-col items-start justify-start pt-[33px] pb-[9px] pl-[55px] pr-10 box-border gap-4 max-w-full z-[1] text-center text-sm text-gainsboro-200 font-manrope mq1275:pl-[27px] mq1275:box-border mq825:pt-[21px] mq825:pb-5 mq825:box-border ${className}`}
     >
       <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-5 text-left text-xl text-shades-white mq1275:flex-wrap">
         <h3 className="m-0 relative text-inherit leading-[140%] font-semibold font-[inherit] mq450:text-base mq450:leading-[22px]">
-          offering Details
+          Offerings Available
         </h3>
         <div className="w-[561px] shadow-[0px_20px_24px_-4px_rgba(255,_235,_176,_0.04),_0px_8px_11px_-4px_rgba(45,_54,_67,_0.04)] rounded-xl flex flex-row items-center justify-center py-[5.5px] px-2.5 box-border gap-4 opacity-[0.9] max-w-full mq825:flex-wrap">
           <div className="flex-1 rounded-xl border-amber-100 border-[1px] border-solid box-border flex flex-row items-center justify-start py-0.5 px-4 min-w-[123px] whitespace-nowrap">
@@ -84,11 +120,6 @@ const OrderReport = ({ className = "" }) => {
               <div className="w-[66px] relative leading-[20px] font-semibold inline-block min-w-[66px]">
                 Available Tokens
               </div>
-              <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-row items-start justify-start pt-1 px-3 pb-0 box-border text-accents-green">
-                <div className="w-[55px] relative leading-[22px] font-semibold inline-block shrink-0">
-                  Status
-                </div>
-              </div>
               <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
                 Date listed
               </div>
@@ -124,21 +155,25 @@ const OrderReport = ({ className = "" }) => {
                   {offering.assetId}
                 </div>
                 <div className="w-[52px] relative leading-[20px] font-semibold inline-block shrink-0">
-                  {offering.tokens}
+                  {String(offering.pricePerToken)}
                 </div>
                 <div className="h-10 w-[63px] relative tracking-[-0.2px] leading-[140%] font-semibold inline-block shrink-0">
-                  {offering.pricePerToken}
+                  {String(offering.availableTokens)}
                 </div>
-                <div className="w-[85px] rounded-11xl bg-mediumaquamarine flex flex-col items-center justify-center py-0.5 px-[15px] box-border text-accents-green">
+                <div className="w-[85px] flex flex-col items-center justify-center py-0.5 px-[15px] box-border">
                   <div className="self-stretch relative leading-[22px] font-semibold">
-                    {offering.status}
+                    {offering.startDate}
                   </div>
                 </div>
                 <div className="relative leading-[20px] font-semibold inline-block min-w-[87px]">
-                  {offering.dateListed}
+                  {offering.status}
                 </div>
-                <div className="w-[102px] relative leading-[20px] font-semibold text-shades-white inline-block shrink-0 min-w-[102px]">
-                  <h1>Accept</h1>
+                <div className="w-[102px] relative leading-[20px] font-semibold inline-block shrink-0 min-w-[102px]">
+                  <PayInvestmentButton
+                    invest={() =>
+                      handleInvestment(offering.id, offering.pricePerToken)
+                    }
+                  />
                 </div>
               </div>
             ))
@@ -153,6 +188,7 @@ const OrderReport = ({ className = "" }) => {
 
 OrderReport.propTypes = {
   className: PropTypes.string,
+  investorId: PropTypes.string.isRequired,
 };
 
 export default OrderReport;
