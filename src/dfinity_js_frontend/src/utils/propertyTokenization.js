@@ -127,17 +127,20 @@ export async function makeInvestment(investment) {
   const reserve = investmentReserveResp.Ok;
   console.log("Investment reserve created:", reserve);
 
-  // Step 2: Get the receiver (property owner)'s address
+  // Step 2: Get the receiver (property owner)'s Principal and address
   const receiverPrincipal = Principal.from(reserve.propertyOwner);
   const receiverAddress = await investmentCanister.getAddressFromPrincipal(
     receiverPrincipal
   );
 
+  // Log the receiver details
+  console.log("Receiver details:", receiverPrincipal, receiverAddress);
+
   // Step 3: Transfer ICP tokens to the receiver's address
   const block = await transferICP(
     receiverAddress,
-    BigInt(reserve.amountInvested),
-    BigInt(reserve.memo)
+    reserve.amountInvested,
+    reserve.memo
   );
   
 
