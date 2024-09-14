@@ -1073,25 +1073,40 @@ export default Canister({
         });
       }
 
-      // Update available tokens for the asset
-      const assetUpdateResult = updateAvailableTokensForAsset(
-        pendingReserveOpt.Some.offeringId,
-        pendingReserveOpt.Some.amountInvested
-      );
-
-      if ("Err" in assetUpdateResult) {
-        return Err({
-          Error: `An error occurred while updating the available tokens for the asset: ${assetUpdateResult.Err}`,
-        });
-      }
-
       // Update the reserve status to completed
       const reserve = pendingReserveOpt.Some;
       const updatedReserve = {
         ...reserve,
-        status: TransactionStatus.Completed,
+        status: { Completed: "Completed" },
         paid_at_block: Some(block),
       };
+
+      // Log the updated reserve for debugging purposes
+      console.log("Updated Reserve: ", updatedReserve);
+
+      // Update available tokens for the asset by the number of tokens purchased
+      const offeringOpt = offeringStorage.get(reserve.offeringId);
+
+      if ("None" in offeringOpt) {
+        return Err({
+          NotFound: `Offering with id=${reserve.offeringId} not found`,
+        });
+      }
+
+      const offering = offeringOpt.Some;
+
+      // Calculate the number of tokens purchased
+      const tokensPurchased = reserve.amountInvested / offering.pricePerToken;
+
+      console.log("Tokens Purchased: ", tokensPurchased);
+
+      // Update the offering available tokens
+      const updatedOffering = {
+        ...offering,
+        availableTokens: offering.availableTokens - tokensPurchased,
+      };
+
+      offeringStorage.insert(offering.id, updatedOffering);
 
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
@@ -1102,12 +1117,15 @@ export default Canister({
 
       // Update the investor total invested amount and number of investments
       const investor = investorOpt.Some;
-      investor.totalInvested += reserve.amountInvested;
-      investor.totalInvestments += 1n;
-      investor.investments.push(reserve.id);
+      investor.totalInvested += reservePrice;
+      // investor.totalInvestments += 1n;
+      // investor.investments.push(reserve.id);
       investorStorage.insert(investor.id, investor);
 
-      persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
+      // Insert the transaction into the storage(persistedInvestmentsReserves)
+      persistedInvestmentsReserves.insert(investor.id, updatedReserve);
+
+      // console.log("Transaction added to storage: ", updatedReserve);
 
       return Ok(updatedReserve);
     }
@@ -1128,16 +1146,57 @@ export default Canister({
     }
   ),
 
-  // Function to get all investments
-  getAllInvestments: query([], Result(Vec(Transaction), Message), () => {
-    const allInvestments = persistedInvestmentsReserves.values();
+  // Function to get all investments of a specific investor with error handling
+  getInvestorInvestments: query(
+    [text],
+    Result(Vec(Transaction), Message),
+    (investorId) => {
+      // Validate the investor id
+      const investorOpt = investorStorage.get(investorId);
 
-    // Check if there are any investments
-    if (allInvestments.length === 0) {
-      return Err({ NotFound: "No investments found." });
+      if ("None" in investorOpt) {
+        return Err({
+          NotFound: `Investor with id=${investorId} not found`,
+        });
+      }
+
+      const investments = persistedInvestmentsReserves
+        .values()
+        .filter((transaction) => {
+          return transaction.investorId === investorId;
+        });
+
+      // Check if there are any investments
+      if (investments.length === 0) {
+        return Err({ NotFound: "No investments found for the investor." });
+      }
+
+      return Ok(investments);
+    }
+  ),
+
+  // Function to get all completed investments
+  getCompletedInvestments: query([], Result(Vec(Transaction), Message), () => {
+    const completedInvestments = persistedInvestmentsReserves.values();
+
+    // Check if there are any completed investments
+    if (completedInvestments.length === 0) {
+      return Err({ NotFound: "No completed investments found." });
     }
 
-    return Ok(allInvestments);
+    return Ok(completedInvestments);
+  }),
+
+  // Function to get all pending investments
+  getPendingInvestments: query([], Result(Vec(Transaction), Message), () => {
+    const pendingInvestments = pendingInvestmentsReserves.values();
+
+    // Check if there are any pending investments
+    if (pendingInvestments.length === 0) {
+      return Err({ NotFound: "No pending investments found." });
+    }
+
+    return Ok(pendingInvestments);
   }),
 
   // Function to get the total number of investments of a specific investor
@@ -1164,6 +1223,33 @@ export default Canister({
       const totalInvestments = BigInt(transactions.length);
 
       return Ok(totalInvestments);
+    }
+  ),
+
+  // Function to get the total number of pending  investments of a specific investor
+  totalNumberOfInvestorPendingInvestments: query(
+    [text],
+    Result(nat64, Message),
+    (investorId) => {
+      // Retrieve the investor profile
+      const investorOpt = investorStorage.get(investorId);
+      if ("None" in investorOpt) {
+        return Err({
+          NotFound: `Investor with id=${investorId} not found`,
+        });
+      }
+
+      const investor = investorOpt.Some;
+
+      // Retrieve the transactions for the investor
+      const transactions = pendingInvestmentsReserves
+        .values()
+        .filter((transaction) => transaction.investorId === investorId);
+
+      // Return the total number of pending investments
+      const totalPendingInvestments = BigInt(transactions.length);
+
+      return Ok(totalPendingInvestments);
     }
   ),
 
