@@ -8,6 +8,7 @@ import AddAsset from "../PropertyOwner/Asset/ListAsset";
 import { createAsset, getAllAssets } from "../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AssetDetailModal from "./AssetDetailModal";
 
 const MyAssetsOverview = ({ className = "", propertyOwner }) => {
   const id = propertyOwner;
@@ -15,6 +16,7 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
   const [assets, setAssets] = useState([]);
   const [activeModal, setActiveModal] = useState(null); // State for modal visibility
   const [loading, setLoading] = useState(false); // Loading state
+  const [selectedAsset, setSelectedAsset] = useState(null); // State for the selected asset
   const navigate = useNavigate();
 
   const onFilterDropContainerClick = useCallback(() => {
@@ -44,6 +46,16 @@ const MyAssetsOverview = ({ className = "", propertyOwner }) => {
 
     fetchAssets(); // Call the fetch function
   }, []);
+
+  // Function to open the asset details modal
+  const openAssetModal = (asset) => {
+    setSelectedAsset(asset);
+  };
+
+  // Function to close the modal
+  const closeAssetModal = () => {
+    setSelectedAsset(null);
+  };
 
   // Function to save the asset
   const saveAsset = async (assetPayload) => {
