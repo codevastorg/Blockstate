@@ -2,7 +2,7 @@ import React from "react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import MainContent from "../../components/PropertyOwner/MainContent";
-import MyAssetsOverview from "../../components/PropertyOwner/MyAssetsOverview";
+import MyAssetsOverview from "../../components/PropertyOwner/Asset/MyAssetsOverview";
 import MyOfferingsOverview from "../../components/PropertyOwner/Offerings/MyOfferingsOverview"
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
