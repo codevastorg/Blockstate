@@ -32,6 +32,9 @@ This link is for managing identity authentication via the Internet Identity cani
 2. Use the backend Candid interface link to inspect or manage backend canister operations.
 3. For user authentication, use the Internet Identity canister link to log in and authenticate your session.
 
+### Slides
+[**Presentation**](https://www.canva.com/design/DAGQvnz3P7E/FvATdl-S_nDR71PQzJIypQ/edit)
+
 ## Things to be explained in the course:
 
 1. What is Ledger? More details here: https://internetcomputer.org/docs/current/developer-docs/integrations/ledger/
