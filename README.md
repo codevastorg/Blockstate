@@ -1,5 +1,56 @@
 # Property Ownership Tokenization
 
+## Description
+The **Property Tokenization Smart Contract** is a decentralized platform that enables the tokenization of real estate properties, facilitating fractional ownership and investments. The contract allows property owners to create and manage tokenized assets, offers, and lease agreements. Investors can participate by purchasing tokens representing a fraction of a property, and both property owners and investors can engage in leasing and dividend distribution. The contract also supports secure transactions and verification through the Internet Computer Protocol (ICP).
+
+## Features
+
+1. **Property Owner Management**
+   - Create, update, and delete property owner profiles.
+   - Store owner details such as name, phone number, email, and properties owned.
+
+2. **Investor Management**
+   - Create, update, and delete investor profiles.
+   - Manage investor details including name, email, phone number, and total investments.
+   
+3. **Asset (Property) Tokenization**
+   - Tokenize real estate properties by creating digital assets.
+   - Define property details like title, description, location, and total value.
+   - Automatically divide property value into tokens for fractional ownership.
+
+4. **Investment Offerings**
+   - Create and manage investment offerings for tokenized properties.
+   - Specify price per token, available tokens, and offering duration.
+   - Reserve and complete investments with secure transaction tracking.
+
+5. **Leasing**
+   - Create lease agreements for tokenized assets.
+   - Define lease duration, rental price per token, and manage total rent collected.
+   - Support for tenants to reserve and pay for leases.
+
+6. **Dividend Distribution**
+   - Reserve and distribute dividends from asset revenue to investors.
+   - Automatically calculate dividend amounts based on tokens owned.
+
+7. **Transaction Management**
+   - Track and manage investment and rent transactions.
+   - Secure transaction verification with memo and block validation.
+   - Handle different transaction statuses such as pending, completed, and cancelled.
+
+8. **Storage**
+   - Utilize stable storage for property owners, investors, assets, offerings, leases, and transactions.
+   - Automatically discard reservations after a timeout period for security and management.
+
+9. **Payment Verification**
+   - Verify payment details using the ICP Ledger Canister.
+   - Ensure secure and accurate transfers of tokens and funds between participants.
+
+10. **Canister-to-Canister Communication**
+    - Integrate ledger calls for querying transaction details and ensuring secure investment operations.
+
+This smart contract supports a full-featured ecosystem for decentralized property ownership and investment, making real estate more accessible and liquid by enabling fractional ownership and transparent transactions.
+
+
 # Canister Access
 
 ## Frontend Canister via Browser
