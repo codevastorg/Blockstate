@@ -33,7 +33,7 @@ This link is for managing identity authentication via the Internet Identity cani
 3. For user authentication, use the Internet Identity canister link to log in and authenticate your session.
 
 ### Slides
-[**Presentation**](https://www.canva.com/design/DAGQvnz3P7E/FvATdl-S_nDR71PQzJIypQ/edit)
+[**Presentation**](https://www.canva.com/design/DAGQvnz3P7E/FvATdl-S_nDR71PQzJIypQ/edit?utm_content=DAGQvnz3P7E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ## Things to be explained in the course:
 
