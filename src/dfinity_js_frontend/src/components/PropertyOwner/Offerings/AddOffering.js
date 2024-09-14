@@ -1,22 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
+import { getAllOfferings, getAllAssets } from "../../../utils/propertyTokenization";
 
 const OfferingPayload = (assetId, propertyOwnerId) => ({
   assetId,
   propertyOwnerId,
 });
 
-const AddOffering = ({ save, initialAssetId = "", show, handleClose, propertyOwnerId }) => {
+const AddOffering = ({
+  save,
+  initialAssetId = "",
+  show,
+  handleClose,
+  propertyOwnerId,
+}) => {
   const [assetId, setAssetId] = useState(initialAssetId); // Manage assetId state
+  const [offerings, setOfferings] = useState([]);
+  const [assets, setAssets] = useState([]); // State to hold fetched assets
+  const [loading, setLoading] = useState(false); // Loading state
+
+  // Fetch offerings and assets when the component mounts
+  useEffect(() => {
+    async function fetchOfferings() {
+      setLoading(true);
+      try {
+        const response = await getAllOfferings();
+        if (response?.Ok && Array.isArray(response.Ok)) {
+          setOfferings(response.Ok);
+        } else {
+          console.error(
+            "Error fetching offerings:",
+            response?.Err || "Unexpected response"
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching offerings:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    async function fetchAssets() {
+      setLoading(true);
+      try {
+        const response = await getAllAssets();
+        if (response?.Ok && Array.isArray(response.Ok)) {
+          setAssets(response.Ok); // Set the fetched assets
+        } else {
+          console.error(
+            "Error fetching assets:",
+            response?.Err || "Unexpected response"
+          );
+        }
+      } catch (error) {
+        console.error("Error fetching assets:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOfferings();
+    fetchAssets();
+  }, []);
 
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (assetId) {
-      // Create the offering payload based on the assetId
       const offeringPayload = OfferingPayload(assetId, propertyOwnerId);
-
-      // Save the offering
       save(offeringPayload);
       handleClose(); // Close the modal after saving
     } else {
@@ -32,30 +83,30 @@ const AddOffering = ({ save, initialAssetId = "", show, handleClose, propertyOwn
         </Modal.Header>
         <Modal.Body className="p-4">
           <Form onSubmit={handleSubmit}>
-            <FloatingLabel
-              controlId="floatingAssetId"
-              label="Asset ID"
-              className="mb-4"
-            >
-              <Form.Control
-                type="text"
-                placeholder="Enter Asset ID"
-                value={assetId} // Bind to the assetId state
-                onChange={(e) => setAssetId(e.target.value)} // Update assetId state
+            {/* Dropdown to select asset ID */}
+            <FloatingLabel controlId="floatingSelectAsset" label="Select Asset" className="mb-4">
+              <Form.Select
+                value={assetId}
+                onChange={(e) => setAssetId(e.target.value)} // Update the assetId state
                 className="rounded-3 shadow-sm"
-              />
+                disabled={loading} // Disable dropdown while loading
+              >
+                <option value="">Select an Asset</option>
+                {/* Map through the fetched assets to populate dropdown */}
+                {assets.map((asset) => (
+                  <option key={asset.id} value={asset.id}>
+                    {asset.title} - {asset.location}
+                  </option>
+                ))}
+              </Form.Select>
             </FloatingLabel>
 
             <div className="d-flex justify-content-end">
-              <Button
-                variant="secondary"
-                onClick={handleClose}
-                className="me-2"
-              >
+              <Button variant="secondary" onClick={handleClose} className="me-2">
                 Cancel
               </Button>
               <Button
-                style={{ backgroundColor: "#D97706", borderColor: "#D97706" }} // Amber-600 color
+                style={{ backgroundColor: "#D97706", borderColor: "#D97706" }}
                 type="submit"
                 className="shadow-sm"
               >

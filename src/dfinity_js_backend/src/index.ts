@@ -1073,18 +1073,6 @@ export default Canister({
         });
       }
 
-      // Update available tokens for the asset
-      const assetUpdateResult = updateAvailableTokensForAsset(
-        pendingReserveOpt.Some.offeringId,
-        pendingReserveOpt.Some.amountInvested
-      );
-
-      if ("Err" in assetUpdateResult) {
-        return Err({
-          Error: `An error occurred while updating the available tokens for the asset: ${assetUpdateResult.Err}`,
-        });
-      }
-
       // Update the reserve status to completed
       const reserve = pendingReserveOpt.Some;
       const updatedReserve = {
@@ -1096,17 +1084,29 @@ export default Canister({
       // Log the updated reserve for debugging purposes
       console.log("Updated Reserve: ", updatedReserve);
 
-      // // Update available tokens for the asset
-      // const assetUpdateResult = updateAvailableTokensForAsset(
-      //   pendingReserveOpt.Some.offeringId,
-      //   pendingReserveOpt.Some.amountInvested
-      // );
+      // Update available tokens for the asset by the number of tokens purchased
+      const offeringOpt = offeringStorage.get(reserve.offeringId);
 
-      // if ("Err" in assetUpdateResult) {
-      //   return Err({
-      //     Error: `An error occurred while updating the available tokens for the asset: ${assetUpdateResult.Err}`,
-      //   });
-      // }
+      if ("None" in offeringOpt) {
+        return Err({
+          NotFound: `Offering with id=${reserve.offeringId} not found`,
+        });
+      }
+
+      const offering = offeringOpt.Some;
+
+      // Calculate the number of tokens purchased
+      const tokensPurchased = reserve.amountInvested / offering.pricePerToken;
+
+      console.log("Tokens Purchased: ", tokensPurchased);
+
+      // Update the offering available tokens
+      const updatedOffering = {
+        ...offering,
+        availableTokens: offering.availableTokens - tokensPurchased,
+      };
+
+      offeringStorage.insert(offering.id, updatedOffering);
 
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
