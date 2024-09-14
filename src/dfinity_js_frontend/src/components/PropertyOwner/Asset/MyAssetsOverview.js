@@ -2,13 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Asset from "./Asset";
 import PropTypes from "prop-types";
-import { Img } from "../../components/Img";
-import * as Images from "../../assets/images";
-import AddAsset from "../PropertyOwner/Asset/ListAsset";
-import { createAsset, getAllAssets } from "../../utils/propertyTokenization";
+import { Img } from "../../../components/Img";
+import * as Images from "../../../assets/images";
+import AddAsset from "../Asset/ListAsset";
+import { createAsset, getAllAssets } from "../../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AssetDetailModal from "./AssetDetailModal";
+import AssetDetailsModal from "./AssetDetailsModal";
 
 const MyAssetsOverview = ({ className = "", propertyOwner }) => {
   const id = propertyOwner;

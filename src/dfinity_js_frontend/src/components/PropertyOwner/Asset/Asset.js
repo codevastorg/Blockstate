@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Img } from "../../components/Img";
-import * as Images from "../../assets/images";
+import { Img } from "../../Img";
+import * as Images from "../../../assets/images";
 
 const Asset = ({ title, location, totalValue, className = "" }) => {
   return (
