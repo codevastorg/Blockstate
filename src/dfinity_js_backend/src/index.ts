@@ -1081,52 +1081,69 @@ export default Canister({
         paid_at_block: Some(block),
       };
 
-      // Log the updated reserve for debugging purposes
-      console.log("Updated Reserve: ", updatedReserve);
+      // // Log the updated reserve for debugging purposes
+      // console.log("Updated Reserve: ", updatedReserve);
 
-      // Update available tokens for the asset by the number of tokens purchased
-      const offeringOpt = offeringStorage.get(reserve.offeringId);
+      // // Update available tokens for the asset by the number of tokens purchased
+      // const offeringOpt = offeringStorage.get(reserve.offeringId);
 
-      if ("None" in offeringOpt) {
-        return Err({
-          NotFound: `Offering with id=${reserve.offeringId} not found`,
-        });
-      }
+      // if ("None" in offeringOpt) {
+      //   return Err({
+      //     NotFound: `Offering with id=${reserve.offeringId} not found`,
+      //   });
+      // }
 
-      const offering = offeringOpt.Some;
+      // const offering = offeringOpt.Some;
 
-      // Calculate the number of tokens purchased
-      const tokensPurchased = reserve.amountInvested / offering.pricePerToken;
+      // // Sample reserve_price = 1000n
+      // const reserve_price = 1000n;
 
-      console.log("Tokens Purchased: ", tokensPurchased);
+      // // Calculate the number of tokens purchased
+      // const tokensPurchased = reserve_price / offering.pricePerToken;
 
-      // Update the offering available tokens
-      const updatedOffering = {
-        ...offering,
-        availableTokens: offering.availableTokens - tokensPurchased,
-      };
+      // console.log("Reserve Price: ", reservePrice);
 
-      offeringStorage.insert(offering.id, updatedOffering);
+      // console.log("Price Per Token: ", offering.pricePerToken);
+
+      // console.log("Tokens Purchased: ", tokensPurchased);
+
+      // // Update the offering available tokens
+      // const updatedOffering = {
+      //   ...offering,
+      //   availableTokens: offering.availableTokens - tokensPurchased,
+      // };
+
+      // offeringStorage.insert(offering.id, updatedOffering);
+
+      // const investorOpt = investorStorage.get(investorId);
+      // if ("None" in investorOpt) {
+      //   return Err({
+      //     NotFound: `Investor with id=${investorId} not found`,
+      //   });
+      // }
+
+      // // Update the investor total invested amount and number of investments
+      // const investor = investorOpt.Some;
+      // investor.totalInvested += reservePrice;
+      // // investor.totalInvestments += 1n;
+      // // investor.investments.push(reserve.id);
+      // investorStorage.insert(investor.id, investor);
+
+      // // Insert the transaction into the storage(persistedInvestmentsReserves)
+      // persistedInvestmentsReserves.insert(investor.id, updatedReserve);
+
+      // // console.log("Transaction added to storage: ", updatedReserve);
+
+      // return Ok(updatedReserve);
 
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
-        return Err({
-          NotFound: `Investor with id=${investorId} not found`,
-        });
+        throw Error(`Investor with id=${investorId} not found`);
       }
-
-      // Update the investor total invested amount and number of investments
       const investor = investorOpt.Some;
       investor.totalInvested += reservePrice;
-      // investor.totalInvestments += 1n;
-      // investor.investments.push(reserve.id);
-      investorStorage.insert(investor.id, investor);
-
-      // Insert the transaction into the storage(persistedInvestmentsReserves)
-      persistedInvestmentsReserves.insert(investor.id, updatedReserve);
-
-      // console.log("Transaction added to storage: ", updatedReserve);
-
+      investorStorage.insert(investorId, investor);
+      persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
       return Ok(updatedReserve);
     }
   ),
