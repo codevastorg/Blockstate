@@ -1081,9 +1081,6 @@ export default Canister({
         paid_at_block: Some(block),
       };
 
-      // // Log the updated reserve for debugging purposes
-      // console.log("Updated Reserve: ", updatedReserve);
-
       // // Update available tokens for the asset by the number of tokens purchased
       // const offeringOpt = offeringStorage.get(reserve.offeringId);
 
@@ -1115,36 +1112,21 @@ export default Canister({
 
       // offeringStorage.insert(offering.id, updatedOffering);
 
-      // const investorOpt = investorStorage.get(investorId);
-      // if ("None" in investorOpt) {
-      //   return Err({
-      //     NotFound: `Investor with id=${investorId} not found`,
-      //   });
-      // }
-
-      // // Update the investor total invested amount and number of investments
-      // const investor = investorOpt.Some;
-      // investor.totalInvested += reservePrice;
-      // // investor.totalInvestments += 1n;
-      // // investor.investments.push(reserve.id);
-      // investorStorage.insert(investor.id, investor);
-
-      // // Insert the transaction into the storage(persistedInvestmentsReserves)
-      // persistedInvestmentsReserves.insert(investor.id, updatedReserve);
-
-      // // console.log("Transaction added to storage: ", updatedReserve);
-
-      // return Ok(updatedReserve);
-
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
         throw Error(`Investor with id=${investorId} not found`);
       }
       const investor = investorOpt.Some;
       investor.totalInvested += reservePrice;
+      investor.totalInvestments += 1n;
+
+      // Update the investor total invested amount and number of investments
       investorStorage.insert(investorId, investor);
+
+      // Insert the transaction into the storage(persistedInvestmentsReserves)
       persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
-      return Ok(updatedReserve);
+
+      return Ok(updatedReserve); // Successfully return the updated reserve
     }
   ),
 
