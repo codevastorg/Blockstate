@@ -49,8 +49,10 @@ const OrderReport = ({ className = "", investorId }) => {
     propertyOwnerId
   ) => {
     // Assuming pricePerToken is already in the correct format
-    const amountInvested = parseInt(pricePerToken, 10) * 10 ** 8;
-    const amountPayable = BigInt(amountInvested);
+    // const amountInvested = parseInt(pricePerToken, 10) * 10 ** 8;
+    // const amountPayable = BigInt(amountInvested);
+
+    const amountPayable = BigInt(pricePerToken);
 
     console.log(
       "Dynamically fetched offeringId, pricePerToken, and propertyOwnerId",

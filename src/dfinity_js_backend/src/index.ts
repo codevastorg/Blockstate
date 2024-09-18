@@ -1075,48 +1075,37 @@ export default Canister({
 
       // Update the reserve status to completed
       const reserve = pendingReserveOpt.Some;
+
+      // Update available tokens for the asset by the number of tokens purchased
+      const offeringOpt = offeringStorage.get(reserve.offeringId);
+
+      if ("None" in offeringOpt) {
+        return Err({
+          NotFound: `Offering with id=${reserve.offeringId} not found`,
+        });
+      }
+
+      const offering = offeringOpt.Some;
+
+      const tokensPurchased = reserve.amountInvested / offering.pricePerToken;
+
+      offering.availableTokens -= tokensPurchased;
+
+      offeringStorage.insert(offering.id, offering);
+
       const updatedReserve = {
         ...reserve,
         status: { Completed: "Completed" },
+        tokensPurchased: tokensPurchased,
         paid_at_block: Some(block),
       };
-
-      // // Update available tokens for the asset by the number of tokens purchased
-      // const offeringOpt = offeringStorage.get(reserve.offeringId);
-
-      // if ("None" in offeringOpt) {
-      //   return Err({
-      //     NotFound: `Offering with id=${reserve.offeringId} not found`,
-      //   });
-      // }
-
-      // const offering = offeringOpt.Some;
-
-      // // Sample reserve_price = 1000n
-      // const reserve_price = 1000n;
-
-      // // Calculate the number of tokens purchased
-      // const tokensPurchased = reserve_price / offering.pricePerToken;
-
-      // console.log("Reserve Price: ", reservePrice);
-
-      // console.log("Price Per Token: ", offering.pricePerToken);
-
-      // console.log("Tokens Purchased: ", tokensPurchased);
-
-      // // Update the offering available tokens
-      // const updatedOffering = {
-      //   ...offering,
-      //   availableTokens: offering.availableTokens - tokensPurchased,
-      // };
-
-      // offeringStorage.insert(offering.id, updatedOffering);
 
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
         throw Error(`Investor with id=${investorId} not found`);
       }
       const investor = investorOpt.Some;
+
       investor.totalInvested += reservePrice;
       investor.totalInvestments += 1n;
 
