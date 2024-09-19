@@ -754,6 +754,29 @@ export default Canister({
     return Ok(assets);
   }),
 
+  // Function to get total Assets value of a propertyOwner
+  totalPropertyOwnerAssetsValue: query(
+    [text],
+    Result(nat64, Message),
+    (propertyOwnerId) => {
+      const assets = assetStorage.values().filter((asset) => {
+        return asset.owner === propertyOwnerId;
+      });
+
+      if (assets.length === 0) {
+        return Err({
+          NotFound: `No assets found for propertyOwner=${propertyOwnerId}`,
+        });
+      }
+
+      const totalValue = assets.reduce((acc, asset) => {
+        return acc + asset.totalValue;
+      }, 0n);
+
+      return Ok(totalValue);
+    }
+  ),
+
   // Get available Assets
   getAvailableAssets: query([], Result(Vec(Asset), Message), () => {
     const assets = assetStorage.values().filter((asset) => {
@@ -1075,14 +1098,6 @@ export default Canister({
 
       // Update the reserve status to completed
       const reserve = pendingReserveOpt.Some;
-      const updatedReserve = {
-        ...reserve,
-        status: { Completed: "Completed" },
-        paid_at_block: Some(block),
-      };
-
-      // Log the updated reserve for debugging purposes
-      console.log("Updated Reserve: ", updatedReserve);
 
       // Update available tokens for the asset by the number of tokens purchased
       const offeringOpt = offeringStorage.get(reserve.offeringId);
@@ -1095,39 +1110,35 @@ export default Canister({
 
       const offering = offeringOpt.Some;
 
-      // Calculate the number of tokens purchased
       const tokensPurchased = reserve.amountInvested / offering.pricePerToken;
 
-      console.log("Tokens Purchased: ", tokensPurchased);
+      offering.availableTokens -= tokensPurchased;
 
-      // Update the offering available tokens
-      const updatedOffering = {
-        ...offering,
-        availableTokens: offering.availableTokens - tokensPurchased,
+      offeringStorage.insert(offering.id, offering);
+
+      const updatedReserve = {
+        ...reserve,
+        status: { Completed: "Completed" },
+        tokensPurchased: tokensPurchased,
+        paid_at_block: Some(block),
       };
-
-      offeringStorage.insert(offering.id, updatedOffering);
 
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
-        return Err({
-          NotFound: `Investor with id=${investorId} not found`,
-        });
+        throw Error(`Investor with id=${investorId} not found`);
       }
+      const investor = investorOpt.Some;
+
+      investor.totalInvested += reservePrice;
+      investor.totalInvestments += 1n;
 
       // Update the investor total invested amount and number of investments
-      const investor = investorOpt.Some;
-      investor.totalInvested += reservePrice;
-      // investor.totalInvestments += 1n;
-      // investor.investments.push(reserve.id);
-      investorStorage.insert(investor.id, investor);
+      investorStorage.insert(investorId, investor);
 
       // Insert the transaction into the storage(persistedInvestmentsReserves)
-      persistedInvestmentsReserves.insert(investor.id, updatedReserve);
+      persistedInvestmentsReserves.insert(ic.caller(), updatedReserve);
 
-      // console.log("Transaction added to storage: ", updatedReserve);
-
-      return Ok(updatedReserve);
+      return Ok(updatedReserve); // Successfully return the updated reserve
     }
   ),
 

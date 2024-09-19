@@ -13,7 +13,7 @@ const InvestorDashboard = ({ investor }) => {
       <FrameComponent3 investor={investor} />
       <main className="w-[1287px] rounded-26xl bg-gray1-1000 flex flex-col items-start justify-start pt-12 px-[61px] pb-[37px] box-border gap-[51px] max-w-full mq1275:pt-[31px] mq1275:px-[30px] mq1275:pb-6 mq1275:box-border mq825:gap-[25px] mq825:pt-5 mq825:pb-5 mq825:box-border">
         <section className="w-[860px] flex flex-row items-start justify-start py-0 px-3 box-border max-w-full">
-          <FrameComponent2 />
+          <FrameComponent2 investorId={id} />
         </section>
         <section className="w-[1138px] rounded-11xl bg-light-black flex flex-col items-start justify-start pt-8 px-8 pb-[58px] box-border gap-12 max-w-full z-[1] text-left text-5xl text-shades-white font-manrope mq450:pt-[21px] mq450:pb-[38px] mq450:box-border mq825:gap-6">
           <div className="self-stretch flex flex-row items-start justify-between gap-5 mq825:flex-wrap">

@@ -1,9 +1,31 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
+import { getInvestorProfileById } from "../../utils/propertyTokenization";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
-const TotalOrder = ({ className = "" }) => {
+const TotalOrder = ({ className = "", investorId }) => {
+  const [investor, setInvestor] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const fetchInvestor = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await getInvestorProfileById(investorId);
+      if (res.Ok) {
+        console.log(res.Ok); // Log the entire profile data for debugging
+        setInvestor(res.Ok);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchInvestor();
+  }, []);
+
   return (
     <div
       className={`flex-[0.8779] shadow-[6px_6px_54px_rgba(0,_0,_0,_0.05)] rounded-11xl bg-light-black flex flex-col items-start justify-start p-4 box-border gap-7 min-w-[196px] z-[1] text-left text-base text-gray1-2000 font-manrope mq450:flex-1 ${className}`}
@@ -15,7 +37,8 @@ const TotalOrder = ({ className = "" }) => {
             Total Investments
           </a>
           <a className="[text-decoration:none] relative text-9xl tracking-[1px] font-bold text-shades-white inline-block min-w-[87px] z-[1] mq450:text-3xl">
-            10293
+            {/* Convert BigInt to string for rendering */}
+            {investor.totalInvested ? investor.totalInvested.toString() : "N/A"}
           </a>
         </div>
         <Img
@@ -43,6 +66,7 @@ const TotalOrder = ({ className = "" }) => {
 
 TotalOrder.propTypes = {
   className: PropTypes.string,
+  investorId: PropTypes.string.isRequired,
 };
 
 export default TotalOrder;

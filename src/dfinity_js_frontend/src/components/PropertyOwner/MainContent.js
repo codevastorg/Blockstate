@@ -1,10 +1,30 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ValueSubComponents from "./ValueSubComponents";
 import PropTypes from "prop-types";
+import Wallet from "../../components/Wallet";
+import { totalPropertyOwnerAssetsValue } from "../../utils/propertyTokenization";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
-const MainContent = ({ className = "", propertyOwner }) => {
+const MainContent = ({ className = "", propertyOwner, propertyOwnerId }) => {
+  const [totalAssetValue, setTotalAssetValue] = useState(0);
+
+  const fetchTotalAssetValue = useCallback(async () => {
+    try {
+      const res = await totalPropertyOwnerAssetsValue(propertyOwnerId);
+      if (res.Ok) {
+        console.log(res.Ok); // Log the total asset value for debugging
+        setTotalAssetValue(res.Ok);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchTotalAssetValue();
+  }, []);
+
   return (
     <section
       className={`self-stretch rounded-23xl bg-gray1-1000 flex flex-col items-start justify-start pt-[43px] pb-[42px] pl-10 pr-[31px] box-border relative gap-9 max-w-full text-left text-5xl text-aliceblue-100 font-manrope mq700:gap-[18px] mq975:pt-7 mq975:pb-[27px] mq975:box-border ${className}`}
@@ -61,7 +81,7 @@ const MainContent = ({ className = "", propertyOwner }) => {
               <ValueSubComponents
                 subtract={Images.imgSubtract}
                 totalAssetValue="Total Asset Value"
-                balanceSeparator="$12,366.56"
+                balanceSeparator={`$${totalAssetValue.toString()}`}
               />
               <ValueSubComponents
                 subtract={Images.imgSubtract_1}
