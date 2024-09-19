@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ValueSubComponents from "./ValueSubComponents";
 import PropTypes from "prop-types";
-import Wallet from "../../components/Wallet";
+import Balance from "../../components/Balance";
 import { totalPropertyOwnerAssetsValue } from "../../utils/propertyTokenization";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
@@ -87,7 +87,7 @@ const MainContent = ({ className = "", propertyOwner, propertyOwnerId }) => {
                 subtract={Images.imgSubtract_1}
                 totalAssetValue="Wallet balance"
                 propMinWidth="111px"
-                balanceSeparator="$123.456"
+                balanceSeparator={<Balance />}
               />
             </div>
             <div className="self-stretch rounded-11xl bg-light-black border-border-linear border-[1px] border-solid box-border flex flex-col items-end justify-start pt-6 pb-14 pl-[18px] pr-[23px] gap-2.5 max-w-full z-[1] text-sm text-silver-100">

@@ -41,11 +41,11 @@ const PropertyOwner = () => {
         !loading ? (
           propertyOwner?.name ? (
             <>
-              <Nav className="justify-content-end pt-3 pb-5 mr-4">
+              {/* <Nav className="justify-content-end pt-3 pb-5 mr-4">
                 <Nav.Item>
                   <Wallet />
                 </Nav.Item>
-              </Nav>
+              </Nav> */}
 
               <main>
                 <PropertyOwnerDashboard propertyOwner={propertyOwner} />
