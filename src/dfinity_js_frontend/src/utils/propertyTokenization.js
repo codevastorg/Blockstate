@@ -61,6 +61,11 @@ export async function getAssetsByOwner(ownerId) {
   return window.canister.farmWorkChain.getAssetsByOwner(ownerId);
 }
 
+// totalPropertyOwnerAssetsValue
+export async function totalPropertyOwnerAssetsValue(ownerId) {
+  return window.canister.farmWorkChain.totalPropertyOwnerAssetsValue(ownerId);
+}
+
 // getAvailableAssets
 export async function getAvailableAssets() {
   return window.canister.farmWorkChain.getAvailableAssets();

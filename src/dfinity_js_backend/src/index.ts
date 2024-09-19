@@ -754,6 +754,29 @@ export default Canister({
     return Ok(assets);
   }),
 
+  // Function to get total Assets value of a propertyOwner
+  totalPropertyOwnerAssetsValue: query(
+    [text],
+    Result(nat64, Message),
+    (propertyOwnerId) => {
+      const assets = assetStorage.values().filter((asset) => {
+        return asset.owner === propertyOwnerId;
+      });
+
+      if (assets.length === 0) {
+        return Err({
+          NotFound: `No assets found for propertyOwner=${propertyOwnerId}`,
+        });
+      }
+
+      const totalValue = assets.reduce((acc, asset) => {
+        return acc + asset.totalValue;
+      }, 0n);
+
+      return Ok(totalValue);
+    }
+  ),
+
   // Get available Assets
   getAvailableAssets: query([], Result(Vec(Asset), Message), () => {
     const assets = assetStorage.values().filter((asset) => {
