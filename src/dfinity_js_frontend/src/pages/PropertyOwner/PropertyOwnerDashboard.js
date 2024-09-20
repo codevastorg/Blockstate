@@ -1,9 +1,9 @@
-import React from "react";
-import { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MainContent from "../../components/PropertyOwner/MainContent";
 import MyAssetsOverview from "../../components/PropertyOwner/Asset/MyAssetsOverview";
-import MyOfferingsOverview from "../../components/PropertyOwner/Offerings/MyOfferingsOverview"
+import MyOfferingsOverview from "../../components/PropertyOwner/Offerings/MyOfferingsOverview";
+import { getAddressFromPrincipal } from "../../utils/propertyTokenization";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
@@ -17,6 +17,11 @@ const OwnerDashboard = ({ propertyOwner }) => {
     joinedAt,
   } = propertyOwner;
   const navigate = useNavigate();
+  const [address, setAddress] = useState("");
+
+  const isAuthenticated = window.auth.isAuthenticated;
+
+  const principal = window.auth.principalText;
 
   const onVectorClick = useCallback(() => {
     navigate("/portfolio?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai");
@@ -29,6 +34,21 @@ const OwnerDashboard = ({ propertyOwner }) => {
   const onAnalyticsContainerClick = useCallback(() => {
     navigate("/investor-dashboard");
   }, [navigate]);
+
+  // Get the address of the property owner
+  useEffect(() => {
+    const getAddress = async () => {
+      if (isAuthenticated && principal) {
+        try {
+          const address = await getAddressFromPrincipal(principal);
+          setAddress(address);
+        } catch (error) {
+          console.error("Error getting address:", error);
+        }
+      }
+    };
+    getAddress();
+  }, [isAuthenticated, principal]);
 
   return (
     <div className="w-full relative bg-gray1-400 overflow-hidden flex flex-row items-start justify-start pt-[18px] pb-[49px] pl-[19px] pr-4 box-border gap-7 leading-[normal] tracking-[normal] mq975:pl-7 mq975:pr-7 mq975:box-border">
@@ -286,8 +306,11 @@ const OwnerDashboard = ({ propertyOwner }) => {
                 <div className="self-stretch relative font-semibold">
                   {name}
                 </div>
-                <div className="relative text-3xs text-gainsboro-500 inline-block min-w-[127px]">
-                  0x1a2B3c4D5e6F7g8H9i0J
+                <div
+                  className="relative text-3xs text-gainsboro-500 inline-block min-w-[127px]"
+                  style={{ wordBreak: "break-all" }}
+                >
+                  {address}
                 </div>
               </div>
             </div>
@@ -303,7 +326,7 @@ const OwnerDashboard = ({ propertyOwner }) => {
         </nav>
       </div>
       <main className="flex-1 flex flex-col items-start justify-start gap-7 max-w-[calc(100%_-_255px)] mq975:max-w-full">
-        <MainContent propertyOwner={name} propertyOwnerId={id}/>
+        <MainContent propertyOwner={name} propertyOwnerId={id} />
         <MyAssetsOverview propertyOwner={id} />
         <MyOfferingsOverview propertyOwner={id} />
       </main>
