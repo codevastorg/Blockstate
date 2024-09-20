@@ -111,6 +111,17 @@ export async function getAllInvestments() {
   return window.canister.farmWorkChain.getAllInvestments();
 }
 
+// getAddressFromPrincipal
+export async function getAddressFromPrincipal(principalId) {
+  try {
+    const principal = Principal.fromText(principalId);
+    return window.canister.farmWorkChain.getAddressFromPrincipal(principal);
+  } catch (error) {
+    console.error("Error creating Principal:", error);
+    throw new Error("Invalid principal format");
+  }
+}
+
 // Make investment
 export async function makeInvestment(investment) {
   const investmentCanister = window.canister.farmWorkChain;
@@ -147,7 +158,6 @@ export async function makeInvestment(investment) {
     reserve.amountInvested,
     reserve.memo
   );
-  
 
   // Logging the transaction details
   console.log(
