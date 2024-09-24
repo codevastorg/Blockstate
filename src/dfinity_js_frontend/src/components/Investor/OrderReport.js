@@ -287,7 +287,13 @@ const OrderReport = ({ className = "", investorId }) => {
             onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
           >
             {isProcessing ? (
-              <Spinner as={"span"} animation="border" size="sm" role="status" aria-hidden="true" />
+              <Spinner
+                as={"span"}
+                animation="border"
+                size="sm"
+                role="status"
+                aria-hidden="true"
+              />
             ) : (
               "Invest Now 🚀"
             )}
