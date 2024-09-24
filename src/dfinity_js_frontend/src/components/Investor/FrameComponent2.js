@@ -10,8 +10,9 @@ const FrameComponent2 = ({ className = "", investorId }) => {
     <div
       className={`flex-1 flex flex-row items-start justify-start gap-[25px] max-w-full text-left text-base text-gray1-2000 font-manrope mq825:flex-wrap ${className}`}
     >
+       <InvestorBalance investorId={investorId} />
       <TotalOrder investorId={investorId} />
-      <InvestorBalance investorId={investorId} />
+     
       <div className="flex-1 flex flex-col items-start justify-start pt-px px-0 pb-0 box-border min-w-[196px]">
         <div className="self-stretch shadow-[6px_6px_54px_rgba(0,_0,_0,_0.05)] rounded-11xl bg-light-black flex flex-col items-start justify-start p-4 gap-7 z-[1]">
           <div className="w-[262px] h-[161px] relative shadow-[6px_6px_54px_rgba(0,_0,_0,_0.05)] rounded-11xl bg-light-black hidden" />
