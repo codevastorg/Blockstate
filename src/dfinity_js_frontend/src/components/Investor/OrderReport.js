@@ -9,12 +9,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 import PayInvestmentButton from "./PayInvestment";
-import { off } from "process";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
 
 const OrderReport = ({ className = "", investorId }) => {
   const [offerings, setOfferings] = useState([]);
   const [loading, setLoading] = useState(false); // Loading state
   const [error, setError] = useState(null); // Error state
+  const [showModal, setShowModal] = useState(false); // Modal visibility state
+  const [selectedOffering, setSelectedOffering] = useState(null);
+  const [investmentAmount, setInvestmentAmount] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false); // Spinner state
 
   useEffect(() => {
     async function fetchOfferings() {
@@ -45,21 +49,17 @@ const OrderReport = ({ className = "", investorId }) => {
   // Function to handle investment payment with dynamic values
   const handleInvestment = async (
     offeringId,
-    pricePerToken,
+    investmentAmount,
     propertyOwnerId
   ) => {
-    // Assuming pricePerToken is already in the correct format
-    // const amountInvested = parseInt(pricePerToken, 10) * 10 ** 8;
-    // const amountPayable = BigInt(amountInvested);
+    const amountPayable = BigInt(investmentAmount);
 
-    const amountPayable = BigInt(pricePerToken);
+    if (!amountPayable || amountPayable <= 0) {
+      toast.error("Please enter a valid amount to invest.");
+      return;
+    }
 
-    console.log(
-      "Dynamically fetched offeringId, pricePerToken, and propertyOwnerId",
-      offeringId,
-      pricePerToken,
-      propertyOwnerId
-    );
+    setIsProcessing(true); // Set spinner to true before payment
 
     try {
       await makeInvestment({
@@ -74,7 +74,24 @@ const OrderReport = ({ className = "", investorId }) => {
     } catch (err) {
       console.error("Check if wallet is funded", err);
       toast.error("Payment failed. Please check if the wallet is funded.");
+    } finally {
+      setIsProcessing(false); // Set spinner to false after payment
     }
+
+    // Close the modal after investment
+    setShowModal(false);
+  };
+
+  // Show the modal and set the selected offering for the user to enter investment amount
+  const openInvestmentModal = (offering) => {
+    setSelectedOffering(offering);
+    setShowModal(true);
+  };
+
+  // Close the modal
+  const handleClose = () => {
+    setShowModal(false);
+    setInvestmentAmount(""); // Reset the investment amount
   };
 
   return (
@@ -174,9 +191,7 @@ const OrderReport = ({ className = "", investorId }) => {
                 </div>
                 <div className="w-[102px] relative leading-[20px] font-semibold inline-block shrink-0 min-w-[102px]">
                   <PayInvestmentButton
-                    invest={() =>
-                      handleInvestment(offering.id, offering.pricePerToken, offering.propertyOwnerId)
-                    }
+                    invest={() => openInvestmentModal(offering)}
                   />
                 </div>
               </div>
@@ -186,6 +201,99 @@ const OrderReport = ({ className = "", investorId }) => {
           )}
         </div>
       </div>
+
+      {/* Modal for investment amount input */}
+      <Modal show={showModal} onHide={handleClose} centered>
+        <Modal.Header
+          closeButton
+          className="bg-dark text-white border-bottom-0"
+          style={{ borderRadius: "10px 10px 0 0", padding: "20px" }}
+        >
+          <Modal.Title className="text-center w-100 font-weight-bold">
+            💸 Enter Investment Amount
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body className="p-4 bg-light" style={{ textAlign: "center" }}>
+          <p className="mb-4 text-muted">
+            How much would you like to invest in this offering? Choose wisely!
+          </p>
+
+          <Form>
+            <Form.Group>
+              <Form.Label className="font-weight-bold text-dark">
+                Amount to Invest (in tokens):
+              </Form.Label>
+              <Form.Control
+                type="number"
+                value={investmentAmount}
+                onChange={(e) => setInvestmentAmount(e.target.value)}
+                placeholder="Enter the amount"
+                className="p-3 text-center rounded-lg border border-gray-300 shadow-sm"
+                style={{
+                  fontSize: "1.1rem",
+                  color: "#495057",
+                  borderColor: "#ced4da",
+                  borderRadius: "8px",
+                  transition: "border-color 0.2s ease-in-out",
+                }}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+
+        <Modal.Footer
+          className="d-flex justify-content-between bg-light border-top-0"
+          style={{ padding: "20px", borderRadius: "0 0 10px 10px" }}
+        >
+          <Button
+            variant="outline-danger"
+            onClick={handleClose}
+            className="px-4 py-2 rounded-pill"
+            disabled={isProcessing}
+            style={{
+              fontSize: "1rem",
+              fontWeight: "500",
+              letterSpacing: "0.5px",
+              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+              transition: "all 0.2s ease-in-out",
+            }}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            variant="success"
+            onClick={() =>
+              handleInvestment(
+                selectedOffering.id,
+                investmentAmount,
+                selectedOffering.propertyOwnerId
+              )
+            }
+            disabled={isProcessing}
+            className="px-4 py-2 rounded-pill"
+            style={{
+              fontSize: "1rem",
+              fontWeight: "500",
+              background:
+                "linear-gradient(135deg, rgba(72,177,72,1) 0%, rgba(66,155,66,1) 100%)",
+              border: "none",
+              color: "#fff",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+              transition: "transform 0.2s",
+            }}
+            onMouseEnter={(e) => (e.target.style.transform = "scale(1.05)")}
+            onMouseLeave={(e) => (e.target.style.transform = "scale(1)")}
+          >
+            {isProcessing ? (
+              <Spinner as={"span"} animation="border" size="sm" role="status" aria-hidden="true" />
+            ) : (
+              "Invest Now 🚀"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </section>
   );
 };

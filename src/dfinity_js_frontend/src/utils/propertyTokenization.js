@@ -122,6 +122,11 @@ export async function getAddressFromPrincipal(principalId) {
   }
 }
 
+// getInvestmentsByPropertyOwner
+export async function getInvestmentsByPropertyOwner(ownerId) {
+  return window.canister.farmWorkChain.getInvestmentsByPropertyOwner(ownerId);
+}
+
 // Make investment
 export async function makeInvestment(investment) {
   const investmentCanister = window.canister.farmWorkChain;

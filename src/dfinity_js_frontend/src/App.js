@@ -12,6 +12,7 @@ import RoleSelection from "./pages/Home/RoleSelection";
 import Investor from "./pages/Investor/Investor";
 import PropertyOwner from "./pages/PropertyOwner/PropertyOwner";
 import Portfolio from "./pages/PropertyOwner/Portfolio";
+import Wallet from "./pages/PropertyOwner/Wallet";
 
 const App = function AppWrapper() {
   return (
@@ -23,6 +24,7 @@ const App = function AppWrapper() {
           <Route path="/investor" element={<Investor />} />
           <Route path="/property-owner" element={<PropertyOwner />} />
           <Route path="/portfolio" element={<Portfolio />} />
+          <Route path="/wallet" element={<Wallet />} />
         </Routes>
       </Router>
     </>

@@ -81,7 +81,7 @@ const MainContent = ({ className = "", propertyOwner, propertyOwnerId }) => {
               <ValueSubComponents
                 subtract={Images.imgSubtract}
                 totalAssetValue="Total Asset Value"
-                balanceSeparator={`$${totalAssetValue.toString()}`}
+                balanceSeparator={`${totalAssetValue.toString()} ICP`}
               />
               <ValueSubComponents
                 subtract={Images.imgSubtract_1}

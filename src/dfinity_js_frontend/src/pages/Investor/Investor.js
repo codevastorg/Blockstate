@@ -41,12 +41,6 @@ const Investor = () => {
         !loading ? (
           investor?.name ? (
             <>
-              <Nav className="justify-content-end pt-3 pb-5 mr-4">
-                <Nav.Item>
-                  <Wallet />
-                </Nav.Item>
-              </Nav>
-
               <main>
                 <InvestorDashboard investor={investor} />
               </main>
