@@ -1,9 +1,8 @@
 import React from "react";
-import { useState, useCallback } from "react";
-// import TokenizationRequest from "./TokenizationRequest";
-import PortalPopup from "../PropertyOwner/PortalPopup";
+import { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { getAddressFromPrincipal } from "../../utils/propertyTokenization";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 
@@ -12,6 +11,12 @@ const FrameComponent3 = ({ className = "", investor }) => {
     false
   );
   const navigate = useNavigate();
+
+  const [address, setAddress] = useState("");
+
+  const isAuthenticated = window.auth.isAuthenticated;
+
+  const principal = window.auth.principalText;
 
   const openTokenizationRequest = useCallback(() => {
     setTokenizationRequestOpen(true);
@@ -36,6 +41,21 @@ const FrameComponent3 = ({ className = "", investor }) => {
   const onWalletContainerClick = useCallback(() => {
     navigate("/wallet");
   }, [navigate]);
+
+  // Get the address of the investor
+  useEffect(() => {
+    const getAddress = async () => {
+      if (isAuthenticated && principal) {
+        try {
+          const address = await getAddressFromPrincipal(principal);
+          setAddress(address);
+        } catch (error) {
+          console.error("Error getting address:", error);
+        }
+      }
+    };
+    getAddress();
+  }, [isAuthenticated, principal]);
 
   return (
     <>
@@ -299,8 +319,11 @@ const FrameComponent3 = ({ className = "", investor }) => {
               <div className="self-stretch relative font-semibold">
                 {investor.name}
               </div>
-              <div className="relative text-3xs text-gainsboro-500 inline-block min-w-[127px]">
-                0x1a2B3c4D5e6F7g8H9i0J
+              <div
+                className="relative text-3xs text-gainsboro-500 inline-block min-w-[127px]"
+                style={{ wordBreak: "break-all" }}
+              >
+                {address}
               </div>
             </div>
           </div>

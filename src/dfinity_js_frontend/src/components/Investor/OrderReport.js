@@ -304,5 +304,3 @@ OrderReport.propTypes = {
 };
 
 export default OrderReport;
-
-// "Invest Now 🚀"
