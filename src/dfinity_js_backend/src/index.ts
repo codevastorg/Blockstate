@@ -1123,6 +1123,9 @@ export default Canister({
         paid_at_block: Some(block),
       };
 
+      // Log the completed reserve for debugging purposes
+      console.log("Completed Investment Reserve: ", updatedReserve);
+
       const investorOpt = investorStorage.get(investorId);
       if ("None" in investorOpt) {
         throw Error(`Investor with id=${investorId} not found`);
@@ -1261,6 +1264,28 @@ export default Canister({
       const totalPendingInvestments = BigInt(transactions.length);
 
       return Ok(totalPendingInvestments);
+    }
+  ),
+
+  // Get Investments made for a propertyOwner
+  getInvestmentsByPropertyOwner: query(
+    [text],
+    Result(Vec(Transaction), Message),
+    (propertyOwnerId) => {
+      const transactions = persistedInvestmentsReserves
+        .values()
+        .filter((transaction) => {
+          return transaction.propertyOwnerId === propertyOwnerId;
+        });
+
+      // Check if there are any investments
+      if (transactions.length === 0) {
+        return Err({
+          NotFound: `No investments found for propertyOwner=${propertyOwnerId}`,
+        });
+      }
+
+      return Ok(transactions);
     }
   ),
 

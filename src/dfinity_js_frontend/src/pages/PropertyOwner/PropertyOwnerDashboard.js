@@ -27,6 +27,10 @@ const OwnerDashboard = ({ propertyOwner }) => {
     navigate("/portfolio?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai");
   }, [navigate]);
 
+  const onBalanceClick = useCallback(() => {
+    navigate("/wallet?canisterId=br5f7-7uaaa-aaaaa-qaaca-cai");
+  }, [navigate]);
+
   const onVectorClick1 = useCallback(() => {
     navigate("/documents");
   }, [navigate]);
@@ -239,6 +243,7 @@ const OwnerDashboard = ({ propertyOwner }) => {
                       loading="lazy"
                       alt=""
                       src={Images.imgFrame_6}
+                      onClick={onBalanceClick}
                     />
                     <div className="flex flex-col items-start justify-start pt-1.5 px-0 pb-0">
                       <b className="relative inline-block [text-shadow:1px_0_0_rgba(255,_255,_255,_0.05),_0_1px_0_rgba(255,_255,_255,_0.05),_-1px_0_0_rgba(255,_255,_255,_0.05),_0_-1px_0_rgba(255,_255,_255,_0.05)] min-w-[50px] z-[1]">
