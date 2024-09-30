@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import {
   getAllOfferings,
   makeInvestment,
+  leaseOffering,
 } from "../../utils/propertyTokenization";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

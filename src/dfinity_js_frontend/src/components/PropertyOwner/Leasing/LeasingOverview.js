@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Img } from "../../../components/Img";
 import * as Images from "../../../assets/images";
-import AddOffering from "./AddOffering";
+import AddOffering from "../Offerings/AddOffering";
 import {
   createOffering,
   getAllOfferings,
@@ -11,7 +11,7 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
+const LeasingOverview = ({ className = "", propertyOwner }) => {
   const id = propertyOwner;
   const [offerings, setOfferings] = useState([]);
   const [activeModal, setActiveModal] = useState(null); // State for modal visibility
@@ -102,7 +102,7 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
     >
       <div className="self-stretch flex flex-row items-center justify-between max-w-full gap-5 text-left text-xl text-shades-white mq1025:flex-wrap">
         <h3 className="m-0 w-[89.8px] relative text-inherit leading-[140%] font-semibold font-[inherit] inline-block shrink-0 mq450:text-base mq450:leading-[22px]">
-          Investment Offerings
+          Lease Offerings
         </h3>
 
         {/* Create Offering Button in the middle */}
@@ -111,7 +111,7 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
           className="cursor-pointer [border:none] py-1 px-[22px] bg-amber-600 shadow-[0px_0px_1px_rgba(12,_26,_75,_0.24),_0px_3px_8px_-1px_rgba(50,_50,_71,_0.05)] rounded-xl flex flex-row items-center justify-center gap-2 hover:bg-darkgoldenrod-200"
         >
           <div className="relative text-lg leading-[26px] font-medium font-manrope text-shades-black text-center inline-block min-w-[60px]">
-            Create Offering
+            Create Lease
           </div>
         </button>
 
@@ -245,9 +245,9 @@ const MyOfferingsOverview = ({ className = "", propertyOwner }) => {
   );
 };
 
-MyOfferingsOverview.propTypes = {
+LeasingOverview.propTypes = {
   className: PropTypes.string,
   propertyOwner: PropTypes.string.isRequired,
 };
 
-export default MyOfferingsOverview;
+export default LeasingOverview;

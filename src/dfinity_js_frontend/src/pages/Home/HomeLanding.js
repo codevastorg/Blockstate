@@ -118,7 +118,7 @@ const HomeLanding = () => {
                     propBorderRadius="unset"
                     propAlignSelf="stretch"
                     propWidth="unset"
-                    cardBackground={Images.imgRectangle_34624569_1 }
+                    cardBackground={Images.imgRectangle_34624569_1}
                     propBorderRadius1="30px"
                     propBorderRadius2="30px"
                     prop="£654,250"

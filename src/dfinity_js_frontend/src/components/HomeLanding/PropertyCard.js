@@ -1,6 +1,8 @@
 import React from "react";
 import { useMemo } from "react";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const PropertyCard = ({
   className = "",
@@ -113,7 +115,7 @@ const PropertyCard = ({
         </div>
         <div className="self-stretch rounded-xl bg-shades-black border-light-black border-[1px] border-solid flex flex-row items-center justify-between py-3.5 px-4 gap-5 text-sm text-shades-white mq450:flex-wrap">
           <div className="flex flex-row items-center justify-center gap-1">
-            <img className="h-6 w-6 relative" alt="" src="/bed.svg" />
+            <img className="h-6 w-6 relative" alt="" src={Images.imgBed} />
             <div className="relative leading-[20px] inline-block min-w-[8px]">
               {prop1}
             </div>
@@ -125,7 +127,7 @@ const PropertyCard = ({
             </div>
           </div>
           <div className="flex flex-row items-center justify-center gap-1">
-            <img className="h-6 w-6 relative" alt="" src="/chairs.svg" />
+            <img className="h-6 w-6 relative" alt="" src={Images.imgChairs} />
             <div
               className="relative leading-[20px] inline-block min-w-[100px]"
               style={semiFurnished1Style}

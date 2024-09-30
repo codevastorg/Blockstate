@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import MainContent from "../../components/PropertyOwner/MainContent";
 import MyAssetsOverview from "../../components/PropertyOwner/Asset/MyAssetsOverview";
 import MyOfferingsOverview from "../../components/PropertyOwner/Offerings/MyOfferingsOverview";
+import LeasingOverview from "../../components/PropertyOwner/Leasing/LeasingOverview";
 import { getAddressFromPrincipal } from "../../utils/propertyTokenization";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
@@ -334,6 +335,7 @@ const OwnerDashboard = ({ propertyOwner }) => {
         <MainContent propertyOwner={name} propertyOwnerId={id} />
         <MyAssetsOverview propertyOwner={id} />
         <MyOfferingsOverview propertyOwner={id} />
+        <LeasingOverview propertyOwner={id} />
       </main>
     </div>
   );
