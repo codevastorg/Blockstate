@@ -1,31 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import PropTypes from "prop-types";
-import { getInvestorProfileById } from "../../utils/propertyTokenization";
 import { Img } from "../../components/Img";
 import * as Images from "../../assets/images";
 import Balance from "../../components/Balance";
 
 const InvestorBalance = ({ className = "", investorId }) => {
-  const [investor, setInvestor] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const fetchInvestor = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await getInvestorProfileById(investorId);
-      if (res.Ok) {
-        console.log(res.Ok); // Log the entire profile data for debugging
-        setInvestor(res.Ok);
-      }
-      setLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchInvestor();
-  }, []);
 
   return (
     <div
@@ -35,7 +14,7 @@ const InvestorBalance = ({ className = "", investorId }) => {
       <div className="self-stretch flex flex-row items-start justify-start gap-8 mq450:flex-wrap">
         <div className="flex-1 flex flex-col items-start justify-start gap-4 min-w-[90px]">
           <a className="[text-decoration:none] relative font-semibold text-[inherit] mix-blend-normal z-[1]">
-            Total Investments
+            Total Balance
           </a>
           <a className="[text-decoration:none] relative text-9xl tracking-[1px] font-bold text-shades-white inline-block min-w-[87px] z-[1] mq450:text-3xl">
             < Balance />

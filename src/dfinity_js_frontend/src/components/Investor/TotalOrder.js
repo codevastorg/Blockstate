@@ -38,7 +38,7 @@ const TotalOrder = ({ className = "", investorId }) => {
           </a>
           <a className="[text-decoration:none] relative text-9xl tracking-[1px] font-bold text-shades-white inline-block min-w-[87px] z-[1] mq450:text-3xl">
             {/* Convert BigInt to string for rendering */}
-            {investor.totalInvested ? investor.totalInvested.toString() : "N/A"}
+            {investor.totalInvested ? investor.totalInvested.toString() : "N/A"} ICP
           </a>
         </div>
         <Img
