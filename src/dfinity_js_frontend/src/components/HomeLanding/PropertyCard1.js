@@ -1,6 +1,8 @@
 import React from "react";
 import { useMemo } from "react";
 import PropTypes from "prop-types";
+import { Img } from "../../components/Img";
+import * as Images from "../../assets/images";
 
 const PropertyCard1 = ({
   className = "",
@@ -101,7 +103,7 @@ const PropertyCard1 = ({
         className="self-stretch h-[292px] flex flex-col items-center justify-center min-w-[300px] min-h-[208px]"
         style={cardRectangleStyle}
       >
-        <img
+        <Img
           className="self-stretch flex-1 relative rounded-11xl max-w-full overflow-hidden max-h-full object-cover"
           alt=""
           src={cardBackground}
@@ -134,11 +136,11 @@ const PropertyCard1 = ({
           style={featuresStyle}
         >
           <div className="flex flex-row items-center justify-center gap-1">
-            <img
+            <Img
               className="h-6 w-6 relative"
               loading="lazy"
               alt=""
-              src="/bed.svg"
+              src={Images.imgBed}
             />
             <div className="relative leading-[20px] inline-block min-w-[8px]">
               {bedroomPlaceholder}
@@ -151,11 +153,11 @@ const PropertyCard1 = ({
             </div>
           </div>
           <div className="flex flex-row items-center justify-center gap-1">
-            <img
+            <Img
               className="h-6 w-6 relative"
               loading="lazy"
               alt=""
-              src="/chairs.svg"
+              src={Images.imgChairs}
             />
             <b
               className="relative leading-[20px] inline-block min-w-[106px]"
@@ -170,7 +172,7 @@ const PropertyCard1 = ({
         className="!m-[0] absolute top-[27px] left-[0px] rounded-tl-none rounded-tr-xl rounded-br-xl rounded-bl-none bg-amber-600 flex flex-row items-center justify-center py-1 pl-1 pr-2 gap-1 whitespace-nowrap z-[1] text-xs text-shades-black"
         style={tagsStyle}
       >
-        <img
+        <Img
           className="h-3 w-3 relative"
           loading="lazy"
           alt=""
