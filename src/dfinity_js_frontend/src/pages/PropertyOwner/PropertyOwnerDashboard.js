@@ -335,7 +335,7 @@ const OwnerDashboard = ({ propertyOwner }) => {
         <MainContent propertyOwner={name} propertyOwnerId={id} />
         <MyAssetsOverview propertyOwner={id} />
         <MyOfferingsOverview propertyOwner={id} />
-        <LeasingOverview propertyOwner={id} />
+        {/* <LeasingOverview propertyOwner={id} /> */}
       </main>
     </div>
   );
