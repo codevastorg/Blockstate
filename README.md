@@ -1,90 +1,20 @@
 # Property Ownership Tokenization
 
-## Description
-The **Property Tokenization Smart Contract** is a decentralized platform that enables the tokenization of real estate properties, facilitating fractional ownership and investments. The contract allows property owners to create and manage tokenized assets, offers, and lease agreements. Investors can participate by purchasing tokens representing a fraction of a property, and both property owners and investors can engage in leasing and dividend distribution. The contract also supports secure transactions and verification through the Internet Computer Protocol (ICP).
+## Overview
 
-## Features
+The **Property Tokenization Smart Contract** is a decentralized solution designed to revolutionize real estate ownership by enabling fractional property investments through blockchain technology. This platform allows property owners to tokenize their assets, creating digital shares that represent a fraction of a property. Investors can then purchase these tokens, facilitating shared ownership and democratizing real estate investment opportunities.
 
-1. **Property Owner Management**
-   - Create, update, and delete property owner profiles.
-   - Store owner details such as name, phone number, email, and properties owned.
+The smart contract streamlines property management, lease agreements, and dividend distributions between owners and investors, while leveraging the security and efficiency of the Internet Computer Protocol (ICP) for seamless, secure transactions and verification.
 
-2. **Investor Management**
-   - Create, update, and delete investor profiles.
-   - Manage investor details including name, email, phone number, and total investments.
-   
-3. **Asset (Property) Tokenization**
-   - Tokenize real estate properties by creating digital assets.
-   - Define property details like title, description, location, and total value.
-   - Automatically divide property value into tokens for fractional ownership.
+## Live Platform (Mainnet)
 
-4. **Investment Offerings**
-   - Create and manage investment offerings for tokenized properties.
-   - Specify price per token, available tokens, and offering duration.
-   - Reserve and complete investments with secure transaction tracking.
+Explore the live platform and experience property tokenization in action:
+[BlockState](https://ndyfi-byaaa-aaaag-qkifa-cai.icp0.io/)
 
-5. **Leasing**
-   - Create lease agreements for tokenized assets.
-   - Define lease duration, rental price per token, and manage total rent collected.
-   - Support for tenants to reserve and pay for leases.
+## Pitch
 
-6. **Dividend Distribution**
-   - Reserve and distribute dividends from asset revenue to investors.
-   - Automatically calculate dividend amounts based on tokens owned.
-
-7. **Transaction Management**
-   - Track and manage investment and rent transactions.
-   - Secure transaction verification with memo and block validation.
-   - Handle different transaction statuses such as pending, completed, and cancelled.
-
-8. **Storage**
-   - Utilize stable storage for property owners, investors, assets, offerings, leases, and transactions.
-   - Automatically discard reservations after a timeout period for security and management.
-
-9. **Payment Verification**
-   - Verify payment details using the ICP Ledger Canister.
-   - Ensure secure and accurate transfers of tokens and funds between participants.
-
-10. **Canister-to-Canister Communication**
-    - Integrate ledger calls for querying transaction details and ensuring secure investment operations.
-
-This smart contract supports a full-featured ecosystem for decentralized property ownership and investment, making real estate more accessible and liquid by enabling fractional ownership and transparent transactions.
-
-
-# Canister Access
-
-## Frontend Canister via Browser
-
-[**dfinity_js_frontend**](https://ndyfi-byaaa-aaaag-qkifa-cai.icp0.io/)
-
-This link directs you to the frontend of the project, deployed on the Internet Computer Protocol (ICP).
-
----
-
-## Backend Canister via Candid Interface
-
-- [**dfinity_js_backend**](https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=nk3ou-xqaaa-aaaag-qkieq-cai)
-
-This link provides access to the backend canister through the Candid interface, allowing for interactions and management of backend services.
-
----
-
-## Internet Identity Canister
-
-- [**internet_identity**](https://a4gq6-oaaaa-aaaab-qaa4q-cai.raw.icp0.io/?id=nezd4-maaaa-aaaag-qkifq-cai)
-
-This link is for managing identity authentication via the Internet Identity canister on the Internet Computer.
-
----
-
-### Instructions
-
-1. Visit the frontend canister link to interact with the dapp.
-2. Use the backend Candid interface link to inspect or manage backend canister operations.
-3. For user authentication, use the Internet Identity canister link to log in and authenticate your session.
-
-### Slides
-[**Presentation**](https://www.canva.com/design/DAGQvnz3P7E/FvATdl-S_nDR71PQzJIypQ/edit?utm_content=DAGQvnz3P7E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+For a comprehensive overview of the project, view our pitch deck:
+[Pitch](https://www.canva.com/design/DAGQvnz3P7E/FvATdl-S_nDR71PQzJIypQ/edit?utm_content=DAGQvnz3P7E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ## Things to be explained in the course:
 
@@ -140,7 +70,7 @@ where:
 `dfx deploy internet_identity` - that is the canister that handles the authentication flow. Once it's deployed, the `js-agent` library will be talking to it to register identities. There is UI that acts as a wallet where you can select existing identities
 or create a new one.
 
-### Marketplace canister
+### Property-ownership-tokenization canister
 
 `dfx deploy dfinity_js_backend` - deploys the marketplace canister where the business logic is implemented.
 Basically, it implements functions like add, view, update, delete, and buy products + a set of helper functions.
