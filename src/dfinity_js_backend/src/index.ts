@@ -1253,7 +1253,6 @@ export default Canister({
         });
       }
 
-      const investor = investorOpt.Some;
 
       // Retrieve the transactions for the investor
       const transactions = pendingInvestmentsReserves
