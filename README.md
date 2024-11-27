@@ -18,7 +18,7 @@ For a comprehensive overview of the project, view our pitch deck:
 
 ## Demo
 
-For a comprehensive overview of the project, view our pitch deck:
+For a comprehensive overview of the project, view our demo:
 [Demo](https://www.loom.com/share/957c972c4297483daba6cbd712bd3313)
 
 ## Things to be explained in the course:
