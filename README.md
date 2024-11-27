@@ -16,6 +16,11 @@ Explore the live platform and experience property tokenization in action:
 For a comprehensive overview of the project, view our pitch deck:
 [Pitch](https://www.canva.com/design/DAGQvnz3P7E/FvATdl-S_nDR71PQzJIypQ/edit?utm_content=DAGQvnz3P7E&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
+## Demo
+
+For a comprehensive overview of the project, view our pitch deck:
+[Demo](https://www.loom.com/share/957c972c4297483daba6cbd712bd3313)
+
 ## Things to be explained in the course:
 
 1. What is Ledger? More details here: https://internetcomputer.org/docs/current/developer-docs/integrations/ledger/
